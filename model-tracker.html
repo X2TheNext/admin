@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ATCHÉ — Model Roster</title>
+<title>ATCHÉ — Talent Roster</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
@@ -333,6 +333,14 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .tier-silver{background:rgba(180,180,190,0.1);border:1px solid #8a8a9a;color:#aaaabc}
 .tier-new{background:rgba(107,158,122,0.12);border:1px solid var(--sage);color:var(--sage-light)}
 
+/* category colors */
+.cat-model{background:rgba(139,107,177,0.15);border:1px solid var(--violet);color:var(--violet-light)}
+.cat-dj{background:rgba(91,141,184,0.15);border:1px solid var(--sky);color:var(--sky-light)}
+.cat-photographer{background:rgba(107,158,122,0.15);border:1px solid var(--sage);color:var(--sage-light)}
+.cat-mua{background:rgba(194,105,122,0.15);border:1px solid var(--rose);color:var(--rose-light)}
+.cat-creative{background:var(--gold-dim);border:1px solid var(--gold);color:var(--gold)}
+.card-category{position:absolute;bottom:12px;left:12px;padding:3px 9px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase}
+
 /* status dots */
 .dot-active{background:var(--sage-light)}
 .dot-pending{background:var(--gold)}
@@ -595,7 +603,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
     </div>
   </nav>
   <div class="sidebar-bottom">
-    <button class="add-btn" onclick="openAddModal()">+ Add Model</button>
+    <button class="add-btn" onclick="openAddModal()">+ Add Talent</button>
     <div style="display:flex;gap:6px;margin-top:8px">
       <button class="icon-btn" style="flex:1;font-size:11px;padding:7px 0;letter-spacing:0.5px" onclick="exportData()" title="Export all data as JSON backup">⬇ Export</button>
       <button class="icon-btn" style="flex:1;font-size:11px;padding:7px 0;letter-spacing:0.5px" onclick="document.getElementById('importFile').click()" title="Import data from JSON backup">⬆ Import</button>
@@ -641,7 +649,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <div class="stats-row">
         <div class="stat-card gold">
           <div class="stat-card-val" id="stat-total">0</div>
-          <div class="stat-card-lbl">Models Tracked</div>
+          <div class="stat-card-lbl">Talent Tracked</div>
           <div class="stat-card-sub">in roster</div>
         </div>
         <div class="stat-card rose">
@@ -659,6 +667,19 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
           <div class="stat-card-lbl">Notes</div>
           <div class="stat-card-sub">written</div>
         </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <div class="section-row">
+          <div class="section-title">Roster by Category</div>
+        </div>
+        <div class="stats-row" id="categoryBreakdown"></div>
+      </div>
+      <div style="margin-bottom:16px">
+        <div class="section-row">
+          <div class="section-title">Follow-Ups Due</div>
+          <span class="see-all" onclick="showView('roster',document.querySelectorAll('.nav-item')[1])">See all →</span>
+        </div>
+        <div class="recent-list" id="followupsList"></div>
       </div>
       <div class="dashboard-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <div>
@@ -680,7 +701,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 
     <!-- ROSTER -->
     <div class="view" id="view-roster">
-      <div class="filter-bar">
+      <div class="filter-bar" id="statusFilterBar">
         <span class="filter-label">Filter:</span>
         <span class="filter-chip active" onclick="filterRoster('all',this)">All</span>
         <span class="filter-chip" onclick="filterRoster('active',this)">Active</span>
@@ -689,18 +710,38 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
         <span class="filter-chip" onclick="filterRoster('tier-diamond',this)">💎 Diamond</span>
         <span class="filter-chip" onclick="filterRoster('tier-gold',this)">✦ Gold</span>
       </div>
+      <div class="filter-bar" id="categoryFilterBar">
+        <span class="filter-label">Category:</span>
+        <span class="filter-chip active" onclick="filterByCategory('all',this)">All</span>
+        <span class="filter-chip" onclick="filterByCategory('model',this)">Model</span>
+        <span class="filter-chip" onclick="filterByCategory('dj',this)">DJ</span>
+        <span class="filter-chip" onclick="filterByCategory('photographer',this)">Photographer/Videographer</span>
+        <span class="filter-chip" onclick="filterByCategory('mua',this)">MUA/Hair/Stylist</span>
+        <span class="filter-chip" onclick="filterByCategory('creative',this)">Creative/Other</span>
+      </div>
       <div class="grid" id="rosterGrid"></div>
     </div>
 
     <!-- KANBAN -->
     <div class="view" id="view-kanban">
+      <div class="filter-bar">
+        <span class="filter-label">Category:</span>
+        <select class="form-select" style="width:auto;font-size:12px" id="kanbanCategoryFilter" onchange="setKanbanCategoryFilter(this.value)">
+          <option value="all">All</option>
+          <option value="model">Model</option>
+          <option value="dj">DJ</option>
+          <option value="photographer">Photographer/Videographer</option>
+          <option value="mua">MUA/Hair/Stylist</option>
+          <option value="creative">Creative/Other</option>
+        </select>
+      </div>
       <div class="kanban" id="kanbanBoard"></div>
     </div>
 
     <!-- RANKINGS -->
     <div class="view" id="view-rankings">
       <div class="rankings-header">
-        <div class="section-title">Model Rankings</div>
+        <div class="section-title">Talent Rankings</div>
         <div style="display:flex;gap:8px">
           <select class="form-select" style="width:auto;font-size:12px" onchange="renderRankings(this.value)" id="rankCat">
             <option value="overall">Overall Score</option>
@@ -845,23 +886,42 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <div class="form-section">Identity</div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Name</label>
-          <input class="form-input" id="f-name" placeholder="Full name or stage name">
+          <label class="form-label">Category</label>
+          <select class="form-select" id="f-category" onchange="applyCategoryFields(this.value)">
+            <option value="model">Model</option>
+            <option value="dj">DJ</option>
+            <option value="photographer">Photographer / Videographer</option>
+            <option value="mua">MUA / Hair / Stylist</option>
+            <option value="creative">Creative / Other</option>
+          </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Handle / IG</label>
-          <input class="form-input" id="f-handle" placeholder="@handle">
+          <label class="form-label">Name</label>
+          <input class="form-input" id="f-name" placeholder="Full name or stage name">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">City / Market</label>
-          <input class="form-input" id="f-city" placeholder="e.g. Washington DC">
+          <label class="form-label">Handle / IG</label>
+          <input class="form-input" id="f-handle" placeholder="@handle">
         </div>
+        <div class="form-group">
+          <label class="form-label">City / Market</label>
+          <select class="form-select" id="f-city" onchange="toggleCustomCity(this.value)"></select>
+        </div>
+      </div>
+      <div class="form-row" id="customCityRow" style="display:none">
+        <div class="form-group full">
+          <label class="form-label">Custom City / Market</label>
+          <input class="form-input" id="f-city-other" placeholder="Enter city or market">
+        </div>
+      </div>
+      <div class="form-row">
         <div class="form-group">
           <label class="form-label">Phone / Contact</label>
           <input class="form-input" id="f-contact" placeholder="Phone or email">
         </div>
+        <div class="form-group"></div>
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -894,7 +954,18 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
           <input class="form-input" id="f-metDate" type="date">
         </div>
       </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Last Contacted</label>
+          <input class="form-input" id="f-lastContact" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Next Follow-Up</label>
+          <input class="form-input" id="f-nextFollowUp" type="date">
+        </div>
+      </div>
 
+      <div id="section-look">
       <div class="form-section">Look & Style</div>
       <div class="form-row">
         <div class="form-group">
@@ -923,6 +994,39 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <div class="form-group full" style="margin-bottom:12px">
         <label class="form-label">Look Tags (comma separated)</label>
         <input class="form-input" id="f-tags" placeholder="e.g. runway, editorial, dark glam, streetwear">
+      </div>
+      </div>
+
+      <div id="section-catdetails">
+      <div class="form-section" id="catDetailsTitle">Category Details</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" id="specialtyLabel">Specialty</label>
+          <input class="form-input" id="f-specialty" list="specialtyOptions" placeholder="Type or pick from suggestions">
+          <datalist id="specialtyOptions"></datalist>
+        </div>
+        <div class="form-group" id="setLengthGroup" style="display:none">
+          <label class="form-label">Set Length</label>
+          <input class="form-input" id="f-setLength" placeholder="e.g. 2 hours, open to close">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" id="equipmentLabel">Equipment</label>
+          <input class="form-input" id="f-equipment" placeholder="">
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="portfolioLabel">Portfolio Link</label>
+          <input class="form-input" id="f-portfolio" placeholder="https://...">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Rate</label>
+          <input class="form-input" id="f-rate" placeholder="e.g. $200/event, $150/hr">
+        </div>
+        <div class="form-group"></div>
+      </div>
       </div>
 
       <div class="form-section">Personality & Energy</div>
@@ -1041,12 +1145,13 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <div class="modal-hero-info">
         <div class="modal-name" id="profileName"></div>
         <div class="modal-handle" id="profileHandle"></div>
+        <div class="card-category" id="profileCategory" style="position:static;display:inline-block;margin-top:6px"></div>
       </div>
       <div class="modal-close" onclick="closeProfileModal()">✕</div>
     </div>
     <div class="modal-tabs">
       <div class="modal-tab active" onclick="switchProfileTab('overview',this)">Overview</div>
-      <div class="modal-tab" onclick="switchProfileTab('look',this)">Look & Style</div>
+      <div class="modal-tab" id="tabBtn-look" onclick="switchProfileTab('look',this)">Look & Style</div>
       <div class="modal-tab" onclick="switchProfileTab('personality',this)">Personality</div>
       <div class="modal-tab" onclick="switchProfileTab('ratings',this)">Ratings</div>
       <div class="modal-tab" onclick="switchProfileTab('memory',this)">Memory</div>
@@ -1080,6 +1185,17 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
             <div class="info-label">Date Met</div>
             <div class="info-value" id="p-metDate">—</div>
           </div>
+          <div class="info-block">
+            <div class="info-label">Last Contacted</div>
+            <div class="info-value" id="p-lastContact">—</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Next Follow-Up</div>
+            <div class="info-value" id="p-nextFollowUp">—</div>
+          </div>
+          <div class="info-block full" style="display:flex;align-items:center;justify-content:flex-end;padding-top:0;border:none">
+            <button class="btn-cancel" onclick="markContactedToday()" style="color:var(--gold);border-color:var(--gold)">✓ Mark Contacted Today</button>
+          </div>
           <div class="info-block full">
             <div class="info-label">First Impressions</div>
             <div class="info-value" id="p-notes" style="white-space:pre-wrap">—</div>
@@ -1087,6 +1203,28 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
           <div class="info-block full">
             <div class="info-label">Skills</div>
             <div class="skill-chips" id="p-skills"></div>
+          </div>
+        </div>
+        <div class="info-grid" id="p-catdetails" style="margin-top:14px">
+          <div class="info-block">
+            <div class="info-label" id="p-specialtyLabel">Specialty</div>
+            <div class="info-value" id="p-specialty">—</div>
+          </div>
+          <div class="info-block" id="p-setLengthBlock" style="display:none">
+            <div class="info-label">Set Length</div>
+            <div class="info-value" id="p-setLength">—</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label" id="p-equipmentLabel">Equipment</div>
+            <div class="info-value" id="p-equipment">—</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label" id="p-portfolioLabel">Portfolio Link</div>
+            <div class="info-value" id="p-portfolio">—</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Rate</div>
+            <div class="info-value" id="p-rate">—</div>
           </div>
         </div>
       </div>
@@ -1254,9 +1392,9 @@ function hideAuthErr(){ document.getElementById('loginErr').style.display='none'
 // ── DEMO SEED ──
 const DEMO = {
   models: [
-    {id:"demo1",name:"Zara Knight",handle:"@zaraknight",city:"Washington DC",contact:"zara@email.com",status:"active",tier:"gold",metAt:"ATCHÉ Launch Night",metDate:"2026-05-15",height:"5'10\"",measurements:"34-26-38",complexion:"deep brown, luminous",hair:"long locs, honey-tipped",style:"Dark glamour — always in monochrome or deep jewel tones. Moves like she owns the room before she walks in.",tags:["Runway","Editorial","Nightlife"],skills:["Runway","Editorial","Social Media","Hosting"],mbti:"ENFJ",vibe:"quiet power, magnetic",personality:"Extremely self-possessed. Slow to warm up but intensely loyal once she trusts you. Responds well to direct, honest feedback. Doesn't like ambiguity.",personal:"She's working on launching her own brand. Her younger sister is also in the industry — don't mix them up. Loves clean aesthetics and hates clutter.",notes:"Met at the launch. She walked in and the whole energy in the room shifted. Exactly the kind of presence ATCHÉ is built around.",photo:"",ratings:{look:5,energy:5,skill:4,vibe:5,reliability:4,overall:5},memories:[{text:"Prefers voice notes over texts. Respond same-day or she moves on.",date:1747267200000},{text:"Her goal is editorial in Vogue Africa by end of year. Keep that in mind for casting conversations.",date:1747353600000}],createdAt:1747267200000,updatedAt:1747353600000},
-    {id:"demo2",name:"Imani Wells",handle:"@imaniwells",city:"Baltimore",contact:"imani@dm",status:"prospect",tier:"new",metAt:"Howard Homecoming",metDate:"2026-04-28",height:"5'7\"",measurements:"32-24-36",complexion:"warm caramel",hair:"natural 4C, big voluminous",style:"Afrocentric with high-fashion edge. Ankara prints, bold jewelry, never overdone.",tags:["Print","Commercial","Editorial"],skills:["Print","Commercial","Dance"],mbti:"INFP",vibe:"free spirit, artsy",personality:"Creative and quiet in groups but opens up one-on-one. Needs encouragement — she undersells herself constantly. Responds to vision and story.",personal:"Still figuring out her lane. Don't rush her. She mentioned she works a day job and does this part-time.",notes:"Approached me at Homecoming. Really warm energy. She doesn't fully believe in herself yet but the raw material is there.",photo:"",ratings:{look:4,energy:3,skill:3,vibe:4,reliability:0,overall:3},memories:[{text:"First time she hears a compliment she deflects. Say it twice.",date:1745798400000}],createdAt:1745798400000,updatedAt:1745798400000},
-    {id:"demo3",name:"Seun Adeyemi",handle:"@seunmodel",city:"Washington DC",contact:"seun.a@email.com",status:"booked",tier:"diamond",metAt:"ATCHÉ x Noir Agency",metDate:"2026-03-01",height:"5'11\"",measurements:"34-25-37",complexion:"deep ebony, flawless",hair:"short fade, always sharp",style:"High concept. Shows up to every shoot with a fully formed character in mind. Effortlessly switches between editorial and commercial.",tags:["Runway","Editorial","Commercial","Print"],skills:["Runway","Editorial","Commercial","Acting","Print"],mbti:"INTJ",vibe:"boss energy, calculated",personality:"Strategic thinker. She reads contracts before she signs anything. Values professionalism above all else. Will cut contact if you waste her time.",personal:"Has an agent — always cc them on anything formal. She keeps a portfolio of every job. Remembers everything.",notes:"The most professional model I've worked with. The shoot we did for the winter campaign was flawless. She came in with a mood board she made herself.",photo:"",ratings:{look:5,energy:4,skill:5,vibe:5,reliability:5,overall:5},memories:[{text:"Always arrive on time — she will notice if you don't.",date:1740787200000},{text:"Her agent is Marcus at Noir Agency. Loop him in for anything paid.",date:1740873600000}],createdAt:1740787200000,updatedAt:1740873600000}
+    {id:"demo1",name:"Zara Knight",handle:"@zaraknight",category:"model",city:"Washington, DC",contact:"zara@email.com",status:"active",tier:"gold",metAt:"ATCHÉ Launch Night",metDate:"2026-05-15",height:"5'10\"",measurements:"34-26-38",complexion:"deep brown, luminous",hair:"long locs, honey-tipped",style:"Dark glamour — always in monochrome or deep jewel tones. Moves like she owns the room before she walks in.",tags:["Runway","Editorial","Nightlife"],skills:["Runway","Editorial","Social Media","Hosting"],mbti:"ENFJ",vibe:"quiet power, magnetic",personality:"Extremely self-possessed. Slow to warm up but intensely loyal once she trusts you. Responds well to direct, honest feedback. Doesn't like ambiguity.",personal:"She's working on launching her own brand. Her younger sister is also in the industry — don't mix them up. Loves clean aesthetics and hates clutter.",notes:"Met at the launch. She walked in and the whole energy in the room shifted. Exactly the kind of presence ATCHÉ is built around.",photo:"",ratings:{look:5,energy:5,skill:4,vibe:5,reliability:4,overall:5},memories:[{text:"Prefers voice notes over texts. Respond same-day or she moves on.",date:1747267200000},{text:"Her goal is editorial in Vogue Africa by end of year. Keep that in mind for casting conversations.",date:1747353600000}],createdAt:1747267200000,updatedAt:1747353600000},
+    {id:"demo2",name:"Imani Wells",handle:"@imaniwells",category:"model",city:"Baltimore, MD",contact:"imani@dm",status:"prospect",tier:"new",metAt:"Howard Homecoming",metDate:"2026-04-28",height:"5'7\"",measurements:"32-24-36",complexion:"warm caramel",hair:"natural 4C, big voluminous",style:"Afrocentric with high-fashion edge. Ankara prints, bold jewelry, never overdone.",tags:["Print","Commercial","Editorial"],skills:["Print","Commercial","Dance"],mbti:"INFP",vibe:"free spirit, artsy",personality:"Creative and quiet in groups but opens up one-on-one. Needs encouragement — she undersells herself constantly. Responds to vision and story.",personal:"Still figuring out her lane. Don't rush her. She mentioned she works a day job and does this part-time.",notes:"Approached me at Homecoming. Really warm energy. She doesn't fully believe in herself yet but the raw material is there.",photo:"",ratings:{look:4,energy:3,skill:3,vibe:4,reliability:0,overall:3},memories:[{text:"First time she hears a compliment she deflects. Say it twice.",date:1745798400000}],createdAt:1745798400000,updatedAt:1745798400000},
+    {id:"demo3",name:"Seun Adeyemi",handle:"@seunmodel",category:"model",city:"Washington, DC",contact:"seun.a@email.com",status:"booked",tier:"diamond",metAt:"ATCHÉ x Noir Agency",metDate:"2026-03-01",height:"5'11\"",measurements:"34-25-37",complexion:"deep ebony, flawless",hair:"short fade, always sharp",style:"High concept. Shows up to every shoot with a fully formed character in mind. Effortlessly switches between editorial and commercial.",tags:["Runway","Editorial","Commercial","Print"],skills:["Runway","Editorial","Commercial","Acting","Print"],mbti:"INTJ",vibe:"boss energy, calculated",personality:"Strategic thinker. She reads contracts before she signs anything. Values professionalism above all else. Will cut contact if you waste her time.",personal:"Has an agent — always cc them on anything formal. She keeps a portfolio of every job. Remembers everything.",notes:"The most professional model I've worked with. The shoot we did for the winter campaign was flawless. She came in with a mood board she made herself.",photo:"",ratings:{look:5,energy:4,skill:5,vibe:5,reliability:5,overall:5},memories:[{text:"Always arrive on time — she will notice if you don't.",date:1740787200000},{text:"Her agent is Marcus at Noir Agency. Loop him in for anything paid.",date:1740873600000}],createdAt:1740787200000,updatedAt:1740873600000}
   ],
   notes: [
     {id:"dnote1",title:"Zara — Post Shoot Debrief",body:"The chemistry on set was incredible. She has this way of transforming the energy in the room when the camera comes out. Her look 3 was standout — the one in the black mesh.\n\nThings to remember for next time:\n- She prefers natural lighting, said the harsh studio lights washed her out last time\n- Bring tea, not coffee\n- Give her 10 min alone before we start rolling",linkedModel:"demo1",createdAt:1747440000000,updatedAt:1747440000000},
@@ -1288,7 +1426,70 @@ let currentNoteId = null;
 let calDate = new Date();
 let sortMode = 'newest';
 let filterMode = 'all';
+let categoryFilterMode = 'all';
 let searchQuery = '';
+
+// ── CATEGORIES & CITIES ──
+const CATEGORIES = {
+  model: {
+    label: 'Model',
+    specialtyLabel: 'Look Tags',
+    specialtyOptions: [],
+    equipmentLabel: 'Equipment',
+    portfolioLabel: 'Portfolio Link',
+    showSetLength: false,
+    showLook: true,
+    showDetails: false
+  },
+  dj: {
+    label: 'DJ',
+    specialtyLabel: 'Genre(s)',
+    specialtyOptions: ['Afrobeats','Amapiano','Hip-Hop','R&B','House','Open Format','Dancehall','Reggaeton','Soca','Top 40'],
+    equipmentLabel: 'Equipment / Setup',
+    portfolioLabel: 'Mixes (SoundCloud / Mixcloud)',
+    showSetLength: true,
+    showLook: false,
+    showDetails: true
+  },
+  photographer: {
+    label: 'Photographer / Videographer',
+    specialtyLabel: 'Specialty',
+    specialtyOptions: ['Portrait','Editorial','Event','Product','Videography','Fashion','Content Creation'],
+    equipmentLabel: 'Equipment',
+    portfolioLabel: 'Portfolio Link',
+    showSetLength: false,
+    showLook: false,
+    showDetails: true
+  },
+  mua: {
+    label: 'MUA / Hair / Stylist',
+    specialtyLabel: 'Specialties',
+    specialtyOptions: ['Makeup','Hair','Wardrobe Styling','Nails','SFX Makeup'],
+    equipmentLabel: 'Kit / Brands',
+    portfolioLabel: 'Portfolio Link',
+    showSetLength: false,
+    showLook: false,
+    showDetails: true
+  },
+  creative: {
+    label: 'Creative / Other',
+    specialtyLabel: 'Discipline',
+    specialtyOptions: ['Designer','Content Creator','Dancer','Producer','Writer','Stylist','Other'],
+    equipmentLabel: 'Tools / Equipment',
+    portfolioLabel: 'Portfolio Link',
+    showSetLength: false,
+    showLook: false,
+    showDetails: true
+  }
+};
+const CITIES = [
+  'Washington, DC','Arlington, VA','Alexandria, VA','Silver Spring, MD','Baltimore, MD',
+  'Richmond, VA','Norfolk, VA','Philadelphia, PA','Atlanta, GA','Durham, NC','Greensboro, NC',
+  'Charlotte, NC','Nashville, TN','New Orleans, LA','Houston, TX','Tallahassee, FL','New York, NY'
+];
+function categoryMeta(cat){ return CATEGORIES[cat] || CATEGORIES.model; }
+function categoryLabel(cat){ return categoryMeta(cat).label; }
+function categoryClass(cat){ return 'cat-'+(CATEGORIES[cat]?cat:'model'); }
 
 // ── UTILS ──
 function save(){
@@ -1303,6 +1504,7 @@ function save(){
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
 function initials(name){ return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
 function fmt(ts){ if(!ts) return ''; const d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function todayStr(){ return new Date().toISOString().split('T')[0]; }
 function statusLabel(s){ return ({prospect:'Prospect',reached:'Reached Out',active:'Active',collab:'In Collab',booked:'Booked'}[s]||s); }
 function tierClass(t){ return 'tier-'+(t||'new'); }
 function dotClass(s){ return ({active:'dot-active',booked:'dot-booked',prospect:'dot-inactive',reached:'dot-pending',collab:'dot-pending'}[s]||'dot-inactive'); }
@@ -1364,11 +1566,47 @@ function renderDashboard(){
   document.getElementById('stat-notes').textContent = notes.length;
   document.getElementById('rosterBadge').textContent = total;
 
+  document.getElementById('categoryBreakdown').innerHTML = Object.keys(CATEGORIES).map(catKey=>{
+    const count = models.filter(m=>(m.category||'model')===catKey).length;
+    return `<div class="stat-card" style="cursor:pointer" onclick="showView('roster',document.querySelectorAll('.nav-item')[1]); setTimeout(()=>{ const chip=[...document.querySelectorAll('#categoryFilterBar .filter-chip')].find(c=>c.getAttribute('onclick')===\`filterByCategory('${catKey}',this)\`); if(chip) filterByCategory('${catKey}', chip); }, 50)">
+      <div class="stat-card-val">${count}</div>
+      <div class="stat-card-lbl">${categoryLabel(catKey)}</div>
+      <div class="stat-card-sub"><span class="${categoryClass(catKey)}" style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase">${catKey}</span></div>
+    </div>`;
+  }).join('');
+
   const recent = [...models].sort((a,b)=>b.createdAt-a.createdAt).slice(0,5);
-  document.getElementById('recentList').innerHTML = recent.length ? recent.map(m=>recentItemHTML(m)).join('') : '<div class="empty-state"><div class="empty-icon">✦</div><p>No models yet</p></div>';
+  document.getElementById('recentList').innerHTML = recent.length ? recent.map(m=>recentItemHTML(m)).join('') : '<div class="empty-state"><div class="empty-icon">✦</div><p>No talent yet</p></div>';
 
   const top = [...models].sort((a,b)=>overallScore(b)-overallScore(a)).slice(0,5);
   document.getElementById('topRankedList').innerHTML = top.length ? top.map(m=>recentItemHTML(m)).join('') : '<div class="empty-state"><div class="empty-icon">◉</div><p>Add ratings to see rankings</p></div>';
+
+  const today = todayStr();
+  const due = models.filter(m=>m.nextFollowUp && m.nextFollowUp<=today).sort((a,b)=>a.nextFollowUp.localeCompare(b.nextFollowUp));
+  document.getElementById('followupsList').innerHTML = due.length ? due.map(m=>followupItemHTML(m)).join('') : '<div class="empty-state"><div class="empty-icon">✓</div><p>Nothing due — you\'re all caught up</p></div>';
+}
+function followupItemHTML(m){
+  const overdue = m.nextFollowUp < todayStr();
+  return `<div class="recent-item">
+    <div class="ri-avatar" style="cursor:pointer" onclick="openProfile('${m.id}')">${m.photo?`<img src="${m.photo}">`:`<span>${initials(m.name)}</span>`}</div>
+    <div class="ri-info" style="cursor:pointer" onclick="openProfile('${m.id}')">
+      <div class="ri-name">${m.name}</div>
+      <div class="ri-meta">${overdue?'Overdue · ':'Due · '}${m.nextFollowUp}${m.lastContact?` · last contacted ${m.lastContact}`:''}</div>
+    </div>
+    <div class="ri-right">
+      <button class="btn-cancel" style="color:var(--gold);border-color:var(--gold);padding:4px 10px;font-size:11px" onclick="quickMarkContacted('${m.id}')">✓ Contacted</button>
+    </div>
+  </div>`;
+}
+function quickMarkContacted(id){
+  const m = models.find(x=>x.id===id);
+  if(!m) return;
+  m.lastContact = todayStr();
+  const next = prompt(`Set next follow-up for ${m.name} (YYYY-MM-DD), or leave blank to clear it:`, '');
+  if(next !== null) m.nextFollowUp = next.trim();
+  m.updatedAt = Date.now();
+  save();
+  renderDashboard();
 }
 function recentItemHTML(m){
   const score = overallScore(m);
@@ -1393,6 +1631,7 @@ function filteredModels(){
     if(filterMode.startsWith('tier-')) list = list.filter(m=>m.tier===filterMode.replace('tier-',''));
     else list = list.filter(m=>m.status===filterMode);
   }
+  if(categoryFilterMode!=='all') list = list.filter(m=>(m.category||'model')===categoryFilterMode);
   if(sortMode==='newest') list.sort((a,b)=>b.createdAt-a.createdAt);
   else if(sortMode==='alpha') list.sort((a,b)=>a.name.localeCompare(b.name));
   else if(sortMode==='score') list.sort((a,b)=>overallScore(b)-overallScore(a));
@@ -1401,7 +1640,7 @@ function filteredModels(){
 function renderRoster(){
   const list = filteredModels();
   const g = document.getElementById('rosterGrid');
-  if(!list.length){ g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">✦</div><p>No models found. Click + Add Model to get started.</p></div>'; return; }
+  if(!list.length){ g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">✦</div><p>No talent found. Click + Add Talent to get started.</p></div>'; return; }
   g.innerHTML = list.map(m=>modelCardHTML(m)).join('');
 }
 function modelCardHTML(m){
@@ -1414,6 +1653,7 @@ function modelCardHTML(m){
       <div class="card-avatar">${m.photo?`<img src="${m.photo}">`:`${initials(m.name)}`}</div>
       <div class="card-tier badge ${tierClass(m.tier)}">${(m.tier||'new').toUpperCase()}</div>
       <div class="card-status-dot ${dotClass(m.status)}"></div>
+      <div class="card-category ${categoryClass(m.category)}">${categoryLabel(m.category)}</div>
     </div>
     <div class="card-body">
       <div class="card-name">${m.name}</div>
@@ -1430,9 +1670,25 @@ function modelCardHTML(m){
 }
 function filterRoster(mode, el){
   filterMode=mode;
-  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('#statusFilterBar .filter-chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   renderRoster();
+}
+function filterByCategory(cat, el){
+  categoryFilterMode=cat;
+  document.querySelectorAll('#categoryFilterBar .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const kf = document.getElementById('kanbanCategoryFilter');
+  if(kf) kf.value = cat;
+  renderRoster();
+  if(document.getElementById('view-kanban').classList.contains('active')) renderKanban();
+}
+function setKanbanCategoryFilter(cat){
+  categoryFilterMode = cat;
+  document.querySelectorAll('#categoryFilterBar .filter-chip').forEach(c=>{
+    c.classList.toggle('active', c.getAttribute('onclick')===`filterByCategory('${cat}',this)`);
+  });
+  renderKanban();
 }
 function handleSearch(v){ searchQuery=v.toLowerCase(); if(document.getElementById('view-roster').classList.contains('active')) renderRoster(); }
 function cycleSortMode(){ const modes=['newest','alpha','score']; sortMode=modes[(modes.indexOf(sortMode)+1)%modes.length]; if(document.getElementById('view-roster').classList.contains('active')) renderRoster(); }
@@ -1448,8 +1704,9 @@ const COLS = [
 let draggedId = null;
 function renderKanban(){
   const board = document.getElementById('kanbanBoard');
+  const pool = categoryFilterMode!=='all' ? models.filter(m=>(m.category||'model')===categoryFilterMode) : models;
   board.innerHTML = COLS.map(col=>{
-    const cards = models.filter(m=>m.status===col.key);
+    const cards = pool.filter(m=>m.status===col.key);
     return `<div class="kanban-col" data-col="${col.key}"
       ondragover="kanbanDragOver(event,this)"
       ondragleave="this.classList.remove('drag-over')"
@@ -1470,7 +1727,7 @@ function kanbanCardHTML(m){
     onclick="openProfile('${m.id}')">
     <div class="kc-name">${m.name}</div>
     <div class="kc-handle">${m.handle||m.city||'—'}</div>
-    <div class="kc-tags">${tags.map(t=>`<span class="tag ${tagClass(t)}" style="font-size:9px">${t}</span>`).join('')}</div>
+    <div class="kc-tags"><span class="tag ${categoryClass(m.category)}" style="font-size:9px">${categoryLabel(m.category)}</span>${tags.map(t=>`<span class="tag ${tagClass(t)}" style="font-size:9px">${t}</span>`).join('')}</div>
     ${note?`<div class="kc-note">"${note.body.slice(0,80)}${note.body.length>80?'…':''}"</div>`:''}
     <div class="kc-bottom">
       <div class="kc-avatar">${m.photo?`<img src="${m.photo}">`:`${initials(m.name)}`}</div>
@@ -1649,19 +1906,67 @@ function copyPrompt(el, i){
   setTimeout(()=>{ el.querySelector('.prompt-copy').textContent='⎘ Click to copy'; el.classList.remove('copied'); },2000);
 }
 
+// ── CATEGORY / CITY FIELD HELPERS ──
+function populateCityOptions(){
+  const sel = document.getElementById('f-city');
+  if(!sel) return;
+  sel.innerHTML = '<option value="">Select city…</option>' + CITIES.map(c=>`<option value="${c}">${c}</option>`).join('') + '<option value="__other__">Other (type below)</option>';
+}
+function toggleCustomCity(val){
+  document.getElementById('customCityRow').style.display = val==='__other__' ? '' : 'none';
+}
+function setCityValue(city){
+  const sel = document.getElementById('f-city');
+  if(city && CITIES.includes(city)){
+    sel.value = city;
+    toggleCustomCity(city);
+    document.getElementById('f-city-other').value='';
+  } else if(city){
+    sel.value = '__other__';
+    toggleCustomCity('__other__');
+    document.getElementById('f-city-other').value = city;
+  } else {
+    sel.value = '';
+    toggleCustomCity('');
+    document.getElementById('f-city-other').value='';
+  }
+}
+function getCityValue(){
+  const sel = document.getElementById('f-city').value;
+  if(sel==='__other__') return document.getElementById('f-city-other').value.trim();
+  return sel;
+}
+function applyCategoryFields(cat){
+  const meta = categoryMeta(cat);
+  document.getElementById('section-look').style.display = meta.showLook ? '' : 'none';
+  document.getElementById('section-catdetails').style.display = meta.showDetails ? '' : 'none';
+  document.getElementById('catDetailsTitle').textContent = meta.label + ' Details';
+  document.getElementById('specialtyLabel').textContent = meta.specialtyLabel;
+  document.getElementById('equipmentLabel').textContent = meta.equipmentLabel;
+  document.getElementById('portfolioLabel').textContent = meta.portfolioLabel;
+  document.getElementById('setLengthGroup').style.display = meta.showSetLength ? '' : 'none';
+  document.getElementById('specialtyOptions').innerHTML = (meta.specialtyOptions||[]).map(o=>`<option value="${o}">`).join('');
+}
+populateCityOptions();
+
 // ── ADD / EDIT MODEL ──
 let editingId = null;
 function openAddModal(){
   editingId = null;
   pendingPhoto = null;
   ratings = {};
-  document.querySelector('#addModal .modal-hero div').textContent = 'Add New Model';
+  document.querySelector('#addModal .modal-hero div').textContent = 'Add New Talent';
   document.querySelector('#addModal .btn-save').textContent = 'Save to Roster';
-  ['f-name','f-handle','f-city','f-contact','f-metAt','f-notes','f-photo','f-height','f-measurements','f-complexion','f-hair','f-style','f-tags','f-vibe','f-personality','f-personal','f-skills'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  ['f-name','f-handle','f-contact','f-metAt','f-notes','f-photo','f-height','f-measurements','f-complexion','f-hair','f-style','f-tags','f-vibe','f-personality','f-personal','f-skills','f-specialty','f-setLength','f-equipment','f-portfolio','f-rate'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('f-status').value='prospect';
   document.getElementById('f-tier').value='new';
   document.getElementById('f-mbti').value='';
   document.getElementById('f-metDate').value='';
+  document.getElementById('f-lastContact').value='';
+  document.getElementById('f-nextFollowUp').value='';
+  document.getElementById('f-category').value='model';
+  applyCategoryFields('model');
+  setCityValue('');
   document.querySelectorAll('.star-input span').forEach(s=>s.classList.remove('on'));
   // reset photo preview
   const preview = document.getElementById('formPhotoPreview');
@@ -1687,16 +1992,22 @@ function editCurrentModel(){
   document.querySelector('#addModal .btn-save').textContent = 'Save Changes';
   // fill fields
   const set = (id,val)=>{ const el=document.getElementById(id); if(el) el.value=val||''; };
-  set('f-name', m.name); set('f-handle', m.handle); set('f-city', m.city);
+  set('f-name', m.name); set('f-handle', m.handle);
   set('f-contact', m.contact); set('f-metAt', m.metAt); set('f-notes', m.notes);
   set('f-photo', m.photo); set('f-height', m.height); set('f-measurements', m.measurements);
   set('f-complexion', m.complexion); set('f-hair', m.hair); set('f-style', m.style);
   set('f-tags', (m.tags||[]).join(', ')); set('f-skills', (m.skills||[]).join(', '));
   set('f-vibe', m.vibe); set('f-personality', m.personality); set('f-personal', m.personal);
   set('f-metDate', m.metDate);
+  set('f-lastContact', m.lastContact); set('f-nextFollowUp', m.nextFollowUp);
+  set('f-specialty', m.specialty); set('f-setLength', m.setLength); set('f-equipment', m.equipment);
+  set('f-portfolio', m.portfolio); set('f-rate', m.rate);
   document.getElementById('f-status').value = m.status||'prospect';
   document.getElementById('f-tier').value = m.tier||'new';
   document.getElementById('f-mbti').value = m.mbti||'';
+  document.getElementById('f-category').value = m.category||'model';
+  applyCategoryFields(m.category||'model');
+  setCityValue(m.city||'');
   // fill stars
   document.querySelectorAll('.star-input').forEach(row=>{
     const field = row.getAttribute('data-field');
@@ -1723,14 +2034,17 @@ function saveModel(){
   const tags = document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
   const skills = document.getElementById('f-skills').value.split(',').map(t=>t.trim()).filter(Boolean);
   const fields = {
+    category: document.getElementById('f-category').value || 'model',
     name,
     handle: document.getElementById('f-handle').value.trim(),
-    city: document.getElementById('f-city').value.trim(),
+    city: getCityValue(),
     contact: document.getElementById('f-contact').value.trim(),
     status: document.getElementById('f-status').value,
     tier: document.getElementById('f-tier').value,
     metAt: document.getElementById('f-metAt').value.trim(),
     metDate: document.getElementById('f-metDate').value,
+    lastContact: document.getElementById('f-lastContact').value,
+    nextFollowUp: document.getElementById('f-nextFollowUp').value,
     height: document.getElementById('f-height').value.trim(),
     measurements: document.getElementById('f-measurements').value.trim(),
     complexion: document.getElementById('f-complexion').value.trim(),
@@ -1743,6 +2057,11 @@ function saveModel(){
     personal: document.getElementById('f-personal').value.trim(),
     notes: document.getElementById('f-notes').value.trim(),
     photo: document.getElementById('f-photo').value.trim(),
+    specialty: document.getElementById('f-specialty').value.trim(),
+    setLength: document.getElementById('f-setLength').value.trim(),
+    equipment: document.getElementById('f-equipment').value.trim(),
+    portfolio: document.getElementById('f-portfolio').value.trim(),
+    rate: document.getElementById('f-rate').value.trim(),
     ratings: {...ratings},
     updatedAt: Date.now(),
   };
@@ -1783,6 +2102,28 @@ function openProfile(id){
   av.innerHTML = m.photo?`<img src="${m.photo}">`:`${initials(m.name)}`;
   document.getElementById('profileName').textContent=m.name;
   document.getElementById('profileHandle').textContent=`${m.handle||''} ${m.city?'· '+m.city:''}`;
+  const catMeta = categoryMeta(m.category);
+  const catEl = document.getElementById('profileCategory');
+  catEl.textContent = categoryLabel(m.category);
+  catEl.className = 'card-category ' + categoryClass(m.category);
+  catEl.style.position='static'; catEl.style.display='inline-block'; catEl.style.marginTop='6px';
+  // Show/hide Look & Style tab based on category
+  const lookTabBtn = document.getElementById('tabBtn-look');
+  lookTabBtn.style.display = catMeta.showLook ? '' : 'none';
+  // Category details block
+  document.getElementById('p-catdetails').style.display = catMeta.showDetails ? '' : 'none';
+  document.getElementById('p-specialtyLabel').textContent = catMeta.specialtyLabel;
+  document.getElementById('p-equipmentLabel').textContent = catMeta.equipmentLabel;
+  document.getElementById('p-portfolioLabel').textContent = catMeta.portfolioLabel;
+  document.getElementById('p-specialty').textContent = m.specialty||'—';
+  document.getElementById('p-equipment').textContent = m.equipment||'—';
+  const portfolioEl = document.getElementById('p-portfolio');
+  portfolioEl.innerHTML = m.portfolio ? `<a href="${m.portfolio}" target="_blank" style="color:var(--gold)">${m.portfolio}</a>` : '—';
+  document.getElementById('p-rate').textContent = m.rate||'—';
+  document.getElementById('p-setLengthBlock').style.display = catMeta.showSetLength ? '' : 'none';
+  document.getElementById('p-setLength').textContent = m.setLength||'—';
+  // Reset to Overview tab on open
+  switchProfileTab('overview', document.querySelector('.modal-tab'));
   // Overview
   document.getElementById('p-city').textContent=m.city||'—';
   document.getElementById('p-contact').textContent=m.contact||'—';
@@ -1790,6 +2131,14 @@ function openProfile(id){
   document.getElementById('p-tier').innerHTML=`<span class="badge ${tierClass(m.tier)}">${(m.tier||'new').toUpperCase()}</span>`;
   document.getElementById('p-metAt').textContent=m.metAt||'—';
   document.getElementById('p-metDate').textContent=m.metDate||'—';
+  document.getElementById('p-lastContact').textContent=m.lastContact||'—';
+  const nfuEl = document.getElementById('p-nextFollowUp');
+  if(m.nextFollowUp){
+    const overdue = m.nextFollowUp < todayStr();
+    nfuEl.innerHTML = `${m.nextFollowUp}${overdue?' <span class="badge" style="margin-left:6px;background:var(--rose-dim);border:1px solid var(--rose);color:var(--rose-light)">OVERDUE</span>':''}`;
+  } else {
+    nfuEl.textContent = '—';
+  }
   document.getElementById('p-notes').textContent=m.notes||'—';
   document.getElementById('p-skills').innerHTML=(m.skills||[]).length?m.skills.map(s=>`<span class="skill-chip">${s}</span>`).join(''):'<span style="color:var(--text3);font-size:12px">None added</span>';
   // Look
@@ -1859,6 +2208,23 @@ function switchProfileTab(tab, el){
   if(el) el.classList.add('active');
 }
 function closeProfileModal(){ document.getElementById('profileModal').classList.remove('open'); currentModelId=null; }
+// ── FOLLOW-UP / LAST CONTACTED ──
+function markContactedToday(){
+  if(!currentModelId) return;
+  const m = models.find(x=>x.id===currentModelId);
+  if(!m) return;
+  m.lastContact = todayStr();
+  const next = prompt('Set next follow-up date (YYYY-MM-DD), or leave blank to clear it:', m.nextFollowUp||'');
+  if(next !== null){
+    m.nextFollowUp = next.trim();
+  }
+  m.updatedAt = Date.now();
+  save();
+  openProfile(m.id);
+  renderDashboard();
+  if(document.getElementById('view-roster').classList.contains('active')) renderRoster();
+  if(document.getElementById('view-kanban').classList.contains('active')) renderKanban();
+}
 function deleteCurrentModel(){
   if(!currentModelId) return;
   if(!confirm('Remove this model from your roster?')) return;
@@ -2083,7 +2449,7 @@ function promoteApplicant(appData) {
     const set = (id, val) => { const el = document.getElementById(id); if(el && val) el.value = val; };
     set('f-name',    appData.name);
     set('f-handle',  appData.instagram);
-    set('f-city',    appData.location);
+    if(appData.location) setCityValue(appData.location);
     set('f-contact', appData.phone || appData.email);
     set('f-tags',    roles.join(', ').toLowerCase());
     set('f-notes',   `Applied via Circle form. Bio: "${appData.bio||''}"\nEmail: ${appData.email||''}\nReferral: ${appData.referral||''}\nPortfolio: ${appData.portfolio||''}`);
