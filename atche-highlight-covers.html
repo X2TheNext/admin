@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATCHÉ — IG Highlight Covers</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --black: #080808;
+  --surface: #111111;
+  --surface2: #181818;
+  --border: #222222;
+  --gold: #C9A84C;
+  --gold-light: #E2C47A;
+  --text: #F2EDE6;
+  --text2: #B0A898;
+  --text3: #6A6258;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--surface2);color:var(--text);min-height:100vh;padding:40px 24px}
+
+.page-header{text-align:center;margin-bottom:40px}
+.page-header h1{font-family:'Playfair Display',serif;font-size:32px;letter-spacing:4px;color:var(--gold-light);font-weight:600}
+.page-header p{color:var(--text3);font-size:13px;letter-spacing:2px;text-transform:uppercase;margin-top:8px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;max-width:1100px;margin:0 auto}
+
+.cover-card{display:flex;flex-direction:column;align-items:center;gap:14px}
+
+.cover-frame{width:220px;height:220px;border-radius:50%;overflow:hidden;border:1px solid var(--border);box-shadow:0 0 0 1px rgba(201,168,76,0.08)}
+.cover-frame svg{width:100%;height:100%;display:block}
+
+.cover-label{font-family:'Playfair Display',serif;font-size:16px;letter-spacing:3px;text-transform:uppercase;color:var(--text)}
+.cover-sub{font-size:11px;color:var(--text3);letter-spacing:1px;text-align:center;max-width:200px}
+
+/* shared radial bg for icon canvases */
+.glow{fill:var(--black)}
+.ring{fill:none;stroke:var(--gold);stroke-width:14}
+.line{fill:none;stroke:var(--gold-light);stroke-width:14;stroke-linecap:round;stroke-linejoin:round}
+.dot{fill:var(--gold-light)}
+
+@media(max-width:480px){
+  .cover-frame{width:160px;height:160px}
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>ATCHÉ</h1>
+  <p>Instagram Highlight Covers — @atcheofficial</p>
+</div>
+
+<div class="grid">
+
+  <!-- ABOUT -->
+  <div class="cover-card">
+    <div class="cover-frame">
+      <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g1" cx="50%" cy="38%" r="60%">
+            <stop offset="0%" stop-color="#1a1610"/>
+            <stop offset="100%" stop-color="#080808"/>
+          </radialGradient>
+        </defs>
+        <rect width="1080" height="1080" fill="url(#g1)"/>
+        <!-- radiating glow mark -->
+        <circle cx="540" cy="540" r="90" class="ring"/>
+        <g class="line">
+          <line x1="540" y1="320" x2="540" y2="400"/>
+          <line x1="540" y1="680" x2="540" y2="760"/>
+          <line x1="320" y1="540" x2="400" y2="540"/>
+          <line x1="680" y1="540" x2="760" y2="540"/>
+          <line x1="386" y1="386" x2="442" y2="442"/>
+          <line x1="638" y1="638" x2="694" y2="694"/>
+          <line x1="694" y1="386" x2="638" y2="442"/>
+          <line x1="442" y1="638" x2="386" y2="694"/>
+        </g>
+        <circle cx="540" cy="540" r="14" class="dot"/>
+      </svg>
+    </div>
+    <div class="cover-label">About</div>
+    <div class="cover-sub">Mission, founders, the ATCHÉ story</div>
+  </div>
+
+  <!-- THE CIRCLE -->
+  <div class="cover-card">
+    <div class="cover-frame">
+      <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g2" cx="50%" cy="38%" r="60%">
+            <stop offset="0%" stop-color="#1a1610"/>
+            <stop offset="100%" stop-color="#080808"/>
+          </radialGradient>
+        </defs>
+        <rect width="1080" height="1080" fill="url(#g2)"/>
+        <!-- three interlocking rings -->
+        <circle cx="460" cy="480" r="120" class="ring"/>
+        <circle cx="620" cy="480" r="120" class="ring"/>
+        <circle cx="540" cy="640" r="120" class="ring"/>
+      </svg>
+    </div>
+    <div class="cover-label">The Circle</div>
+    <div class="cover-sub">Member spotlights, applications open</div>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="cover-card">
+    <div class="cover-frame">
+      <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g3" cx="50%" cy="38%" r="60%">
+            <stop offset="0%" stop-color="#1a1610"/>
+            <stop offset="100%" stop-color="#080808"/>
+          </radialGradient>
+        </defs>
+        <rect width="1080" height="1080" fill="url(#g3)"/>
+        <!-- coupe glass -->
+        <g class="line">
+          <path d="M400 360 L540 540 L680 360 Z"/>
+          <line x1="540" y1="540" x2="540" y2="700"/>
+          <line x1="440" y1="760" x2="640" y2="760"/>
+        </g>
+        <g class="line" stroke-width="10">
+          <line x1="430" y1="420" x2="650" y2="420"/>
+        </g>
+        <circle cx="600" cy="400" r="10" class="dot"/>
+      </svg>
+    </div>
+    <div class="cover-label">Events</div>
+    <div class="cover-sub">Table packages, tickets, upcoming nights</div>
+  </div>
+
+  <!-- STUDIO -->
+  <div class="cover-card">
+    <div class="cover-frame">
+      <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g4" cx="50%" cy="38%" r="60%">
+            <stop offset="0%" stop-color="#1a1610"/>
+            <stop offset="100%" stop-color="#080808"/>
+          </radialGradient>
+        </defs>
+        <rect width="1080" height="1080" fill="url(#g4)"/>
+        <!-- camera -->
+        <g class="line">
+          <rect x="370" y="430" width="340" height="240" rx="20"/>
+          <path d="M470 430 L500 380 L580 380 L610 430"/>
+        </g>
+        <circle cx="540" cy="550" r="70" class="ring"/>
+        <circle cx="540" cy="550" r="20" class="dot"/>
+      </svg>
+    </div>
+    <div class="cover-label">Studio</div>
+    <div class="cover-sub">Creator/UGC track, brand collabs</div>
+  </div>
+
+  <!-- COMMUNITY -->
+  <div class="cover-card">
+    <div class="cover-frame">
+      <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g5" cx="50%" cy="38%" r="60%">
+            <stop offset="0%" stop-color="#1a1610"/>
+            <stop offset="100%" stop-color="#080808"/>
+          </radialGradient>
+        </defs>
+        <rect width="1080" height="1080" fill="url(#g5)"/>
+        <!-- three figures -->
+        <g class="line">
+          <circle cx="540" cy="380" r="55" class="ring" stroke-width="12"/>
+          <path d="M430 700 C430 590 650 590 650 700"/>
+          <circle cx="380" cy="430" r="42" class="ring" stroke-width="12"/>
+          <path d="M300 690 C300 600 460 600 460 690"/>
+          <circle cx="700" cy="430" r="42" class="ring" stroke-width="12"/>
+          <path d="M620 690 C620 600 780 600 780 690"/>
+        </g>
+      </svg>
+    </div>
+    <div class="cover-label">Community</div>
+    <div class="cover-sub">Testimonials, recaps, real stories</div>
+  </div>
+
+  <!-- APPLY -->
+  <div class="cover-card">
+    <div class="cover-frame">
+      <svg viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g6" cx="50%" cy="38%" r="60%">
+            <stop offset="0%" stop-color="#1a1610"/>
+            <stop offset="100%" stop-color="#080808"/>
+          </radialGradient>
+        </defs>
+        <rect width="1080" height="1080" fill="url(#g6)"/>
+        <!-- doorway with glow -->
+        <g class="line">
+          <path d="M420 760 L420 420 C420 360 480 320 540 320 C600 320 660 360 660 420 L660 760"/>
+        </g>
+        <line x1="380" y1="760" x2="700" y2="760" class="line"/>
+        <circle cx="540" cy="540" r="36" class="dot" opacity="0.9"/>
+      </svg>
+    </div>
+    <div class="cover-label">Apply</div>
+    <div class="cover-sub">How to join The Circle</div>
+  </div>
+
+</div>
+
+</body>
+</html>

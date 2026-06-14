@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATCHÉ × The Last Dance — Sponsorship Menu</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Inter:wght@200;300;400;500;600;700&display=swap');
+
+:root{
+  --black:#080808;
+  --surface:#111111;
+  --surface2:#181818;
+  --border:#242424;
+  --border2:#2e2e2e;
+  --cream:#F2EAD8;
+  --gold:#C9A84C;
+  --gold-light:#E2C47A;
+  --gold-dim:rgba(201,168,76,0.12);
+  --text:#F2EDE6;
+  --text2:#B0A898;
+  --text3:#6A6258;
+  --red:#A6362C;
+  --green:#3E5E45;
+  --sage:#6B9E7A;
+  --t:0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);overflow-x:hidden;line-height:1.6}
+
+/* NOISE OVERLAY */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;opacity:0.03;pointer-events:none;z-index:999}
+
+.eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:600}
+.section{padding:90px 24px;position:relative;max-width:1100px;margin:0 auto}
+
+/* ── TOP BAR ── */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 32px;mix-blend-mode:difference}
+.topbar-mark{font-family:'Playfair Display',serif;font-weight:700;font-size:18px;letter-spacing:6px;color:var(--text)}
+.topbar-tag{font-size:10px;letter-spacing:3px;color:var(--text2);text-transform:uppercase}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:92vh;display:flex;align-items:flex-end;overflow:hidden}
+.hero-bg{position:absolute;inset:-2%;background-image:url('https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_002839_b983ba9d-a9da-48a0-9d0d-706549f4ed79.png');background-size:cover;background-position:center 45%;animation:heroZoom 26s ease-in-out infinite alternate}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,8,0.25) 0%,rgba(8,8,8,0.55) 55%,rgba(8,8,8,0.98) 100%)}
+@keyframes heroZoom{0%{transform:scale(1)}100%{transform:scale(1.08)}}
+.hero-content{position:relative;z-index:2;padding:0 32px 70px;width:100%;text-align:center}
+.hero-presents{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--gold-light);margin-bottom:18px}
+.hero-presents b{color:var(--cream);letter-spacing:8px}
+.hero-title{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(40px,9vw,108px);line-height:1;color:var(--gold);text-shadow:0 4px 40px rgba(0,0,0,0.6);letter-spacing:2px;animation:glow 4s ease-in-out infinite}
+@keyframes glow{0%,100%{text-shadow:0 4px 40px rgba(0,0,0,0.6)}50%{text-shadow:0 4px 60px rgba(201,168,76,0.45)}}
+.hero-kicker{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(18px,3vw,28px);color:var(--cream);margin-top:8px}
+.hero-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(15px,2.2vw,22px);color:var(--text2);margin-top:22px;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.5}
+.hero-meta{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-top:40px}
+.hero-meta-item{text-align:center}
+.hero-meta-label{font-size:10px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;margin-bottom:6px}
+.hero-meta-value{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--cream)}
+
+/* ── TICKER ── */
+.ticker-wrap{position:relative;z-index:3;width:100%;overflow:hidden;background:var(--gold);border-top:1px solid var(--gold-light);border-bottom:1px solid var(--gold-light);padding:10px 0}
+.ticker{display:flex;white-space:nowrap;animation:ticker 30s linear infinite}
+.ticker span{font-family:'Playfair Display',serif;font-weight:700;font-size:13px;letter-spacing:4px;text-transform:uppercase;color:var(--black);padding:0 26px}
+.ticker span::after{content:'✦';margin-left:26px;color:var(--red)}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ── DIVIDER ── */
+.divider{display:flex;align-items:center;justify-content:center;gap:16px;margin:0 auto 36px;max-width:400px}
+.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent)}
+.divider-dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+
+/* ── INTRO ── */
+.intro{text-align:center;max-width:760px}
+.intro h2{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(26px,4.5vw,42px);color:var(--cream);margin-bottom:24px;line-height:1.3}
+.intro p{font-size:15px;color:var(--text2)}
+.intro em{color:var(--gold-light);font-style:italic}
+
+/* ── PRESENTING (featured) ── */
+.presenting{margin-top:60px;border-radius:24px;border:1px solid rgba(201,168,76,0.4);background:linear-gradient(135deg,rgba(201,168,76,0.14),rgba(166,54,44,0.08));padding:48px;position:relative;overflow:hidden;box-shadow:0 0 0 0 rgba(201,168,76,0.25);animation:pulseCard 4s ease-in-out infinite}
+@keyframes pulseCard{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.18)}50%{box-shadow:0 0 60px 6px rgba(201,168,76,0.18)}}
+.presenting::before{content:'EXCLUSIVE · ONE SLOT';position:absolute;top:22px;right:-46px;background:var(--red);color:var(--cream);font-size:10px;font-weight:700;letter-spacing:3px;padding:6px 60px;transform:rotate(35deg);text-transform:uppercase}
+.presenting .eyebrow{display:block;margin-bottom:10px}
+.presenting h3{font-family:'Playfair Display',serif;font-size:clamp(28px,4.5vw,46px);font-weight:900;color:var(--gold);margin-bottom:18px;letter-spacing:1px}
+.presenting p{font-size:14px;color:var(--text2);margin-bottom:18px;max-width:640px}
+.presenting ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+.presenting li{display:flex;gap:12px;align-items:flex-start;font-size:13px;color:var(--cream)}
+.presenting li::before{content:'✦';color:var(--gold);flex-shrink:0;margin-top:1px}
+
+/* ── TIER GRID ── */
+.tiers-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:60px}
+.tier-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:34px;position:relative;overflow:hidden;transition:var(--t)}
+.tier-card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,0.4);box-shadow:0 20px 50px rgba(0,0,0,0.5)}
+.tier-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.35),transparent)}
+.tier-icon{font-size:28px;margin-bottom:14px;display:block}
+.tier-card h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--gold-light);margin-bottom:6px}
+.tier-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:16px;display:block}
+.tier-card ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.tier-card li{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text2)}
+.tier-card li::before{content:'—';color:var(--gold);flex-shrink:0}
+.tier-card li strong{color:var(--cream)}
+
+.tier-best{padding:4px 14px;border-radius:999px;background:var(--gold-dim);border:1px solid rgba(201,168,76,0.3);font-size:10px;letter-spacing:2px;color:var(--gold-light);text-transform:uppercase;display:inline-block;margin-top:16px}
+
+/* ── PRICE TAGS ── */
+.price-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border2)}
+.price-tag{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--gold-light)}
+.price-tag span{font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--text3);letter-spacing:1px;margin-left:6px;text-transform:none}
+.presenting .price-row{border-top:1px solid rgba(201,168,76,0.25);margin-top:24px;padding-top:20px}
+.presenting .price-tag{font-size:32px}
+
+/* ── GALLERY STRIP ── */
+.gallery-strip{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;margin-top:60px}
+.gallery-strip img{width:100%;height:100%;object-fit:cover;border-radius:18px;border:1px solid var(--border2);box-shadow:0 30px 80px rgba(0,0,0,0.6)}
+.gallery-cap{position:absolute;left:20px;bottom:20px;background:rgba(8,8,8,0.6);backdrop-filter:blur(6px);border:1px solid rgba(201,168,76,0.3);border-radius:999px;padding:8px 18px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light)}
+.gallery-item{position:relative;border-radius:18px;overflow:hidden}
+
+/* ── TV SHOWCASE ── */
+.tv-showcase{display:grid;grid-template-columns:1fr 1.15fr;gap:60px;align-items:center}
+.tv-img{width:100%;border-radius:18px;border:1px solid var(--border2);box-shadow:0 30px 80px rgba(0,0,0,0.6)}
+.tv-text .eyebrow{display:block;margin-bottom:18px}
+.tv-text h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,42px);color:var(--cream);margin-bottom:18px;line-height:1.2}
+.tv-text p{font-size:14px;color:var(--text2);margin-bottom:14px}
+
+/* ── WHY THIS WORKS ── */
+.why{background:linear-gradient(180deg,var(--black),var(--surface) 50%,var(--black));border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.why-inner{max-width:1100px;margin:0 auto;padding:90px 24px;text-align:center}
+.why h2{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(28px,4.5vw,46px);color:var(--gold-light);margin-bottom:48px}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border2);border:1px solid var(--border2);border-radius:20px;overflow:hidden}
+.why-card{background:var(--surface);padding:36px 24px}
+.why-card .num{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--gold);margin-bottom:10px}
+.why-card p{font-size:12px;color:var(--text2);letter-spacing:0.5px}
+.why-card strong{color:var(--cream);display:block;margin-bottom:4px;font-size:13px}
+
+/* ── CTA ── */
+.cta{text-align:center}
+.cta .eyebrow{display:block;margin-bottom:14px}
+.cta h2{font-family:'Playfair Display',serif;font-size:clamp(34px,6.5vw,64px);color:var(--gold);margin:0 0 24px;letter-spacing:4px}
+.cta p{font-size:14px;color:var(--text2);max-width:520px;margin:0 auto 36px}
+.cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn{padding:16px 36px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:var(--t);text-decoration:none;display:inline-block}
+.btn-primary{background:var(--gold);color:var(--black);border:1px solid var(--gold);box-shadow:0 0 0 0 rgba(201,168,76,0.5);animation:pulseFree 2.4s ease-in-out infinite}
+@keyframes pulseFree{0%{box-shadow:0 0 0 0 rgba(201,168,76,0.45)}70%{box-shadow:0 0 0 16px rgba(201,168,76,0)}100%{box-shadow:0 0 0 0 rgba(201,168,76,0)}}
+.btn-primary:hover{background:var(--gold-light)}
+.btn-ghost{background:transparent;color:var(--cream);border:1px solid var(--border2)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── FOOTER ── */
+.footer{text-align:center;padding:48px 24px;border-top:1px solid var(--border)}
+.footer-mark{font-family:'Playfair Display',serif;font-weight:700;font-size:20px;letter-spacing:8px;color:var(--gold);margin-bottom:8px}
+.footer p{font-size:11px;color:var(--text3);letter-spacing:1px}
+
+/* ── MOBILE ── */
+@media(max-width:760px){
+  .section{padding:60px 20px}
+  .tiers-grid{grid-template-columns:1fr}
+  .presenting ul{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:1fr 1fr}
+  .hero-meta{gap:24px}
+  .presenting{padding:32px}
+  .presenting::before{top:14px;right:-50px;font-size:9px;padding:5px 56px}
+  .gallery-strip{grid-template-columns:1fr}
+  .gallery-item img{aspect-ratio:4/3}
+  .tv-showcase{grid-template-columns:1fr;gap:36px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-mark">ATCHÉ</div>
+  <div class="topbar-tag">ah · shay</div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-presents"><b>ATCHÉ</b> &nbsp;×&nbsp; EVERYDAY PEOPLE &nbsp;present</div>
+    <div class="hero-title">THE LAST DANCE</div>
+    <div class="hero-kicker">Sponsorship Menu</div>
+    <p class="hero-sub">One night. One block. Free for everybody. The kind of crowd that remembers who showed up — and the kind of night that gets watched back for years.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">When</div>
+        <div class="hero-meta-value">June 19–20</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Where</div>
+        <div class="hero-meta-value">Everyday People · U Street</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Reach</div>
+        <div class="hero-meta-value">The Circle + Free-Entry Crowd</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>Presenting Sponsor</span><span>TV & Screen Takeover</span><span>Activation Table</span><span>Signature Drink</span><span>Social Package</span><span>Friend of the Block</span>
+    <span>Presenting Sponsor</span><span>TV & Screen Takeover</span><span>Activation Table</span><span>Signature Drink</span><span>Social Package</span><span>Friend of the Block</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<section class="section intro">
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+  <span class="eyebrow">The Pitch</span>
+  <h2>This isn't a logo on a flyer.<br>It's a seat at the last great night at Everyday People.</h2>
+  <p>Live, outside, on Juneteenth, <em>documented in full</em> — every package below puts your brand in front of a crowd that's there for the culture, on a night they'll be talking about for months.</p>
+
+  <div class="gallery-strip">
+    <div class="gallery-item">
+      <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_002304_96a08297-66e6-46fe-bb1e-8df5b2153b25.png" alt="The Last Dance — official poster artwork">
+      <span class="gallery-cap">The Official Artwork</span>
+    </div>
+    <div class="gallery-item">
+      <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_002843_97ceb2d3-6200-46e5-9d57-83d9c10528a0.png" alt="Remembering Everyday People — tribute collage">
+      <span class="gallery-cap">Remembering Everyday People</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRESENTING -->
+<section class="section" style="padding-top:0">
+  <div class="presenting">
+    <span class="eyebrow">Tier One</span>
+    <h3>Presenting Sponsor</h3>
+    <p>"The Last Dance, powered by [Brand]" — your name on everything, from the opening title card of the recap video to the screens behind the bar.</p>
+    <ul>
+      <li><strong>Branded TV loop</strong> running all night on every screen inside Everyday People</li>
+      <li><strong>Top billing</strong> on every flyer, post, and event graphic</li>
+      <li><strong>Entrance signage</strong> — branded banner/sign at the door, plus your logo on the IG story frame used all night</li>
+      <li><strong>Live shoutout</strong> from the stage/DJ at peak hour</li>
+      <li><strong>First credit</strong> + branded intro in the tribute video</li>
+      <li><strong>Premium activation spot</strong> on the block, front and center</li>
+    </ul>
+    <span class="tier-best">One slot only — first conversation wins it</span>
+    <div class="price-row">
+      <div class="price-tag">$1,500–$3,000 <span>full wrap, one slot</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TV SHOWCASE -->
+<section class="section tv-showcase">
+  <img class="tv-img" src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_004722_72bac6ad-a6bf-443a-8829-da48f4dea4b6.png" alt="Branded TV screens behind the bar at Everyday People">
+  <div class="tv-text">
+    <span class="eyebrow">Your Brand, On Loop, All Night</span>
+    <h2>Every screen in the room is yours.</h2>
+    <p>Everyday People's TVs run behind the bar all night long — the one thing every single person in the room looks at, over and over, for hours. A Presenting Sponsor or TV Takeover puts your loop right there: product shots, a promo reel, a QR code, your colors.</p>
+    <p>It's the lowest-lift, highest-frequency placement on the menu — no booth to staff, no flyer to hand out. Just your brand, glowing gold, on repeat.</p>
+  </div>
+</section>
+
+<!-- TIER GRID -->
+<section class="section" style="padding-top:0">
+  <div class="tiers-grid">
+
+    <div class="tier-card">
+      <span class="tier-icon">📺</span>
+      <h3>TV & Screen Takeover</h3>
+      <span class="tier-tag">In-Venue Media</span>
+      <ul>
+        <li>Custom branded loop on Everyday People's screens all night</li>
+        <li>Product shots, promo reel, or a QR straight to your page</li>
+        <li>Hours of passive eyes on your brand at the bar</li>
+        <li>Separate loops possible for indoor vs. block-party screens</li>
+      </ul>
+      <div class="price-row"><div class="price-tag">$400–$700 <span>per night</span></div></div>
+    </div>
+
+    <div class="tier-card">
+      <span class="tier-icon">🖼️</span>
+      <h3>Print & Flyer Placement</h3>
+      <span class="tier-tag">Pre-Event Reach</span>
+      <ul>
+        <li>Logo on the official flyer — digital and any U Street posters</li>
+        <li>Co-branded flyer stack for your own storefront/door</li>
+        <li>Featured in pre-event IG/story graphics from ATCHÉ + Everyday People</li>
+      </ul>
+      <div class="price-row"><div class="price-tag">$150–$300 <span>flat</span></div></div>
+    </div>
+
+    <div class="tier-card">
+      <span class="tier-icon">🛖</span>
+      <h3>Activation Table</h3>
+      <span class="tier-tag">On The Block — Cookies DC Model</span>
+      <ul>
+        <li>Branded tent, table, or booth right on the street</li>
+        <li>Sampling, giveaways, or a codeword discount tied to your brand</li>
+        <li>Direct face-time with the crowd — real interaction, not just a logo</li>
+        <li><strong>Best for:</strong> cannabis/lifestyle, beverage, beauty, local fashion & jewelry</li>
+      </ul>
+      <div class="price-row"><div class="price-tag">$400–$800 <span>+ product/samples</span></div></div>
+    </div>
+
+    <div class="tier-card">
+      <span class="tier-icon">🍸</span>
+      <h3>Signature Drink Sponsor</h3>
+      <span class="tier-tag">Menu Placement</span>
+      <ul>
+        <li>A cocktail or mocktail named after your brand on the night's menu</li>
+        <li>Chalkboard / menu card credit: "[Drink] — presented by [Brand]"</li>
+        <li>Optional: your product physically poured into the drink</li>
+      </ul>
+      <div class="price-row"><div class="price-tag">$250–$450 <span>+ product</span></div></div>
+    </div>
+
+    <div class="tier-card">
+      <span class="tier-icon">📱</span>
+      <h3>Social & Content Package</h3>
+      <span class="tier-tag">Digital Amplification</span>
+      <ul>
+        <li>Tagged post + story from <strong>@atcheofficial</strong> before, during, and after</li>
+        <li>Credit in the recap video</li>
+        <li>Built-in UGC — Circle creators feature your activation organically</li>
+        <li>Optional on-camera "first impressions" moment with your product</li>
+      </ul>
+      <div class="price-row"><div class="price-tag">$200–$400 <span>or bundled add-on</span></div></div>
+    </div>
+
+    <div class="tier-card">
+      <span class="tier-icon">🎁</span>
+      <h3>Swag / Gift Bag Sponsor</h3>
+      <span class="tier-tag">Low Lift, High Goodwill</span>
+      <ul>
+        <li>Your item or sample in any giveaway bags at the door or activation tables</li>
+        <li>Easy entry point for smaller and local brands</li>
+        <li>Pairs well with any other tier as an add-on</li>
+      </ul>
+      <div class="price-row"><div class="price-tag">$100–$200 <span>or product-in-kind</span></div></div>
+    </div>
+
+  </div>
+
+  <div class="tier-card" style="margin-top:24px">
+    <span class="tier-icon">🤝</span>
+    <h3>Friend of the Block</h3>
+    <span class="tier-tag">For U Street Neighbors</span>
+    <ul style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <li>Logo on the "thank you to the block" graphic and event materials footer</li>
+      <li>Mention in the recap video's closing credits</li>
+      <li>Cross-promo — ATCHÉ tags your business in the U Street walking-tour content</li>
+    </ul>
+    <div class="price-row"><div class="price-tag">No cash ask <span>cross-promo / goodwill</span></div></div>
+  </div>
+</section>
+
+<!-- WHY THIS WORKS -->
+<section class="why">
+  <div class="why-inner">
+    <span class="eyebrow">Why This Works</span>
+    <h2>It's a night people remember — so brands get remembered too.</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="num">01</div>
+        <strong>Built-In Audience</strong>
+        <p>The Circle's creative women + Everyday People's loyal regulars, all in one place, all night.</p>
+      </div>
+      <div class="why-card">
+        <div class="num">02</div>
+        <strong>It's Emotional</strong>
+        <p>A send-off night people show up for — and the brands attached to it get carried in that memory.</p>
+      </div>
+      <div class="why-card">
+        <div class="num">03</div>
+        <strong>It's Documented</strong>
+        <p>Full video + photo coverage means your placement keeps working long after the lights come up.</p>
+      </div>
+      <div class="why-card">
+        <div class="num">04</div>
+        <strong>Free Entry = More Eyes</strong>
+        <p>No cover means a bigger crowd, more foot traffic, and more impressions on every activation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta">
+  <span class="eyebrow">One Week Out — Let's Lock It In</span>
+  <h2>BE PART OF<br>THE LAST DANCE</h2>
+  <p>Mix and match — most sponsors land on a TV loop + activation table, or go full Presenting Sponsor for the wrap. Cookies DC and Spicy Water are already in. Prices above are starting points, flexible based on what's still easy to pull off with a week's notice — first to confirm gets first pick.</p>
+  <div class="cta-buttons">
+    <a class="btn btn-primary" href="mailto:thedigitalmarxman@gmail.com">Claim a Sponsorship Slot</a>
+    <a class="btn btn-ghost" href="https://instagram.com/atcheofficial" target="_blank">Follow @atcheofficial</a>
+  </div>
+</section>
+
+<div class="footer">
+  <div class="footer-mark">ATCHÉ</div>
+  <p>@ATCHEOFFICIAL · HU · DC · 2026 · A JUNETEENTH CELEBRATION</p>
+</div>
+
+</body>
+</html>

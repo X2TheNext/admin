@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/atche-visuals.html" },
+    { "source": "/studio", "destination": "/atche-visuals-studio.html" }
+  ]
+}

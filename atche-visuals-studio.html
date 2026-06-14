@@ -122,10 +122,15 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .drop-zone-sub{font-size:11px;color:var(--text3);margin-top:4px}
 #fileInput{display:none}
 
-.thumb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.thumb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px;max-height:420px;overflow-y:auto;padding-right:4px;scroll-behavior:smooth}
 .thumb{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:1;border:1px solid var(--border2);background:var(--surface2)}
+.thumb img{cursor:pointer;transition:transform .25s var(--t)}
+.thumb img:hover{transform:scale(1.04)}
 .thumb img, .thumb video{width:100%;height:100%;object-fit:cover;display:block}
 .thumb-tag{position:absolute;bottom:4px;left:4px;font-size:8px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--gold-light);background:rgba(8,8,8,0.7);border-radius:4px;padding:1px 5px}
+.thumb-delete{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(8,8,8,0.65);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;line-height:1;color:var(--text2);cursor:pointer;z-index:2;transition:var(--t)}
+.thumb-delete:hover{background:var(--rose);border-color:var(--rose);color:#fff}
+.thumb-delete:active{transform:scale(0.92)}
 .upload-status{font-size:11px;color:var(--text3);margin-top:10px;text-align:center;letter-spacing:0.5px}
 
 /* SESSION LIST */
@@ -141,6 +146,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .badge-closed{background:var(--surface3);color:var(--text3);border:1px solid var(--border2)}
 .sess-open{font-size:11px;font-weight:600;color:var(--gold);cursor:pointer;letter-spacing:0.5px;flex-shrink:0}
 .sess-confirm{font-size:11px;font-weight:600;color:#9DC9A8;cursor:pointer;letter-spacing:0.5px;flex-shrink:0;border:1px solid rgba(107,158,122,0.35);border-radius:20px;padding:4px 10px;background:var(--sage-dim)}
+.sess-reopen{font-size:11px;font-weight:600;color:var(--gold);cursor:pointer;letter-spacing:0.5px;flex-shrink:0;border:1px solid rgba(201,168,76,0.35);border-radius:20px;padding:4px 10px;background:var(--gold-dim)}
+.sess-reopen:hover{background:rgba(201,168,76,0.22)}
+.sess-delete{font-size:11px;font-weight:600;color:#E8A0AE;cursor:pointer;letter-spacing:0.5px;flex-shrink:0;border:1px solid rgba(194,105,122,0.35);border-radius:20px;padding:4px 10px;background:var(--rose-dim)}
+.sess-delete:hover{background:rgba(194,105,122,0.22)}
 .sess-empty{text-align:center;font-size:12px;color:var(--text3);padding:16px 0;font-style:italic}
 
 /* FOOTER */
@@ -175,6 +184,31 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .sess-confirm{animation:confirm-pulse 2.2s ease-in-out infinite;transition:var(--t)}
 .sess-confirm:hover{background:rgba(107,158,122,0.28);animation-play-state:paused}
 
+/* ---- PAYMENT BANNER (active session card) ---- */
+.payment-banner{display:none;align-items:center;justify-content:space-between;gap:10px;background:var(--sage-dim);border:1px solid rgba(107,158,122,0.35);border-radius:12px;padding:12px 14px;margin-bottom:16px;animation:confirm-pulse 2.2s ease-in-out infinite}
+.payment-banner.show{display:flex}
+.payment-banner-text{font-size:13px;color:#9DC9A8;font-weight:600}
+.payment-banner-text small{display:block;font-size:11px;color:var(--text2);font-weight:400;margin-top:2px}
+.payment-banner-btn{font-size:12px;font-weight:700;color:#9DC9A8;cursor:pointer;letter-spacing:0.5px;border:1px solid rgba(107,158,122,0.4);border-radius:20px;padding:6px 14px;background:rgba(107,158,122,0.18);flex-shrink:0;transition:var(--t)}
+.payment-banner-btn:hover{background:rgba(107,158,122,0.3)}
+@keyframes banner-flash{0%,100%{outline-color:rgba(107,158,122,0)}30%{outline-color:rgba(107,158,122,0.9)}}
+.payment-banner.flash{outline:3px solid rgba(107,158,122,0);outline-offset:3px;animation:banner-flash 1.2s ease-out}
+
+/* ---- AI EDIT OWED BANNER (active session card) ---- */
+@keyframes ai-edit-pulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.45)}50%{box-shadow:0 0 0 5px rgba(201,168,76,0)}}
+.ai-edit-banner{display:none;align-items:center;justify-content:space-between;gap:10px;background:var(--gold-dim);border:1px solid rgba(201,168,76,0.35);border-radius:12px;padding:12px 14px;margin-bottom:16px;animation:ai-edit-pulse 2.2s ease-in-out infinite}
+.ai-edit-banner.show{display:flex}
+.ai-edit-banner-text{font-size:13px;color:var(--gold);font-weight:600}
+.ai-edit-banner-text small{display:block;font-size:11px;color:var(--text2);font-weight:400;margin-top:2px}
+.ai-edit-banner-btn{font-size:12px;font-weight:700;color:var(--gold);cursor:pointer;letter-spacing:0.5px;border:1px solid rgba(201,168,76,0.4);border-radius:20px;padding:6px 14px;background:rgba(201,168,76,0.15);flex-shrink:0;transition:var(--t)}
+.ai-edit-banner-btn:hover{background:rgba(201,168,76,0.28)}
+.ai-edit-banner-btn.uploading{opacity:0.6;pointer-events:none}
+
+/* ---- NOTIFY CLIENT EMPHASIS ---- */
+@keyframes notify-pulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0.45)}50%{box-shadow:0 0 0 5px rgba(201,168,76,0)}}
+.notify-pulse{animation:notify-pulse 2.2s ease-in-out infinite}
+.notify-pulse:hover{animation-play-state:paused}
+
 /* ---- BUTTON MICRO-INTERACTIONS ---- */
 .btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,168,76,0.25)}
 .btn-primary:active:not(:disabled){transform:scale(0.98)}
@@ -187,6 +221,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 /* ---- ACTIVE SESSION CARD ---- */
 .session-active.show{animation:item-in .5s cubic-bezier(.16,1,.3,1) both}
+
+/* ---- THUMBNAIL LIGHTBOX ---- */
+.thumb-lightbox{display:none;position:fixed;inset:0;background:rgba(8,8,8,0.92);z-index:999;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.thumb-lightbox.show{display:flex;animation:item-in .3s cubic-bezier(.16,1,.3,1)}
+.thumb-lightbox img, .thumb-lightbox video{max-width:100%;max-height:90vh;border-radius:10px;border:1px solid var(--border2);cursor:default}
+.thumb-lightbox-close{position:absolute;top:18px;right:22px;font-size:28px;color:var(--text2);cursor:pointer;line-height:1;transition:var(--t)}
+.thumb-lightbox-close:hover{color:var(--gold)}
 </style>
 </head>
 <body>
@@ -270,9 +311,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <p class="card-desc">One session = one client/group/performer. You upload their shots here; they get a private link + QR to pick, pay, and download on their own phone.</p>
       <div class="row">
         <input class="form-input" id="newLabel" type="text" placeholder="Label (e.g. &quot;DJ Booth Reel&quot;, &quot;Table 4&quot;) — optional">
-        <input class="form-input" id="newContact" type="text" placeholder="Their IG handle or phone — optional" style="max-width:200px">
+        <input class="form-input" id="newContact" type="text" placeholder="IG handle, phone, or email — optional" style="max-width:200px">
       </div>
-      <p class="card-desc" style="margin:8px 0 0">Contact lets you follow up if they don't unlock or download tonight — totally optional.</p>
+      <p class="card-desc" style="margin:8px 0 0">Contact lets you follow up if they don't unlock or download tonight. If it's a phone number, "Notify Client" texts them the link; if it's an email, it opens a pre-filled email instead. Totally optional.</p>
       <button class="btn-primary" style="width:100%;margin-top:10px" onclick="createSession()">Create Session</button>
     </div>
 
@@ -282,11 +323,21 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <h2 style="text-align:center;margin-bottom:14px">Hand this to your client</h2>
       <div class="session-code" id="activeCode">—</div>
       <div class="session-label" id="activeLabel"></div>
+      <div class="payment-banner" id="paymentBanner">
+        <div class="payment-banner-text">💰 Client says they paid<small id="paymentBannerAmt"></small></div>
+        <div class="payment-banner-btn" id="paymentBannerBtn">Confirm Paid</div>
+      </div>
+      <div class="ai-edit-banner" id="aiEditBanner">
+        <div class="ai-edit-banner-text">✨ AI Edit owed — <span id="aiEditBannerTheme"></span><small id="aiEditBannerPhoto"></small></div>
+        <label class="ai-edit-banner-btn" id="aiEditBannerBtn" for="aiEditUploadInput">Upload AI Edit</label>
+        <input type="file" id="aiEditUploadInput" accept="image/*" style="display:none">
+      </div>
       <div class="share-box">
         <div class="share-qr"><img id="shareQr" alt="Session QR code"></div>
         <div class="share-info">
           <div class="share-link" id="shareLink">—</div>
           <button class="btn-secondary" onclick="copyLink()">Copy Link</button>
+          <button class="btn-secondary" id="notifyBtn" onclick="notifyClient()" style="margin-left:6px">📩 Notify Client</button>
           <button class="btn-secondary" onclick="closeSession()" style="margin-left:6px;border-color:var(--text3);color:var(--text3)">Close Session</button>
         </div>
       </div>
@@ -300,6 +351,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="upload-status" id="uploadStatus"></div>
     </div>
 
+    <!-- THUMBNAIL LIGHTBOX -->
+    <div class="thumb-lightbox" id="thumbLightbox" onclick="closeThumbLightbox(event)">
+      <span class="thumb-lightbox-close" onclick="closeThumbLightbox(event)">✕</span>
+      <img id="thumbLightboxImg" alt="Full-size preview" style="display:none">
+      <video id="thumbLightboxVideo" controls style="display:none"></video>
+    </div>
+
     <!-- SESSION LIST -->
     <div class="card reveal">
       <span class="step-tag">All Sessions</span>
@@ -308,7 +366,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     </div>
 
     <div class="av-footer">
-      <a onclick="window.open('atche-visuals.html','_blank')">↗ Client Door Preview</a>
+      <a onclick="window.open('https://atche-visuals.atcheofficial.com/','_blank')">↗ Client Door Preview</a>
       <span style="color:var(--border2)">·</span>
       <a onclick="doSignOut()">Sign Out</a>
     </div>
@@ -338,9 +396,11 @@ async function ensureFonts(){
 function drawWatermark(ctx, w, h){
   // Diagonal repeating wordmark across the whole frame
   ctx.save();
-  const tileFont = Math.max(14, Math.round(w * 0.024));
-  ctx.font = `400 ${tileFont}px 'Playfair Display', serif`;
-  ctx.fillStyle = 'rgba(201,168,76,0.16)';
+  const tileFont = Math.max(18, Math.round(w * 0.034));
+  ctx.font = `700 ${tileFont}px 'Playfair Display', serif`;
+  ctx.fillStyle = 'rgba(242,237,230,0.16)';
+  ctx.strokeStyle = 'rgba(8,8,8,0.16)';
+  ctx.lineWidth = Math.max(1, tileFont * 0.04);
   ctx.textBaseline = 'middle';
   ctx.translate(w/2, h/2);
   ctx.rotate(-Math.PI/8);
@@ -351,22 +411,26 @@ function drawWatermark(ctx, w, h){
   const span = Math.ceil(Math.sqrt(w*w + h*h));
   for(let y = -span; y < h + span; y += gapY){
     for(let x = -span; x < w + span; x += gapX){
+      ctx.strokeText(WM_TEXT, x, y);
       ctx.fillText(WM_TEXT, x, y);
     }
   }
   ctx.restore();
 
-  // Bottom-right brand mark
+  // Bottom-right brand mark, on a dark pill so it reads on any photo
   ctx.save();
   const pad = Math.round(w * 0.028);
-  const markFont = Math.max(16, Math.round(w * 0.034));
+  const markFont = Math.max(18, Math.round(w * 0.038));
   ctx.font = `700 ${markFont}px 'Playfair Display', serif`;
-  ctx.fillStyle = 'rgba(242,237,230,0.92)';
+  const markW = ctx.measureText(WM_TEXT).width;
+  const pillPadX = markFont * 0.5;
+  const pillPadY = markFont * 0.45;
+  ctx.fillStyle = 'rgba(8,8,8,0.35)';
+  ctx.fillRect(w - pad - markW - pillPadX*2, h - pad - markFont - pillPadY*1.4, markW + pillPadX*2, markFont + pillPadY*1.8);
+  ctx.fillStyle = 'rgba(242,237,230,0.85)';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'bottom';
-  ctx.shadowColor = 'rgba(0,0,0,0.55)';
-  ctx.shadowBlur = Math.round(w * 0.01);
-  ctx.fillText(WM_TEXT, w - pad, h - pad);
+  ctx.fillText(WM_TEXT, w - pad - pillPadX, h - pad - pillPadY*0.6);
   ctx.restore();
 }
 
@@ -592,8 +656,10 @@ function genCode(){
   return c;
 }
 
+const CLIENT_GALLERY_BASE = 'https://atche-visuals.atcheofficial.com/';
+
 function clientLink(code){
-  return location.origin + location.pathname.replace(/atche-visuals-studio\.html$/, 'atche-visuals.html') + '?s=' + code;
+  return CLIENT_GALLERY_BASE + '?s=' + code;
 }
 
 async function createSession(){
@@ -625,7 +691,57 @@ function openSession(session){
   document.getElementById('thumbGrid').innerHTML = '';
   document.getElementById('uploadStatus').textContent = '';
   loadThumbs();
-  document.getElementById('activeCard').scrollIntoView({behavior:'smooth', block:'start'});
+  updatePaymentBanner();
+  updateAiEditBanner();
+
+  // Scroll so the relevant info is actually visible: if this session needs
+  // a payment confirmation, jump straight to that banner (and flash it) so
+  // staff can act on it immediately — otherwise just scroll to the top of
+  // the card. Deferred a tick so layout reflects the banner's new display
+  // state before we measure scroll position.
+  requestAnimationFrame(() => {
+    const banner = document.getElementById('paymentBanner');
+    if(banner.classList.contains('show')){
+      banner.scrollIntoView({behavior:'smooth', block:'center'});
+      banner.classList.remove('flash');
+      void banner.offsetWidth;
+      banner.classList.add('flash');
+    } else {
+      document.getElementById('activeCard').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
+}
+
+// ---- PAYMENT BANNER ----
+// Shows a prominent "Confirm Paid" prompt right on the active session card
+// when the client has tapped "I've sent payment" — so staff don't have to
+// hunt for the pill in the session list below.
+function updatePaymentBanner(){
+  const banner = document.getElementById('paymentBanner');
+  if(!activeSession){ banner.classList.remove('show'); return; }
+  const needsConfirm = activeSession.payment_requested && !activeSession.paid;
+  if(!needsConfirm){ banner.classList.remove('show'); return; }
+  document.getElementById('paymentBannerAmt').textContent =
+    activeSession.package_price ? `${activeSession.package_name || 'Package'} — $${activeSession.package_price}` : 'Tap to unlock their download';
+  document.getElementById('paymentBannerBtn').onclick = () => markPaid(activeSession);
+  banner.classList.add('show');
+}
+
+// ---- AI EDIT OWED BANNER ----
+// Shows once a client's payment (including their AI-Enhanced Edit add-on)
+// has been confirmed but the edit hasn't been delivered yet. Tells staff
+// which theme + which uploaded photo to base the edit on, and lets them
+// drop the finished file straight into <code>/ai/ once it's ready.
+function updateAiEditBanner(){
+  const banner = document.getElementById('aiEditBanner');
+  if(!activeSession){ banner.classList.remove('show'); return; }
+  const needsAiEdit = activeSession.paid && activeSession.ai_edit_requested && !activeSession.ai_edit_delivered;
+  if(!needsAiEdit){ banner.classList.remove('show'); return; }
+  document.getElementById('aiEditBannerTheme').textContent = activeSession.ai_edit_theme || 'AI-Enhanced Edit';
+  document.getElementById('aiEditBannerPhoto').textContent = activeSession.ai_edit_photo
+    ? `Base it on: ${activeSession.ai_edit_photo}`
+    : '';
+  banner.classList.add('show');
 }
 
 async function closeSession(){
@@ -642,9 +758,17 @@ async function loadSessions(){
     .order('created_at', {ascending:false}).limit(50);
   if(error || !data){ return; }
 
+  // Keep the active session card's data (and payment banner) in sync with
+  // the latest row, so a client's "I've sent payment" tap shows up here
+  // within one poll cycle (every 8s) without needing to reopen the session.
+  if(activeSession){
+    const fresh = data.find(s => s.id === activeSession.id);
+    if(fresh){ activeSession = fresh; updatePaymentBanner(); updateAiEditBanner(); }
+  }
+
   const todayStr = new Date().toDateString();
   const tonight = data.filter(s => new Date(s.created_at).toDateString() === todayStr);
-  const paidTotal = tonight.filter(s=>s.paid).reduce((sum,s)=>sum+(Number(s.package_price)||0),0);
+  const paidTotal = tonight.filter(s=>s.paid).reduce((sum,s)=>sum+(Number(s.package_price)||0)+(Number(s.ai_edit_price)||0),0);
   const pending = tonight.filter(s=>!s.paid && s.status==='active').length;
   setStat('revTotal', '$' + paidTotal);
   setStat('revSessions', tonight.length);
@@ -676,10 +800,16 @@ async function loadSessions(){
       </div>
       <div class="sess-badge ${badgeClass}">${badge}</div>
       ${needsConfirm ? `<div class="sess-confirm" data-id="${s.id}">Confirm Paid</div>` : ''}
+      ${s.status === 'closed' ? `<div class="sess-reopen" data-id="${s.id}">Reopen</div>` : ''}
+      ${s.status === 'closed' ? `<div class="sess-delete" data-id="${s.id}">Delete</div>` : ''}
       <div class="sess-open" data-id="${s.id}">Open →</div>
     `;
     if(needsConfirm){
       div.querySelector('.sess-confirm').onclick = (e) => { e.stopPropagation(); markPaid(s); };
+    }
+    if(s.status === 'closed'){
+      div.querySelector('.sess-reopen').onclick = (e) => { e.stopPropagation(); reopenSession(s); };
+      div.querySelector('.sess-delete').onclick = (e) => { e.stopPropagation(); deleteSession(s); };
     }
     div.querySelector('.sess-open').onclick = () => openSession(s);
     list.appendChild(div);
@@ -699,6 +829,90 @@ async function markPaid(s){
     payment_requested: false
   }).eq('id', s.id);
   if(error){ alert('Error: ' + error.message); return; }
+  loadSessions();
+}
+
+// ---- REOPEN ----
+// A closed session can't receive new "I've sent payment" requests (the RPC
+// only updates status='active' rows). Lets staff flip it back to active
+// from the session list if a client pays after the session was closed.
+async function reopenSession(s){
+  const { error } = await sb.from('visuals_sessions').update({status:'active'}).eq('id', s.id);
+  if(error){ alert('Error: ' + error.message); return; }
+  loadSessions();
+}
+
+// ---- DELETE OLD SESSION ----
+// Permanently removes a closed session: its row, plus every uploaded file
+// (full / preview / ai) for that code. Used to clear out old test sessions
+// or doors from past nights that are no longer needed.
+async function deleteSession(s){
+  const label = s.label ? ` (${s.label})` : '';
+  if(!confirm(`Permanently delete session ${s.code}${label}? This removes all uploaded photos, reels, and AI edits for this door — it cannot be undone.`)) return;
+
+  for(const sub of ['full','preview','ai']){
+    const { data } = await sb.storage.from(BUCKET).list(`${s.code}/${sub}`, {limit:500});
+    if(data && data.length){
+      const paths = data.filter(f => f.name !== '.emptyFolderPlaceholder').map(f => `${s.code}/${sub}/${f.name}`);
+      if(paths.length) await sb.storage.from(BUCKET).remove(paths);
+    }
+  }
+
+  const { error } = await sb.from('visuals_sessions').delete().eq('id', s.id);
+  if(error){ alert('Error: ' + error.message); return; }
+
+  if(activeSession && activeSession.id === s.id){
+    document.getElementById('activeCard').style.display = 'none';
+    activeSession = null;
+  }
+  loadSessions();
+}
+
+// ---- AI EDIT UPLOAD ----
+// Staff drops the finished AI-Enhanced Edit (from Higgsfield or similar)
+// into <code>/ai/ and flips ai_edit_delivered=true — the client's gallery
+// picks it up on its next poll.
+const aiEditUploadInput = document.getElementById('aiEditUploadInput');
+aiEditUploadInput.addEventListener('change', e => handleAiEditUpload(e.target.files));
+
+async function handleAiEditUpload(fileList){
+  if(!activeSession) return;
+  const file = fileList[0];
+  if(!file) return;
+
+  const btn = document.getElementById('aiEditBannerBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Uploading…';
+  btn.classList.add('uploading');
+
+  const code = activeSession.code;
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+  const filename = `ai-edit-${Date.now()}.${ext}`;
+
+  const { error: e1 } = await sb.storage.from(BUCKET)
+    .upload(`${code}/ai/${filename}`, file, { upsert: true });
+  if(e1){
+    alert('Upload error: ' + e1.message);
+    btn.textContent = orig;
+    btn.classList.remove('uploading');
+    return;
+  }
+
+  const { error: e2 } = await sb.from('visuals_sessions').update({
+    ai_edit_delivered: true,
+    ai_edit_delivered_at: new Date().toISOString()
+  }).eq('id', activeSession.id);
+  if(e2){
+    alert('Uploaded, but failed to mark delivered: ' + e2.message);
+    btn.textContent = orig;
+    btn.classList.remove('uploading');
+    return;
+  }
+
+  activeSession.ai_edit_delivered = true;
+  btn.textContent = orig;
+  btn.classList.remove('uploading');
+  updateAiEditBanner();
   loadSessions();
 }
 
@@ -744,8 +958,42 @@ async function handleFiles(fileList){
       if(e2){ status.textContent = 'Upload error (preview): ' + e2.message; }
     }
   }
-  status.textContent = `${files.length} file(s) uploaded ✓ — watermarked previews ready`;
+  status.textContent = `${files.length} file(s) uploaded ✓ — watermarked previews ready. Tap "Notify Client" to text them the link.`;
   loadThumbs();
+  const notifyBtn = document.getElementById('notifyBtn');
+  if(notifyBtn) notifyBtn.classList.add('notify-pulse');
+}
+
+// ---- NOTIFY CLIENT ----
+function notifyClient(){
+  if(!activeSession) return;
+  const link = clientLink(activeSession.code);
+  const who = activeSession.label ? activeSession.label + ' ' : '';
+  const msg = `Hey ${who}— your photos & reels from tonight are ready ✨ Pick your favorites and grab them here: ${link}`;
+  document.getElementById('notifyBtn').classList.remove('notify-pulse');
+
+  const raw = (activeSession.contact || '').trim();
+  const digits = raw.replace(/[^\d+]/g, '');
+  const isPhone = digits.replace(/[^\d]/g, '').length >= 7;
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw);
+
+  if(isPhone){
+    const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const sep = isiOS ? '&' : '?';
+    window.location.href = `sms:${digits}${sep}body=${encodeURIComponent(msg)}`;
+  } else if(isEmail){
+    const subject = 'Your ATCHÉ Visuals photos are ready ✨';
+    window.location.href = `mailto:${raw}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(msg)}`;
+  } else {
+    const fallback = raw
+      ? `"${raw}" doesn't look like a phone number or email, so I copied the message instead — paste it into their IG DM:\n\n${msg}`
+      : `No phone number or email on file for this session — message copied to clipboard, paste it into IG DM or a text:\n\n${msg}`;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(msg).then(()=>alert(fallback)).catch(()=>alert(`Message to send:\n\n${msg}`));
+    } else {
+      alert(`Message to send:\n\n${msg}`);
+    }
+  }
 }
 
 async function loadThumbs(){
@@ -765,6 +1013,8 @@ async function loadThumbs(){
     const img = document.createElement('img');
     img.src = prev.publicUrl;
     img.onerror = () => { if(!isVideo) img.src = full.publicUrl; };
+    img.title = 'Tap to view full size';
+    img.onclick = () => openThumbLightbox(full.publicUrl, isVideo);
     div.appendChild(img);
     if(isVideo){
       const tag = document.createElement('div');
@@ -772,8 +1022,57 @@ async function loadThumbs(){
       tag.textContent = 'REEL';
       div.appendChild(tag);
     }
+    const del = document.createElement('div');
+    del.className = 'thumb-delete';
+    del.textContent = '✕';
+    del.title = 'Delete this photo';
+    del.onclick = (e) => { e.stopPropagation(); deletePhoto(f.name); };
+    div.appendChild(del);
     grid.appendChild(div);
   });
+}
+
+// ---- THUMBNAIL LIGHTBOX ----
+// Tap any uploaded thumbnail to view the clean full-resolution original
+// (not the watermarked preview) full-screen — for photos and reels alike.
+function openThumbLightbox(url, isVideo){
+  const lightbox = document.getElementById('thumbLightbox');
+  const img = document.getElementById('thumbLightboxImg');
+  const video = document.getElementById('thumbLightboxVideo');
+  if(isVideo){
+    img.style.display = 'none';
+    img.src = '';
+    video.src = url;
+    video.style.display = 'block';
+  } else {
+    video.pause();
+    video.style.display = 'none';
+    video.src = '';
+    img.src = url;
+    img.style.display = 'block';
+  }
+  lightbox.classList.add('show');
+}
+
+function closeThumbLightbox(event){
+  if(event) event.stopPropagation();
+  const lightbox = document.getElementById('thumbLightbox');
+  const video = document.getElementById('thumbLightboxVideo');
+  video.pause();
+  video.src = '';
+  lightbox.classList.remove('show');
+}
+
+async function deletePhoto(fileName){
+  if(!activeSession) return;
+  if(!confirm('Delete this photo for everyone? This removes the full-res file and preview — it cannot be undone.')) return;
+  const code = activeSession.code;
+  const { error } = await sb.storage.from(BUCKET).remove([
+    `${code}/full/${fileName}`,
+    `${code}/preview/${fileName}.jpg`
+  ]);
+  if(error){ alert('Error: ' + error.message); return; }
+  loadThumbs();
 }
 
 function copyLink(){

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATCHÉ LENS — Solo Posing Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080808;
+    --bg-card: #111111;
+    --bg-card2: #181818;
+    --gold: #C9A84C;
+    --gold-soft: #E2C47A;
+    --cream: #F2EDE6;
+    --muted: #B0A898;
+    --muted2: #6A6258;
+    --sage: #6B9E7A;
+    --rose: #C2697A;
+    --line: #2e2e2e;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  header {
+    text-align: center;
+    padding: 28px 0 36px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 36px;
+  }
+
+  .eyebrow {
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 40px;
+    margin: 0 0 8px;
+    letter-spacing: 0.3em;
+  }
+
+  h1 span {
+    background: linear-gradient(100deg, var(--gold) 25%, var(--gold-soft) 50%, var(--gold) 75%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: wordmark-shine 9s ease-in-out infinite;
+  }
+
+  @keyframes wordmark-shine {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Quick grid */
+  .section-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--gold-soft);
+    margin: 0 0 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 18px;
+  }
+
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 60px;
+  }
+
+  .quick-grid figure {
+    margin: 0;
+    position: relative;
+    aspect-ratio: 3 / 4;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+
+  .quick-grid img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .quick-grid figcaption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px 8px 6px;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .quick-grid .num {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: var(--gold);
+    color: #1a1305;
+    font-weight: 700;
+    font-size: 11px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Detail cards */
+  .pose-card {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 22px;
+    align-items: start;
+  }
+
+  .pose-card img {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+  }
+
+  .pose-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .pose-num {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 28px;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .pose-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 22px;
+    margin: 0;
+  }
+
+  .tag-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+  }
+
+  .tag.dc { border-color: var(--sage); color: #a9d2b6; }
+  .tag.energy { border-color: var(--rose); color: #e3a9b6; }
+
+  .pose-card p {
+    margin: 0 0 8px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #ddd9d0;
+  }
+
+  .pose-card .label {
+    color: var(--gold-soft);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--muted2);
+    font-size: 12px;
+    margin-top: 50px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    line-height: 1.7;
+  }
+
+  footer .gold { color: var(--gold); }
+
+  @media (max-width: 800px) {
+    .quick-grid { grid-template-columns: repeat(3, 1fr); }
+    .pose-card { grid-template-columns: 1fr; }
+    .pose-card img { max-width: 280px; margin: 0 auto; }
+    h1 { font-size: 32px; }
+  }
+
+  @media (max-width: 480px) {
+    .quick-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media print {
+    body { background: #fff; color: #111; }
+    .pose-card { break-inside: avoid; background: #fafafa; border-color: #ddd; }
+    .quick-grid { break-after: page; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Field Guide · For ATCHÉ-Trained Photographers</div>
+    <h1>ATCHÉ <span>VISUALS</span></h1>
+    <p class="subtitle">Solo Posing Cheat Sheet — Vol. 1<br>
+    Quick reference for walkaround shoots — street, brunch, and club. Get the subject in, get the pose, get the shot, move to the next sale. Built for fast scanning on your phone between shots.</p>
+  </header>
+
+  <div class="section-label">Quick Grid</div>
+  <p class="section-sub">Glance here first — pick a pose, scroll down for the full setup notes.</p>
+
+  <div class="quick-grid">
+    <figure><span class="num">1</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_133954_c240778e-31d1-4eac-9a86-9d7f18cc1c41.png" alt="The Approach"><figcaption>The Approach</figcaption></figure>
+    <figure><span class="num">2</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_133956_b5a16043-40d3-47aa-a23d-8e192429bb93.png" alt="The Lean"><figcaption>The Lean</figcaption></figure>
+    <figure><span class="num">3</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_133957_ac74b446-52cf-46ca-b9d8-0ee618900fd4.png" alt="Stoop Sit"><figcaption>Stoop Sit</figcaption></figure>
+    <figure><span class="num">4</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_135442_98ee6b10-ddab-47ba-893d-ca9e0c1452a4.png" alt="Brunch Cheers"><figcaption>Brunch Cheers</figcaption></figure>
+    <figure><span class="num">5</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134000_1b8148b2-c2de-46bd-8195-97ec16481361.png" alt="Over the Shoulder"><figcaption>Over the Shoulder</figcaption></figure>
+    <figure><span class="num">6</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134002_1436a8a7-454f-4c6a-a396-b2e3bba83eb6.png" alt="The Adjust"><figcaption>The Adjust</figcaption></figure>
+    <figure><span class="num">7</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134003_59beaa60-6fef-437b-9de6-e36c9af4e34e.png" alt="Car Door Exit"><figcaption>Car Door Exit</figcaption></figure>
+    <figure><span class="num">8</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134004_49a8c528-d3dc-45b4-8bb3-cf04c948f67e.png" alt="The Twirl"><figcaption>The Twirl</figcaption></figure>
+    <figure><span class="num">9</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134037_111b0ed1-4022-494d-a04d-8f621284e090.png" alt="Candid Laugh"><figcaption>Candid Laugh</figcaption></figure>
+    <figure><span class="num">10</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134038_ba84093d-b33b-4181-823c-2c02b95eb6e3.png" alt="Power Stance"><figcaption>Power Stance</figcaption></figure>
+    <figure><span class="num">11</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134040_fe8519a6-e6b5-4795-8c10-47e2ca7baadc.png" alt="Glam Close-Up"><figcaption>Glam Close-Up</figcaption></figure>
+    <figure><span class="num">12</span><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134041_7afff20d-c316-4561-a251-e518f5ce5e63.png" alt="Skyline Silhouette"><figcaption>Skyline Silhouette</figcaption></figure>
+  </div>
+
+  <div class="section-label">Full Setup Notes</div>
+  <p class="section-sub">Reference, angle, and lighting cues for each pose.</p>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_133954_c240778e-31d1-4eac-9a86-9d7f18cc1c41.png" alt="The Approach">
+    <div>
+      <div class="pose-head"><span class="pose-num">01</span><h3 class="pose-name">The Approach</h3></div>
+      <div class="tag-row"><span class="tag dc">U Street energy</span><span class="tag energy">Opener shot</span></div>
+      <span class="label">Reference</span>
+      <p>U Street corridor vibe — neon bar signage and rowhouse silhouettes blurred behind her.</p>
+      <span class="label">Setup</span>
+      <p>Shoot from roughly waist height, dead-on as she walks toward you. Wide aperture / portrait mode to blur the background. Catch her mid-stride, weight forward, chin level.</p>
+      <span class="label">Why it works</span>
+      <p>Instant motion and confidence — strong first frame for any set.</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_133956_b5a16043-40d3-47aa-a23d-8e192429bb93.png" alt="The Lean">
+    <div>
+      <div class="pose-head"><span class="pose-num">02</span><h3 class="pose-name">The Lean</h3></div>
+      <div class="tag-row"><span class="tag dc">Shaw / Bloomingdale murals</span><span class="tag energy">Relaxed editorial</span></div>
+      <span class="label">Reference</span>
+      <p>Any painted mural wall — Shaw, Bloomingdale, and Eaton-area alleys all work.</p>
+      <span class="label">Setup</span>
+      <p>Shoulder against the wall, weight on the back leg, arms loose (not tightly crossed — that closes off the shot). Shoot at eye level or slightly below. Head turned toward camera, easy smile.</p>
+      <span class="label">Why it works</span>
+      <p>Lets the mural's color do half the work — easy, confident, editorial.</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_133957_ac74b446-52cf-46ca-b9d8-0ee618900fd4.png" alt="Stoop Sit">
+    <div>
+      <div class="pose-head"><span class="pose-num">03</span><h3 class="pose-name">Stoop Sit</h3></div>
+      <div class="tag-row"><span class="tag dc">Rowhouse stoop</span><span class="tag energy">Candid / warm</span></div>
+      <span class="label">Reference</span>
+      <p>Classic DC rowhouse front steps — porch light on, friends nearby (can be out of frame).</p>
+      <span class="label">Setup</span>
+      <p>Seated, drink/cup optional. Shoot from slightly below looking up, or from across the street with more zoom. Talk to her — don't ask for a frozen pose, catch a real laugh.</p>
+      <span class="label">Why it works</span>
+      <p>Candid warmth — feels like a real night out, not a shoot.</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_135442_98ee6b10-ddab-47ba-893d-ca9e0c1452a4.png" alt="Brunch Cheers">
+    <div>
+      <div class="pose-head"><span class="pose-num">04</span><h3 class="pose-name">Brunch Cheers</h3></div>
+      <div class="tag-row"><span class="tag dc">Brunch patio</span><span class="tag energy">Daytime / lifestyle</span></div>
+      <span class="label">Reference</span>
+      <p>Outdoor brunch patio, any U Street/Adams Morgan spot — natural daylight, greenery or string lights in the background.</p>
+      <span class="label">Setup</span>
+      <p>Seated at the table, glass raised toward the camera around chest/eye height. Shoot from just above table level. Stick to shade or golden-hour light — avoid harsh overhead sun.</p>
+      <span class="label">Why it works</span>
+      <p>Covers the daytime brunch crowd — same energy as nightlife, just sunnier. Easy sell at weekend brunch tables.</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134000_1b8148b2-c2de-46bd-8195-97ec16481361.png" alt="Over the Shoulder">
+    <div>
+      <div class="pose-head"><span class="pose-num">05</span><h3 class="pose-name">Over the Shoulder</h3></div>
+      <div class="tag-row"><span class="tag dc">Marquee entrance</span><span class="tag energy">Story shot</span></div>
+      <span class="label">Reference</span>
+      <p>Glowing marquee or club entrance — Howard Theatre-style signage and warm lights.</p>
+      <span class="label">Setup</span>
+      <p>Have her walk toward the entrance; call her name right as she reaches the door for the look-back. Shoot from behind/side with the marquee glow as backlight.</p>
+      <span class="label">Why it works</span>
+      <p>Implies a story — she's heading somewhere, and so is the viewer.</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134002_1436a8a7-454f-4c6a-a396-b2e3bba83eb6.png" alt="The Adjust">
+    <div>
+      <div class="pose-head"><span class="pose-num">06</span><h3 class="pose-name">The Adjust</h3></div>
+      <div class="tag-row"><span class="tag dc">Neon bokeh backdrop</span><span class="tag energy">Beauty detail</span></div>
+      <span class="label">Reference</span>
+      <p>Any dark backdrop with ambient neon bokeh in the distance.</p>
+      <span class="label">Setup</span>
+      <p>Tight three-quarter profile. Hand near ear/hair, not blocking the face. Rim light from one side — streetlight, neon sign, or phone flashlight in a pinch.</p>
+      <span class="label">Why it works</span>
+      <p>Beauty/detail shot — jewelry and skin texture. Strong gallery filler.</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_135443_bd055e0c-6c1e-43da-8c44-beb1774f917f.png" alt="Sidewalk Sunglasses">
+    <div>
+      <div class="pose-head"><span class="pose-num">07</span><h3 class="pose-name">Sidewalk Sunglasses</h3></div>
+      <div class="tag-row"><span class="tag dc">Daytime street</span><span class="tag energy">Quick / repeatable</span></div>
+      <span class="label">Reference</span>
+      <p>Any DC sidewalk in daylight — rowhouses or storefronts in the background.</p>
+      <span class="label">Setup</span>
+      <p>Standing, one hand lifting sunglasses slightly off the face, direct eye contact, easy smile. Shoot straight-on at eye level. Under 10 seconds — built for fast street approaches.</p>
+      <span class="label">Why it works</span>
+      <p>The fastest pose in the set — ideal for daytime walkups when you've got seconds, not minutes.</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134004_49a8c528-d3dc-45b4-8bb3-cf04c948f67e.png" alt="The Twirl">
+    <div>
+      <div class="pose-head"><span class="pose-num">08</span><h3 class="pose-name">The Twirl</h3></div>
+      <div class="tag-row"><span class="tag dc">Mural backdrop</span><span class="tag energy">High energy</span></div>
+      <span class="label">Reference</span>
+      <p>Bold-color mural wall — gives the fabric something vibrant to pop against.</p>
+      <span class="label">Setup</span>
+      <p>Crouch for a low angle. Have her spin and call "now" right as the fabric flares. Burst mode if your camera has it — pick the best fabric shape after.</p>
+      <span class="label">Why it works</span>
+      <p>Movement plus color — usually the standout shot of the set.</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134037_111b0ed1-4022-494d-a04d-8f621284e090.png" alt="Candid Laugh">
+    <div>
+      <div class="pose-head"><span class="pose-num">09</span><h3 class="pose-name">Candid Laugh</h3></div>
+      <div class="tag-row"><span class="tag dc">Bar / lounge</span><span class="tag energy">Authentic</span></div>
+      <span class="label">Reference</span>
+      <p>Any warm-lit bar or lounge interior, drink in hand.</p>
+      <span class="label">Setup</span>
+      <p>Don't ask for a smile — get her talking or laughing with friends (even if they're cropped out). Medium close-up, slightly above eye level.</p>
+      <span class="label">Why it works</span>
+      <p>Authenticity sells — every set needs one "real moment."</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134038_ba84093d-b33b-4181-823c-2c02b95eb6e3.png" alt="Power Stance">
+    <div>
+      <div class="pose-head"><span class="pose-num">10</span><h3 class="pose-name">Power Stance</h3></div>
+      <div class="tag-row"><span class="tag dc">Bold mural, full body</span><span class="tag energy">Main character</span></div>
+      <span class="label">Reference</span>
+      <p>A bold, graphic DC mural with room for a full-body frame.</p>
+      <span class="label">Setup</span>
+      <p>Full body, hands on hips, feet planted shoulder-width. Shoot straight-on at chest height. Check that the mural colors don't clash with the outfit.</p>
+      <span class="label">Why it works</span>
+      <p>The "main character" shot — confidence and full fit visibility.</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134040_fe8519a6-e6b5-4795-8c10-47e2ca7baadc.png" alt="Glam Close-Up">
+    <div>
+      <div class="pose-head"><span class="pose-num">11</span><h3 class="pose-name">Glam Close-Up</h3></div>
+      <div class="tag-row"><span class="tag dc">Club interior lighting</span><span class="tag energy">Editorial polish</span></div>
+      <span class="label">Reference</span>
+      <p>Club interior with magenta/blue ambient lighting.</p>
+      <span class="label">Setup</span>
+      <p>Tight beauty shot — jewelry, skin, makeup detail. Get close enough that the colored lighting wraps around her face. Shallow depth of field.</p>
+      <span class="label">Why it works</span>
+      <p>The "magazine crop" shot — polish and detail.</p>
+    </div>
+  </div>
+
+  <div class="pose-card">
+    <img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260614_134041_7afff20d-c316-4561-a251-e518f5ce5e63.png" alt="Skyline Silhouette">
+    <div>
+      <div class="pose-head"><span class="pose-num">12</span><h3 class="pose-name">Skyline Silhouette</h3></div>
+      <div class="tag-row"><span class="tag dc">Monument / skyline view</span><span class="tag energy">Closer shot</span></div>
+      <span class="label">Reference</span>
+      <p>Rooftop, bridge, or waterfront with a DC skyline or monument view at night.</p>
+      <span class="label">Setup</span>
+      <p>Expose for the skyline so she goes dark/silhouette. Find a rim light source (streetlight, building glow) to outline hair and shoulders.</p>
+      <span class="label">Why it works</span>
+      <p>Ties the whole set back to place — strong closer for any DC shoot.</p>
+    </div>
+  </div>
+
+  <footer>
+    <span class="gold">ATCHÉ VISUALS</span> — Solo Posing Cheat Sheet, Vol. 1<br>
+    Internal reference for ATCHÉ-trained photographers shooting Quick Shot, Photo Bundle, Spotlight, and Table packages on the street, at brunches, and in clubs.<br>
+    References are AI-generated mood/composition guides, not finished deliverables.
+  </footer>
+
+</div>
+</body>
+</html>

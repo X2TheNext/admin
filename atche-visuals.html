@@ -104,6 +104,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .gallery-item.selected{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold), 0 6px 18px -8px rgba(201,168,76,0.5);transform:scale(1.015)}
 .gallery-item img, .gallery-item video{width:100%;height:100%;object-fit:cover;display:block}
 .gallery-check{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(8,8,8,0.7);border:1.5px solid var(--text3);display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;transform:scale(0.6);transition:var(--t)}
+.gallery-expand{position:absolute;top:6px;left:6px;width:24px;height:24px;border-radius:50%;background:rgba(8,8,8,0.65);border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text2);z-index:2;transition:var(--t)}
+.gallery-expand:hover{background:rgba(8,8,8,0.9);color:var(--gold-light);border-color:var(--gold)}
+.gallery-expand:active{transform:scale(0.92)}
 .gallery-item.selected .gallery-check{background:var(--gold);border-color:var(--gold);color:var(--black);transform:scale(1)}
 @keyframes item-in{from{opacity:0;transform:scale(0.92) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .gallery-tag{position:absolute;bottom:6px;left:6px;font-size:9px;letter-spacing:1px;text-transform:uppercase;font-weight:700;color:var(--gold-light);background:rgba(8,8,8,0.7);border-radius:4px;padding:2px 6px}
@@ -139,6 +142,39 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .pkg-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
 .pkg-desc{font-size:12px;color:var(--text2);line-height:1.6}
 .pkg-price{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold);white-space:nowrap}
+
+/* AI-ENHANCED EDIT ADD-ON */
+.ai-edit-toggle{display:flex;align-items:flex-start;gap:14px;border:1px solid var(--border2);border-radius:12px;padding:16px;margin-top:14px;cursor:pointer;transition:border-color .25s var(--t),background .25s var(--t);background:var(--surface2)}
+.ai-edit-toggle:hover{border-color:rgba(201,168,76,0.4)}
+.ai-edit-toggle.active{border-color:var(--gold);background:var(--gold-dim)}
+.ai-edit-toggle-check{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--text3);flex-shrink:0;margin-top:2px;position:relative;transition:var(--t)}
+.ai-edit-toggle.active .ai-edit-toggle-check{border-color:var(--gold);background:var(--gold)}
+.ai-edit-toggle.active .ai-edit-toggle-check::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--black);font-weight:700}
+.ai-edit-toggle-body{flex:1}
+.ai-edit-toggle-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.ai-edit-toggle-desc{font-size:12px;color:var(--text2);line-height:1.6}
+.ai-edit-toggle-price{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold);white-space:nowrap}
+.ai-edit-options{margin-top:10px;padding:14px;border:1px solid var(--border2);border-radius:12px;background:var(--surface2);animation:fade-up .4s cubic-bezier(.16,1,.3,1)}
+.ai-edit-theme{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border2);border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:var(--t);background:var(--surface)}
+.ai-edit-theme:last-child{margin-bottom:0}
+.ai-edit-theme.active{border-color:var(--gold);background:var(--gold-dim)}
+.ai-edit-theme-radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--text3);flex-shrink:0;margin-top:2px;position:relative}
+.ai-edit-theme.active .ai-edit-theme-radio{border-color:var(--gold)}
+.ai-edit-theme.active .ai-edit-theme-radio::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--gold)}
+.ai-edit-theme-name{font-size:13px;font-weight:600;color:var(--text)}
+.ai-edit-theme-desc{font-size:11.5px;color:var(--text2);line-height:1.5;margin-top:2px}
+.ai-edit-photo-row{margin-top:12px}
+.ai-edit-photo-row label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);display:block;margin-bottom:6px}
+.ai-edit-photo-row select{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:13px;padding:10px;font-family:inherit}
+.ai-edit-photo-row select:focus{outline:none;border-color:var(--gold)}
+
+/* AI-ENHANCED EDIT RESULT / PENDING */
+.ai-edit-pending{text-align:center;font-size:12px;color:var(--text3);line-height:1.6;padding:14px;border:1px solid var(--border2);border-radius:10px;margin-top:16px;background:var(--surface2);display:none;align-items:center;justify-content:center;gap:8px}
+.ai-edit-pending.show{display:flex;animation:fade-up .5s cubic-bezier(.16,1,.3,1)}
+.ai-edit-pending::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;animation:pulse-dot 1.4s ease-in-out infinite}
+.ai-edit-result{display:none}
+.ai-edit-result.show{display:block;animation:fade-up .5s cubic-bezier(.16,1,.3,1)}
+.ai-edit-result img{width:100%;border-radius:14px;border:1px solid var(--border2);margin-bottom:12px}
 
 /* TOTAL */
 .total-row{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border2);margin-top:6px}
@@ -205,7 +241,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .lightbox{position:fixed;inset:0;background:rgba(8,8,8,0.92);display:none;align-items:center;justify-content:center;z-index:50;padding:28px;cursor:pointer;backdrop-filter:blur(4px)}
 .lightbox.show{display:flex;animation:fade-up .3s cubic-bezier(.16,1,.3,1)}
 .lightbox-inner{max-width:480px;width:100%;text-align:center;cursor:default}
-.lightbox img{width:100%;max-height:65vh;object-fit:cover;border-radius:14px;border:1px solid var(--border2);box-shadow:0 30px 80px -20px rgba(0,0,0,0.8),0 0 50px -10px rgba(201,168,76,0.25);animation:lightbox-in .45s cubic-bezier(.16,1,.3,1)}
+.lightbox img{width:100%;max-height:80vh;object-fit:contain;border-radius:14px;border:1px solid var(--border2);box-shadow:0 30px 80px -20px rgba(0,0,0,0.8),0 0 50px -10px rgba(201,168,76,0.25);animation:lightbox-in .45s cubic-bezier(.16,1,.3,1)}
 @keyframes lightbox-in{from{opacity:0;transform:scale(0.94) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .lightbox-cap{margin-top:16px}
 .lightbox-cap .pkg-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold-light);margin-bottom:4px}
@@ -467,6 +503,23 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="pkg-price">$100</div>
       </div>
 
+      <div class="ai-edit-toggle" id="aiEditToggle" onclick="toggleAiEdit()">
+        <div class="ai-edit-toggle-check" id="aiEditCheck"></div>
+        <div class="ai-edit-toggle-body">
+          <div class="ai-edit-toggle-name">+ AI-Enhanced Edit</div>
+          <div class="ai-edit-toggle-desc">Turn one of your shots into a glossy AI-enhanced fantasy edit — added to your gallery once it's ready (usually within a day).</div>
+        </div>
+        <div class="ai-edit-toggle-price" id="aiEditTogglePrice">+$15</div>
+      </div>
+
+      <div class="ai-edit-options" id="aiEditOptions" style="display:none">
+        <div class="ai-edit-themes" id="aiEditThemes"></div>
+        <div class="ai-edit-photo-row">
+          <label for="aiEditPhoto">Which shot should we use?</label>
+          <select id="aiEditPhoto" onchange="updateTotal()"></select>
+        </div>
+      </div>
+
       <div class="total-row">
         <span class="total-label">Total Due</span>
         <span class="total-amt" id="totalAmt">$5</span>
@@ -512,6 +565,14 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="pay-pending" id="payPending" style="display:none">Waiting for ATCHÉ Visuals to confirm your payment — keep this page open, this is usually quick.</div>
       <button class="btn-primary" id="downloadBtn" disabled style="display:none" onclick="downloadSelected()">Download Your Content</button>
       <div class="delivery-msg" id="deliveryMsg">✓ Content downloaded — thanks for booking ATCHÉ Visuals tonight!</div>
+
+      <div class="ai-edit-pending" id="aiEditPending">✨ Your AI-Enhanced Edit is being created — check back here later tonight, no need to refresh.</div>
+      <div class="ai-edit-result" id="aiEditResult">
+        <h2 style="margin:18px 0 10px">Your AI-Enhanced Edit</h2>
+        <img id="aiEditResultImg" alt="Your AI-enhanced edit">
+        <button class="btn-primary" onclick="downloadAiEdit()">Download AI-Enhanced Edit</button>
+      </div>
+
       <div class="circle-nudge" id="circleNudge">
         <p class="circle-nudge-text">Were you the one in the photos? ATCHÉ is a community for creative women in DC nightlife — photographers, dancers, hosts, DJs, stylists, content creators — to get booked, paid on time, and protected.</p>
         <a class="btn-link" href="circle-application.html">Apply to The Circle</a>
@@ -554,6 +615,16 @@ let session = null;
 let galleryItems = []; // {name, url, type, selected}
 let currentPrice = 5;
 let currentName = 'Quick Shot';
+
+// ---- AI-ENHANCED EDIT ADD-ON ----
+const AI_EDIT_THEMES = [
+  { name:'Private Jet Glam', desc:'Tarmac, private jet stairs, designer luggage, champagne in hand.', price:15 },
+  { name:'Penthouse Night', desc:'City skyline view from a glowing penthouse lounge, golden hour energy.', price:15 },
+  { name:'Red Carpet', desc:'Step-and-repeat backdrop, paparazzi flashes, premiere-night vibe.', price:15 }
+];
+let aiEditEnabled = false;
+let aiEditThemeIdx = 0;
+let aiEditPollInterval = null;
 
 // ---- AMBIENT FX (background glow parallax + drifting gold sparks) ----
 function initBgFx(){
@@ -613,6 +684,18 @@ function openPreview(idx){
 
 function closeLightbox(){
   document.getElementById('lightbox').classList.remove('show');
+}
+
+// ---- GALLERY: full-screen preview ----
+function openGalleryPreview(idx){
+  const item = galleryItems[idx];
+  if(!item) return;
+  document.getElementById('lightboxImg').src = item.previewUrl;
+  document.getElementById('lightboxImg').alt = item.name;
+  document.getElementById('lightboxName').textContent = item.type === 'video' ? 'Reel preview (poster frame)' : '';
+  document.getElementById('lightboxDesc').textContent = '';
+  document.getElementById('lightboxPrice').textContent = '';
+  document.getElementById('lightbox').classList.add('show');
 }
 
 // ---- LANDING: code entry ----
@@ -680,7 +763,9 @@ async function boot(){
   flow.style.display = 'block';
   requestAnimationFrame(() => flow.classList.add('show'));
 
-  updatePayment();
+  renderAiEditThemes();
+  populateAiEditPhotoOptions();
+  updateTotal();
   initReveal();
 
   if(session.paid){
@@ -692,6 +777,8 @@ async function boot(){
     document.getElementById('payHelp').style.display = 'none';
     startPaymentPoll();
   }
+
+  initAiEditStatus();
 }
 
 // ---- ANTICIPATION REVEAL ----
@@ -787,6 +874,13 @@ function renderGallery(){
       div.appendChild(tag);
     }
 
+    const expand = document.createElement('div');
+    expand.className = 'gallery-expand';
+    expand.textContent = '⤢';
+    expand.title = 'View full screen';
+    expand.onclick = (e) => { e.stopPropagation(); openGalleryPreview(idx); };
+    div.appendChild(expand);
+
     const check = document.createElement('div');
     check.className = 'gallery-check';
     check.textContent = '✓';
@@ -805,8 +899,73 @@ function selectPkg(el){
   el.classList.add('active');
   currentPrice = parseInt(el.dataset.price, 10);
   currentName = el.dataset.name;
+  updateTotal();
+}
+
+// ---- AI-ENHANCED EDIT ADD-ON ----
+function renderAiEditThemes(){
+  const wrap = document.getElementById('aiEditThemes');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  AI_EDIT_THEMES.forEach((theme, idx) => {
+    const div = document.createElement('div');
+    div.className = 'ai-edit-theme' + (idx === aiEditThemeIdx ? ' active' : '');
+    div.onclick = (e) => { e.stopPropagation(); selectAiEditTheme(idx); };
+    div.innerHTML = `
+      <div class="ai-edit-theme-radio"></div>
+      <div>
+        <div class="ai-edit-theme-name">${theme.name}</div>
+        <div class="ai-edit-theme-desc">${theme.desc}</div>
+      </div>`;
+    wrap.appendChild(div);
+  });
+}
+
+function selectAiEditTheme(idx){
+  aiEditThemeIdx = idx;
+  document.querySelectorAll('.ai-edit-theme').forEach((el, i) => el.classList.toggle('active', i === idx));
+  updateTotal();
+}
+
+function toggleAiEdit(){
+  if(galleryItems.length === 0) return; // nothing uploaded yet to base the edit on
+  aiEditEnabled = !aiEditEnabled;
+  document.getElementById('aiEditToggle').classList.toggle('active', aiEditEnabled);
+  document.getElementById('aiEditOptions').style.display = aiEditEnabled ? 'block' : 'none';
+  updateTotal();
+}
+
+// Populate the "which shot should we use" select from the loaded gallery,
+// and disable the add-on entirely if nothing's been uploaded yet.
+function populateAiEditPhotoOptions(){
+  const select = document.getElementById('aiEditPhoto');
+  const toggle = document.getElementById('aiEditToggle');
+  if(!select || !toggle) return;
+  select.innerHTML = '';
+
+  if(galleryItems.length === 0){
+    toggle.style.opacity = '0.5';
+    toggle.style.pointerEvents = 'none';
+    return;
+  }
+
+  toggle.style.opacity = '';
+  toggle.style.pointerEvents = '';
+  galleryItems.forEach((item, idx) => {
+    const opt = document.createElement('option');
+    opt.value = item.name;
+    opt.textContent = item.type === 'video' ? `Reel ${idx+1} (poster frame)` : `Photo ${idx+1}`;
+    select.appendChild(opt);
+  });
+}
+
+function getTotal(){
+  return currentPrice + (aiEditEnabled ? AI_EDIT_THEMES[aiEditThemeIdx].price : 0);
+}
+
+function updateTotal(){
   const totalEl = document.getElementById('totalAmt');
-  totalEl.textContent = '$' + currentPrice;
+  totalEl.textContent = '$' + getTotal();
   totalEl.classList.remove('bump');
   void totalEl.offsetWidth;
   totalEl.classList.add('bump');
@@ -816,7 +975,7 @@ function selectPkg(el){
 
 // ---- PAYMENT ----
 function updatePayment(){
-  const cashUrl = `https://cash.app/$${CASHTAG}/${currentPrice}`;
+  const cashUrl = `https://cash.app/$${CASHTAG}/${getTotal()}`;
   document.getElementById('payLink').href = cashUrl;
   document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=8&data=${encodeURIComponent(cashUrl)}`;
 }
@@ -830,11 +989,21 @@ async function requestPaymentConfirmation(){
   btn.disabled = true;
   btn.textContent = 'Letting them know…';
 
-  const { error } = await sb.rpc('request_payment_confirmation', {
+  const rpcParams = {
     p_code: session.code,
     p_package_name: currentName,
     p_package_price: currentPrice
-  });
+  };
+
+  if(aiEditEnabled){
+    const theme = AI_EDIT_THEMES[aiEditThemeIdx];
+    const photoSelect = document.getElementById('aiEditPhoto');
+    rpcParams.p_ai_edit_theme = theme.name;
+    rpcParams.p_ai_edit_photo = photoSelect ? photoSelect.value : null;
+    rpcParams.p_ai_edit_price = theme.price;
+  }
+
+  const { error } = await sb.rpc('request_payment_confirmation', rpcParams);
 
   if(error){
     btn.disabled = false;
@@ -908,6 +1077,55 @@ async function downloadSelected(){
 
   document.getElementById('deliveryMsg').classList.add('show');
   document.getElementById('circleNudge').classList.add('show');
+}
+
+// ---- AI-ENHANCED EDIT: PENDING / RESULT ----
+let aiEditResultItem = null;
+
+async function initAiEditStatus(){
+  if(!session || !session.ai_edit_requested) return;
+  if(session.ai_edit_delivered){
+    await loadAiEditResult();
+  } else {
+    document.getElementById('aiEditPending').classList.add('show');
+    pollAiEditStatus();
+  }
+}
+
+async function loadAiEditResult(){
+  const { data, error } = await sb.storage.from(BUCKET).list(`${session.code}/ai`, {limit:10, sortBy:{column:'created_at', order:'desc'}});
+  if(error || !data || data.length === 0) return;
+  const file = data.find(f => f.name !== '.emptyFolderPlaceholder');
+  if(!file) return;
+  const { data: pub } = sb.storage.from(BUCKET).getPublicUrl(`${session.code}/ai/${file.name}`);
+  aiEditResultItem = { name: file.name, url: pub.publicUrl };
+  document.getElementById('aiEditPending').classList.remove('show');
+  document.getElementById('aiEditResultImg').src = pub.publicUrl;
+  document.getElementById('aiEditResult').classList.add('show');
+}
+
+function pollAiEditStatus(){
+  if(aiEditPollInterval) return;
+  aiEditPollInterval = setInterval(async () => {
+    const { data, error } = await sb.from('visuals_sessions').select('ai_edit_delivered').eq('code', session.code).maybeSingle();
+    if(!error && data && data.ai_edit_delivered){
+      clearInterval(aiEditPollInterval);
+      aiEditPollInterval = null;
+      await loadAiEditResult();
+    }
+  }, 8000);
+}
+
+async function downloadAiEdit(){
+  if(!aiEditResultItem) return;
+  const res = await fetch(aiEditResultItem.url);
+  const blob = await res.blob();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = aiEditResultItem.name || 'ATCHE-AI-Enhanced-Edit.jpg';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 }
 
 boot();
