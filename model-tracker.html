@@ -145,7 +145,15 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .cal-day.today{border-color:var(--gold);background:var(--gold-dim)}
 .cal-day.other-month .cal-day-num{color:var(--text3)}
 .cal-day-num{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:4px}
-.cal-event{padding:2px 5px;border-radius:3px;font-size:10px;font-weight:500;margin-bottom:2px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-event{padding:2px 5px;border-radius:3px;font-size:10px;font-weight:500;margin-bottom:2px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:var(--t)}
+.cal-event:hover{filter:brightness(1.25)}
+.cal-event.evt-shoot{background:var(--gold-dim);color:var(--gold)}
+.cal-event.evt-donation{background:var(--sage-dim);color:var(--sage-light)}
+.cal-event.evt-meeting{background:var(--sky-dim);color:var(--sky-light)}
+.cal-event.evt-pitch{background:var(--violet-dim);color:var(--violet-light)}
+.cal-event.evt-personal{background:var(--rose-dim);color:var(--rose-light)}
+.cal-day-more{font-size:9px;color:var(--text3);padding:2px 5px;cursor:pointer}
+.cal-day-more:hover{color:var(--gold)}
 
 /* ── NOTES ── */
 .notes-layout{display:grid;grid-template-columns:260px 1fr;gap:16px;height:calc(100vh - 140px)}
@@ -340,6 +348,20 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .cat-mua{background:rgba(194,105,122,0.15);border:1px solid var(--rose);color:var(--rose-light)}
 .cat-creative{background:var(--gold-dim);border:1px solid var(--gold);color:var(--gold)}
 .card-category{position:absolute;bottom:12px;left:12px;padding:3px 9px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase}
+
+/* event type colors */
+.evt-shoot{background:var(--gold-dim);border:1px solid var(--gold);color:var(--gold)}
+.evt-donation{background:rgba(107,158,122,0.15);border:1px solid var(--sage);color:var(--sage-light)}
+.evt-meeting{background:rgba(91,141,184,0.15);border:1px solid var(--sky);color:var(--sky-light)}
+.evt-pitch{background:rgba(139,107,177,0.15);border:1px solid var(--violet);color:var(--violet-light)}
+.evt-personal{background:rgba(194,105,122,0.15);border:1px solid var(--rose);color:var(--rose-light)}
+
+/* event status badges */
+.evt-status{padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:inline-block}
+.evt-status-scheduled{background:rgba(180,180,190,0.1);border:1px solid #8a8a9a;color:#aaaabc}
+.evt-status-confirmed{background:rgba(91,141,184,0.15);border:1px solid var(--sky);color:var(--sky-light)}
+.evt-status-done{background:rgba(107,158,122,0.15);border:1px solid var(--sage);color:var(--sage-light)}
+.evt-status-cancelled{background:rgba(194,105,122,0.15);border:1px solid var(--rose);color:var(--rose-light)}
 
 /* status dots */
 .dot-active{background:var(--sage-light)}
@@ -1490,6 +1512,21 @@ const CITIES = [
 function categoryMeta(cat){ return CATEGORIES[cat] || CATEGORIES.model; }
 function categoryLabel(cat){ return categoryMeta(cat).label; }
 function categoryClass(cat){ return 'cat-'+(CATEGORIES[cat]?cat:'model'); }
+
+// ── EVENT TYPES & STATUSES ──
+const EVENT_TYPES = {
+  shoot:    { label:'Paid Shoot',   icon:'📸', cls:'evt-shoot' },
+  donation: { label:'Donation/Door Gig', icon:'💵', cls:'evt-donation' },
+  meeting:  { label:'Meeting',      icon:'🤝', cls:'evt-meeting' },
+  pitch:    { label:'Venue Pitch',  icon:'🏛', cls:'evt-pitch' },
+  personal: { label:'Personal/Other', icon:'✦', cls:'evt-personal' }
+};
+const EVENT_STATUSES = { scheduled:'Scheduled', confirmed:'Confirmed', done:'Done', cancelled:'Cancelled' };
+function eventTypeMeta(t){ return EVENT_TYPES[t] || EVENT_TYPES.shoot; }
+function eventTypeLabel(t){ return eventTypeMeta(t).label; }
+function eventTypeClass(t){ return eventTypeMeta(t).cls; }
+function eventStatusLabel(s){ return EVENT_STATUSES[s] || 'Scheduled'; }
+function eventStatusClass(s){ return 'evt-status-'+(EVENT_STATUSES[s]?s:'scheduled'); }
 
 // ── UTILS ──
 function save(){
