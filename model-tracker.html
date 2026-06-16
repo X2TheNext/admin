@@ -277,7 +277,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .form-label{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
 .form-input{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:13px;outline:none;transition:var(--t);width:100%}
 .form-input:focus{border-color:var(--gold)}
-.form-select{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:13px;outline:none;width:100%;cursor:pointer}
+.form-select{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:13px;outline:none;width:100%;cursor:pointer;appearance:none;-webkit-appearance:none}
 .form-textarea{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 12px;color:var(--text);font-size:13px;outline:none;resize:vertical;min-height:80px;width:100%;font-family:'Inter',sans-serif}
 .form-textarea:focus{border-color:var(--gold)}
 .form-section{font-size:12px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin:16px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--gold-dim)}
@@ -665,12 +665,12 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   <div class="topbar">
     <div>
       <div class="topbar-title" id="viewTitle">Dashboard</div>
-      <div class="topbar-sub" id="viewSub">Your private model intelligence hub</div>
+      <div class="topbar-sub" id="viewSub">Your private talent intelligence hub</div>
     </div>
     <div class="topbar-right">
       <div class="search-box">
         <span class="search-icon">⌕</span>
-        <input type="text" placeholder="Search models..." id="globalSearch" oninput="handleSearch(this.value)">
+        <input type="text" placeholder="Search talent..." id="globalSearch" oninput="handleSearch(this.value)">
       </div>
       <button class="icon-btn" title="Sort" onclick="cycleSortMode()">⇅</button>
       <button class="icon-btn" title="Filter" onclick="showView('roster',document.querySelector('.nav-item:nth-child(2)'))">⊞</button>
@@ -792,7 +792,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
             <option value="photographer">Photographers</option>
             <option value="mua">MUA / Hair</option>
             <option value="creative">Creatives</option>
-            <option value="owner">Owners</option>
+            <option value="owner">Venue Owners</option>
           </select>
           <select class="form-select" style="width:auto;font-size:12px" onchange="renderRankings()" id="rankCat">
             <option value="overall">Overall Score</option>
@@ -837,7 +837,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
           <div class="note-editor-meta">
             <span class="note-editor-date" id="noteDate"></span>
             <select class="note-link-select" id="noteLinked">
-              <option value="">Link to model…</option>
+              <option value="">Link to talent…</option>
             </select>
           </div>
           <textarea class="note-editor-body" id="noteBody" placeholder="Write your thoughts, observations, or anything you want to remember..."></textarea>
@@ -939,7 +939,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <div class="modal-hero" style="height:80px;align-items:center;padding:0 24px;justify-content:space-between">
-      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:600">Add New Model</div>
+      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:600">Add New Talent</div>
       <div class="modal-close" onclick="closeAddModal()">✕</div>
     </div>
     <div class="modal-scroll" style="padding:24px">
@@ -1031,7 +1031,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Height</label>
-          <input class="form-input" id="f-height" placeholder="e.g. 5'9&quot;">
+          <input class="form-input" id="f-height" placeholder="e.g. 5'9"">
         </div>
         <div class="form-group">
           <label class="form-label">Size / Measurements</label>
@@ -1061,10 +1061,14 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <div id="section-catdetails">
       <div class="form-section" id="catDetailsTitle">Category Details</div>
       <div class="form-row">
-        <div class="form-group">
+        <div class="form-group" id="specialtyInputGroup">
           <label class="form-label" id="specialtyLabel">Specialty</label>
           <input class="form-input" id="f-specialty" list="specialtyOptions" placeholder="Type or pick from suggestions">
           <datalist id="specialtyOptions"></datalist>
+        </div>
+        <div class="form-group" id="specialtySelectGroup" style="display:none">
+          <label class="form-label" id="specialtySelectLabel">Venue Type</label>
+          <select class="form-select" id="f-specialty-select" onchange="syncSpecialtySelect()"></select>
         </div>
         <div class="form-group" id="setLengthGroup" style="display:none">
           <label class="form-label">Set Length</label>
@@ -1072,9 +1076,21 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group">
+        <div class="form-group" id="equipmentInputGroup">
           <label class="form-label" id="equipmentLabel">Equipment</label>
           <input class="form-input" id="f-equipment" placeholder="">
+        </div>
+        <div class="form-group" id="capacitySelectGroup" style="display:none">
+          <label class="form-label" id="capacityLabel">Capacity</label>
+          <select class="form-select" id="f-capacity" onchange="syncCapacityValue()">
+            <option value="">Select capacity…</option>
+            <option value="Under 100">Under 100</option>
+            <option value="100–250">100–250</option>
+            <option value="250–500">250–500</option>
+            <option value="500–1,000">500–1,000</option>
+            <option value="1,000–2,500">1,000–2,500</option>
+            <option value="2,500+">2,500+</option>
+          </select>
         </div>
         <div class="form-group">
           <label class="form-label" id="portfolioLabel">Portfolio Link</label>
@@ -1576,6 +1592,7 @@ const CATEGORIES = {
     showSetLength: false,
     showLook: true,
     showDetails: false,
+    isOwner: false,
     lookLabel: 'Look',
     ratingLabels: {look:'Look',energy:'Energy',skill:'Skill',vibe:'Vibe',reliability:'Reliability',overall:'Overall'}
   },
@@ -1588,6 +1605,7 @@ const CATEGORIES = {
     showSetLength: true,
     showLook: false,
     showDetails: true,
+    isOwner: false,
     lookLabel: 'Stage Presence',
     ratingLabels: {look:'Stage Presence',energy:'Energy',skill:'Skill',vibe:'Crowd Read',reliability:'Reliability',overall:'Overall'}
   },
@@ -1600,6 +1618,7 @@ const CATEGORIES = {
     showSetLength: false,
     showLook: false,
     showDetails: true,
+    isOwner: false,
     lookLabel: 'Eye / Aesthetic',
     ratingLabels: {look:'Eye / Aesthetic',energy:'Energy',skill:'Technical Skill',vibe:'Collaboration',reliability:'Reliability',overall:'Overall'}
   },
@@ -1612,6 +1631,7 @@ const CATEGORIES = {
     showSetLength: false,
     showLook: false,
     showDetails: true,
+    isOwner: false,
     lookLabel: 'Presentation',
     ratingLabels: {look:'Presentation',energy:'Energy',skill:'Technique',vibe:'Client Vibe',reliability:'Reliability',overall:'Overall'}
   },
@@ -1624,6 +1644,7 @@ const CATEGORIES = {
     showSetLength: false,
     showLook: false,
     showDetails: true,
+    isOwner: false,
     lookLabel: 'Presentation',
     ratingLabels: {look:'Presentation',energy:'Energy',skill:'Skill',vibe:'Vibe',reliability:'Reliability',overall:'Overall'}
   },
@@ -1636,6 +1657,8 @@ const CATEGORIES = {
     showSetLength: false,
     showLook: false,
     showDetails: true,
+    isOwner: true,
+    capacityOptions: ['Under 100','100–250','250–500','500–1,000','1,000–2,500','2,500+'],
     lookLabel: 'Venue Aesthetic',
     ratingLabels: {look:'Venue Aesthetic',energy:'Energy/Vibe',skill:'Professionalism',vibe:'Partnership Fit',reliability:'Reliability',overall:'Overall'}
   }
@@ -1695,10 +1718,10 @@ function overallScore(m){
 
 // ── VIEWS ──
 const viewMeta = {
-  dashboard:{title:'Dashboard',sub:'Your private model intelligence hub'},
-  roster:{title:'Roster',sub:'All models you\'ve connected with'},
+  dashboard:{title:'Dashboard',sub:'Your private talent intelligence hub'},
+  roster:{title:'Roster',sub:'All talent you\'ve connected with'},
   kanban:{title:'Pipeline',sub:'Track where relationships stand'},
-  rankings:{title:'Rankings',sub:'Your personal model rankings'},
+  rankings:{title:'Rankings',sub:'Your personal talent rankings'},
   calendar:{title:'Calendar',sub:'Shoots, meetings & events'},
   notes:{title:'Notes',sub:'Private notes and observations'},
   prompts:{title:'Prompt Library',sub:'Ready-to-use language for every situation'},
@@ -1840,7 +1863,7 @@ function renderOwners(){
       <div class="card-body">
         <div class="card-name">${m.name}</div>
         <div class="card-handle">${m.handle&&igUrl(m.handle)?`<a href="${igUrl(m.handle)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:inherit;text-decoration:none;border-bottom:1px dotted var(--text3)">${m.handle}</a>`:m.handle||''}${m.city?' · '+m.city:''}</div>
-        <div class="card-tags"><span class="tag cat-owner" style="font-size:9px">${m.specialty||'Venue'}</span></div>
+        <div class="card-tags"><span class="tag cat-owner" style="font-size:9px">${m.specialty||'Venue'}</span>${m.equipment?`<span class="tag cat-owner" style="font-size:9px;opacity:0.75">${m.equipment}</span>`:''}</div>
         <div class="card-stats">
           <div class="stat"><div class="stat-val">${score?score.toFixed(1):'-'}</div><div class="stat-lbl">Score</div></div>
           <div class="stat"><div class="stat-val">${notes.filter(n=>n.linkedModel===m.id).length}</div><div class="stat-lbl">Notes</div></div>
@@ -2194,7 +2217,7 @@ function renderNotes(){
   const noteList = document.getElementById('notesList');
   const linkSel = document.getElementById('noteLinked');
   // repopulate link dropdown
-  linkSel.innerHTML = '<option value="">Link to model…</option>' + models.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+  linkSel.innerHTML = '<option value="">Link to talent…</option>' + models.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
 
   if(!notes.length){ noteList.innerHTML='<div class="note-item" style="padding:20px;color:var(--text3);font-size:12px">No notes yet. Click + New to start.</div>'; return; }
   noteList.innerHTML = [...notes].sort((a,b)=>b.updatedAt-a.updatedAt).map(n=>{
@@ -2304,6 +2327,33 @@ function getCityValue(){
   if(sel==='__other__') return document.getElementById('f-city-other').value.trim();
   return sel;
 }
+
+// ── VENUE OWNER DROPDOWN HELPERS ──
+function syncSpecialtySelect(){
+  const select = document.getElementById('f-specialty-select');
+  const input = document.getElementById('f-specialty');
+  if(select && input) input.value = select.value;
+}
+function syncCapacityValue(){
+  const select = document.getElementById('f-capacity');
+  const input = document.getElementById('f-equipment');
+  if(select && input) input.value = select.value;
+}
+function populateSpecialtySelect(options, currentVal){
+  const select = document.getElementById('f-specialty-select');
+  if(!select) return;
+  select.innerHTML = '<option value="">Select venue type…</option>' + options.map(o=>`<option value="${o}">${o}</option>`).join('');
+  if(currentVal && options.includes(currentVal)) select.value = currentVal;
+  else select.value = '';
+}
+function populateCapacitySelect(options, currentVal){
+  const select = document.getElementById('f-capacity');
+  if(!select) return;
+  select.innerHTML = '<option value="">Select capacity…</option>' + options.map(o=>`<option value="${o}">${o}</option>`).join('');
+  if(currentVal && options.includes(currentVal)) select.value = currentVal;
+  else select.value = '';
+}
+
 function applyCategoryFields(cat){
   const meta = categoryMeta(cat);
   document.getElementById('section-look').style.display = meta.showLook ? '' : 'none';
@@ -2316,6 +2366,20 @@ function applyCategoryFields(cat){
   document.getElementById('portfolioLabel').textContent = meta.portfolioLabel;
   document.getElementById('setLengthGroup').style.display = meta.showSetLength ? '' : 'none';
   document.getElementById('specialtyOptions').innerHTML = (meta.specialtyOptions||[]).map(o=>`<option value="${o}">`).join('');
+
+  // Venue Owner: swap text input → select dropdowns
+  const isOwner = meta.isOwner === true;
+  document.getElementById('specialtyInputGroup').style.display = isOwner ? 'none' : '';
+  document.getElementById('specialtySelectGroup').style.display = isOwner ? '' : 'none';
+  document.getElementById('equipmentInputGroup').style.display = isOwner ? 'none' : '';
+  document.getElementById('capacitySelectGroup').style.display = isOwner ? '' : 'none';
+
+  if(isOwner){
+    const currentSpecialty = document.getElementById('f-specialty').value;
+    populateSpecialtySelect(meta.specialtyOptions, currentSpecialty);
+    const currentEquip = document.getElementById('f-equipment').value;
+    populateCapacitySelect(meta.capacityOptions, currentEquip);
+  }
 }
 populateCityOptions();
 
@@ -2335,6 +2399,9 @@ function openAddModal(){
   document.getElementById('f-lastContact').value='';
   document.getElementById('f-nextFollowUp').value='';
   document.getElementById('f-category').value='model';
+  // reset venue owner selects
+  const ssp = document.getElementById('f-specialty-select'); if(ssp) ssp.value='';
+  const cap = document.getElementById('f-capacity'); if(cap) cap.value='';
   applyCategoryFields('model');
   setCityValue('');
   document.querySelectorAll('.star-input span').forEach(s=>s.classList.remove('on'));
@@ -2377,6 +2444,12 @@ function editCurrentModel(){
   document.getElementById('f-mbti').value = m.mbti||'';
   document.getElementById('f-category').value = m.category||'model';
   applyCategoryFields(m.category||'model');
+  // Pre-fill venue owner selects if editing an owner
+  if((m.category||'model')==='owner'){
+    const meta = categoryMeta('owner');
+    populateSpecialtySelect(meta.specialtyOptions, m.specialty);
+    populateCapacitySelect(meta.capacityOptions, m.equipment);
+  }
   setCityValue(m.city||'');
   // fill stars
   document.querySelectorAll('.star-input').forEach(row=>{
@@ -2403,8 +2476,13 @@ function saveModel(){
   if(!name){ alert('Name is required.'); return; }
   const tags = document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
   const skills = document.getElementById('f-skills').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const cat = document.getElementById('f-category').value || 'model';
+  const meta = categoryMeta(cat);
+  // For venue owners, get values from selects (they sync to the hidden inputs)
+  const specialty = meta.isOwner ? (document.getElementById('f-specialty').value.trim()) : document.getElementById('f-specialty').value.trim();
+  const equipment = meta.isOwner ? (document.getElementById('f-equipment').value.trim()) : document.getElementById('f-equipment').value.trim();
   const fields = {
-    category: document.getElementById('f-category').value || 'model',
+    category: cat,
     name,
     handle: document.getElementById('f-handle').value.trim(),
     city: getCityValue(),
@@ -2427,9 +2505,9 @@ function saveModel(){
     personal: document.getElementById('f-personal').value.trim(),
     notes: document.getElementById('f-notes').value.trim(),
     photo: document.getElementById('f-photo').value.trim(),
-    specialty: document.getElementById('f-specialty').value.trim(),
+    specialty: specialty,
     setLength: document.getElementById('f-setLength').value.trim(),
-    equipment: document.getElementById('f-equipment').value.trim(),
+    equipment: equipment,
     portfolio: document.getElementById('f-portfolio').value.trim(),
     rate: document.getElementById('f-rate').value.trim(),
     ratings: {...ratings},
@@ -2549,7 +2627,7 @@ function openProfile(id){
       <div class="note-item-title">${n.title||'Untitled'}</div>
       <div class="note-item-date">${fmt(n.updatedAt)}</div>
       <div class="note-item-preview">${n.body||'...'}</div>
-    </div>`).join(''):'<div style="color:var(--text3);font-size:13px;padding:20px 0">No notes linked to this model yet.</div>';
+    </div>`).join(''):'<div style="color:var(--text3);font-size:13px;padding:20px 0">No notes linked to this talent yet.</div>';
   // Switch to overview tab
   switchProfileTab('overview', document.querySelector('.modal-tab'));
   document.getElementById('profileModal').classList.add('open');
@@ -2686,7 +2764,7 @@ function markContactedToday(){
 }
 function deleteCurrentModel(){
   if(!currentModelId) return;
-  if(!confirm('Remove this model from your roster?')) return;
+  if(!confirm('Remove this talent from your roster?')) return;
   models=models.filter(m=>m.id!==currentModelId);
   save(); closeProfileModal();
   renderDashboard();
@@ -2773,7 +2851,7 @@ function importData(e){
       events = data.events || [];
       save();
       renderDashboard();
-      alert('Import successful — ' + models.length + ' models loaded.');
+      alert('Import successful — ' + models.length + ' talent loaded.');
     } catch(err) {
       alert('Import failed: ' + err.message);
     }
@@ -2882,7 +2960,7 @@ function renderApplications() {
         ${a.portfolio ? `<div style="font-size:11px;color:var(--text3);margin-bottom:14px">Portfolio: <a href="${a.portfolio}" target="_blank" style="color:var(--gold)">${a.portfolio}</a></div>` : ''}
         ${a.status === 'pending' ? `
         <div style="display:flex;gap:10px">
-          <button onclick="promoteApplicant(${JSON.stringify(a).replace(/"/g,'&quot;')})" style="flex:1;padding:10px;background:var(--gold);color:var(--black);border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase">✦ Add to Roster</button>
+          <button onclick="promoteApplicant(${JSON.stringify(a).replace(/"/g,'"')})" style="flex:1;padding:10px;background:var(--gold);color:var(--black);border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;text-transform:uppercase">✦ Add to Roster</button>
           <button onclick="passApplicant('${a.id}')" style="padding:10px 18px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);font-size:12px;color:var(--text3);cursor:pointer">Pass</button>
         </div>` : `<div style="font-size:11px;color:${statusColor};letter-spacing:0.5px;text-transform:uppercase;font-weight:600">${a.status === 'approved' ? '✦ Added to Roster' : '— Passed'}</div>`}
       </div>
