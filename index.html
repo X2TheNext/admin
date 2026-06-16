@@ -7,8 +7,8 @@
 <script>
 (function(){
   var h = location.hostname, dest = "ATCHE-Visuals-Guide-Hub.html";
-  if (h.indexOf("invited") > -1)        dest = "spicy-water-casting.html";
-  else if (h.indexOf("spicy") > -1)     dest = "SpicyWater-Proposal.html";
+  if (/invit|invt|your|youre/.test(h))   dest = "spicy-water-casting.html";
+  else if (h.indexOf("spicy") > -1)      dest = "SpicyWater-Proposal.html";
   location.replace(dest);
 })();
 </script>
