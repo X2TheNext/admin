@@ -15,7 +15,7 @@ From your ATCHÉ project folder in Terminal:
 ```
 cd ~/Documents/Claude/Projects/ATCHÉ
 git add .
-git commit -m "UX overhaul: flow reorder, custom modals, overflow menu, sign-out, skeleton states"
+git commit -m "AI Edit showcase page, packages 3-tier ($10/$30/$60), 6 themes at $20 with previews, Studio prompts expanded"
 git push
 ```
 
@@ -41,6 +41,8 @@ Live in ~60 seconds. This push covers everything from the full UX/UI audit:
 - `--text3` bumped + focus-visible styles + aria-labels on icon-only buttons
 
 **New file** (`atche-visuals-feedback.html`) — pilot survey (run the `visuals_feedback` SQL block from `ATCHE-Visuals-Setup.md` if you haven't already).
+
+**New file** (`atche-ai-edit.html`) — AI Edit before/after marketing page. Drag-to-reveal slider, 6 theme cards with real Higgsfield preview images, packages, how-it-works, and CTA. Share this link to sell the AI edit concept before clients even meet you.
 
 ## After it's live — quick smoke test
 

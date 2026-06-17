@@ -185,6 +185,29 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);ov
 .bn-item.active{color:var(--gold)}
 .bn-icon{font-size:18px}
 
+/* ── TASK CHECKLIST ── */
+.tasks-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.tasks-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold-lt);font-style:italic}
+.tasks-reset{font-size:11px;color:var(--text3);cursor:pointer;padding:5px 10px;background:var(--s2);border:1px solid var(--border);border-radius:6px}
+.tasks-reset:hover{color:var(--rose);border-color:var(--rose)}
+.tasks-section{margin-bottom:28px}
+.tasks-section-head{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.tasks-section-head .section-prog{margin-left:auto;font-size:10px;color:var(--text3);font-weight:400;letter-spacing:0;text-transform:none}
+.task-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(42,42,42,0.5);cursor:pointer;user-select:none;-webkit-user-select:none}
+.task-row:last-child{border-bottom:none}
+.task-row.done .task-row-label strong{color:var(--text3);text-decoration:line-through}
+.task-row.done .task-row-label span{color:var(--text3)}
+.task-row-box{width:20px;height:20px;border-radius:4px;border:1.5px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--sage);transition:var(--t)}
+.task-row.done .task-row-box{background:var(--sage-d);border-color:var(--sage);color:#9DC9A8}
+.task-row-label{flex:1}
+.task-row-label strong{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;transition:var(--t)}
+.task-row-label span{font-size:11px;color:var(--text3);line-height:1.55}
+.task-tip-row{margin:0 0 8px 30px;padding:7px 10px;background:rgba(201,168,76,0.05);border-left:2px solid rgba(201,168,76,0.25);border-radius:0 6px 6px 0;font-size:11px;color:var(--text3);font-style:italic;line-height:1.55}
+.tasks-progress{height:4px;background:var(--s2);border-radius:2px;overflow:hidden;margin-bottom:20px}
+.tasks-progress-bar{height:100%;background:linear-gradient(to right,var(--sage),var(--gold));border-radius:2px;transition:width 0.3s}
+.guide-link{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding:12px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);font-size:13px;color:var(--text2);cursor:pointer;text-decoration:none;transition:var(--t)}
+.guide-link:hover{border-color:var(--gold);color:var(--gold)}
+
 /* ── LOADING ── */
 #loadScreen{position:fixed;inset:0;background:var(--black);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
 .load-word{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--gold);letter-spacing:8px;animation:pulse 1.4s ease-in-out infinite}
@@ -243,6 +266,7 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);ov
   <div class="tab" onclick="setTab('venues',this)">Venues</div>
   <div class="tab" onclick="setTab('upcoming',this)">Upcoming</div>
   <div class="tab" onclick="setTab('calendar',this)">📸 Calendar</div>
+  <div class="tab" onclick="setTab('tasks',this)">✓ Tasks</div>
 </div>
 
 <!-- QUEUE -->
@@ -250,6 +274,9 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);ov
 
 <!-- CALENDAR (photography events) -->
 <div class="queue" id="calendarView" style="display:none"></div>
+
+<!-- TASKS CHECKLIST -->
+<div id="tasksView" style="display:none;padding:16px 20px 80px"></div>
 
 <!-- NEW LEAD FAB -->
 <button class="fab" onclick="openLeadSheet()" title="Add a new lead">+</button>
@@ -738,6 +765,117 @@ async function applyFollowUp(id, type, newDate, isSnooze) {
 }
 
 // ── TABS / NAV ────────────────────────────────────────────────────
+// ── TASK CHECKLIST ─────────────────────────────────────────────────
+
+const DAILY_TASKS = [
+  { id:'d1', label:'Check the Follow-Up Queue', tip:'Look at Overdue + Today. Work through each card — pick a template, copy, send.' },
+  { id:'d2', label:'Send follow-up messages for every Overdue + Today card', tip:'Tap ✓ Sent after each one and set the next follow-up date.' },
+  { id:'d3', label:'Snooze anyone who can\'t be reached right now', tip:'Hit +3d to snooze for 3 days. Don\'t leave cards unanswered.' },
+  { id:'d4', label:'Update stage for anyone who replied', tip:'Change their Pipeline Stage to Interested, Meeting Set, etc.' },
+  { id:'d5', label:'Review today\'s and tomorrow\'s shoots on 📸 Calendar', tip:'Confirm nothing changed. Add anything new to your Google Calendar.' },
+  { id:'d6', label:'Log any new leads from the past 24 hours', tip:'Hit + bottom right. Choose Venue or Talent → fill in name, IG, stage.' },
+  { id:'d7', label:'Check IG DMs — update tracker for any replies', tip:'Use the IG button on each card to jump straight to their profile.' },
+];
+
+const WEEKLY_TASKS = [
+  { id:'w1', label:'Pipeline Review — move Kanban cards to reflect current status', tip:'Open Model Tracker → Kanban. Anything stuck 2+ weeks? Schedule a follow-up or move to Inactive.' },
+  { id:'w2', label:'Promote promising leads to full profiles in the tracker', tip:'Add photo, category, IG handle, city, email. Email field unlocks the template tab.' },
+  { id:'w3', label:'Add rating notes from any meetings or collabs this week', tip:'Even one sentence in the notes field is useful for later.' },
+  { id:'w4', label:'Outreach batch — send to 5–10 leads in New Lead or Contacted stage', tip:'Profile → Email tab → pick template → customize → send → mark contacted → set next follow-up.' },
+  { id:'w5', label:'Sync photography calendar — add confirmed shoots to Google Calendar', tip:'Review the 📸 Calendar tab for the next 2 weeks. Flag scheduling conflicts to Xavier.' },
+  { id:'w6', label:'Send Xavier a weekly recap text', tip:'New leads added · follow-ups sent · shoots confirmed · anyone worth prioritizing · anything broken.' },
+];
+
+function getTaskStorageKey(prefix) {
+  return `atche-tasks-${prefix}-${todayStr()}`;
+}
+
+function loadTaskState(prefix) {
+  try { return JSON.parse(localStorage.getItem(getTaskStorageKey(prefix)) || '{}'); } catch(e) { return {}; }
+}
+
+function saveTaskState(prefix, state) {
+  localStorage.setItem(getTaskStorageKey(prefix), JSON.stringify(state));
+}
+
+function toggleTask(prefix, id, el) {
+  const state = loadTaskState(prefix);
+  state[id] = !state[id];
+  saveTaskState(prefix, state);
+  // refresh checklist
+  renderTasksChecklist();
+}
+
+function renderTasksChecklist() {
+  const el = document.getElementById('tasksView');
+  if(!el) return;
+
+  const dState = loadTaskState('daily');
+  const wState = loadTaskState('weekly');
+
+  const dDone = DAILY_TASKS.filter(t => dState[t.id]).length;
+  const wDone = WEEKLY_TASKS.filter(t => wState[t.id]).length;
+  const totalDone = dDone + wDone;
+  const totalTasks = DAILY_TASKS.length + WEEKLY_TASKS.length;
+  const pct = Math.round((totalDone / totalTasks) * 100);
+
+  function taskHtml(tasks, prefix, state) {
+    return tasks.map(t => {
+      const done = !!state[t.id];
+      return `
+        <div class="task-row${done?' done':''}" onclick="toggleTask('${prefix}','${t.id}',this)">
+          <div class="task-row-box">${done?'✓':''}</div>
+          <div class="task-row-label">
+            <strong>${t.label}</strong>
+            <span>${t.tip}</span>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  el.innerHTML = `
+    <div class="tasks-header">
+      <div class="tasks-title">Today's Tasks</div>
+      <div class="tasks-reset" onclick="resetTasks()">Reset all</div>
+    </div>
+
+    <div class="tasks-progress">
+      <div class="tasks-progress-bar" style="width:${pct}%"></div>
+    </div>
+
+    <div style="font-size:11px;color:var(--text3);margin-bottom:20px;text-align:right">
+      ${totalDone} of ${totalTasks} done${pct===100?' — ✦ All clear!':''}
+    </div>
+
+    <div class="tasks-section">
+      <div class="tasks-section-head">
+        Daily
+        <span class="section-prog">${dDone}/${DAILY_TASKS.length}</span>
+      </div>
+      ${taskHtml(DAILY_TASKS, 'daily', dState)}
+    </div>
+
+    <div class="tasks-section">
+      <div class="tasks-section-head">
+        Weekly
+        <span class="section-prog">${wDone}/${WEEKLY_TASKS.length}</span>
+      </div>
+      ${taskHtml(WEEKLY_TASKS, 'weekly', wState)}
+    </div>
+
+    <a class="guide-link" href="monet-admin-guide.html" target="_blank">
+      📋 Open Full Admin Guide
+    </a>
+  `;
+}
+
+function resetTasks() {
+  if(!confirm('Reset all tasks for today?')) return;
+  localStorage.removeItem(getTaskStorageKey('daily'));
+  localStorage.removeItem(getTaskStorageKey('weekly'));
+  renderTasksChecklist();
+}
+
 function setTab(tab, el) {
   activeTab = tab;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -746,13 +884,20 @@ function setTab(tab, el) {
 
   const queueEl = document.getElementById('queue');
   const calEl = document.getElementById('calendarView');
+  const tasksEl = document.getElementById('tasksView');
   if(tab === 'calendar') {
     queueEl.style.display = 'none';
     calEl.style.display = 'flex';
+    if(tasksEl) tasksEl.style.display = 'none';
     renderCalendar();
+  } else if(tab === 'tasks') {
+    queueEl.style.display = 'none';
+    calEl.style.display = 'none';
+    if(tasksEl) { tasksEl.style.display = 'block'; renderTasksChecklist(); }
   } else {
     queueEl.style.display = 'flex';
     calEl.style.display = 'none';
+    if(tasksEl) tasksEl.style.display = 'none';
     renderQueue();
   }
 }

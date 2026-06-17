@@ -155,7 +155,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .ai-edit-toggle-desc{font-size:12px;color:var(--text2);line-height:1.6}
 .ai-edit-toggle-price{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold);white-space:nowrap}
 .ai-edit-options{margin-top:10px;padding:14px;border:1px solid var(--border2);border-radius:12px;background:var(--surface2);animation:fade-up .4s cubic-bezier(.16,1,.3,1)}
-.ai-edit-theme{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border2);border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:var(--t);background:var(--surface)}
+.ai-edit-theme{display:flex;align-items:center;gap:12px;border:1px solid var(--border2);border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:var(--t);background:var(--surface)}
+.ai-edit-theme-thumb{width:54px;height:54px;border-radius:8px;object-fit:cover;flex-shrink:0;border:1px solid var(--border)}
 .ai-edit-theme:last-child{margin-bottom:0}
 .ai-edit-theme.active{border-color:var(--gold);background:var(--gold-dim)}
 .ai-edit-theme-radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--text3);flex-shrink:0;margin-top:2px;position:relative}
@@ -367,54 +368,27 @@ button:focus-visible,a:focus-visible,.pkg:focus-visible,.gallery-item:focus-visi
         <div class="pkg-thumb"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_005538_be580b13-e2b5-4009-a425-a12c797e7f89_min.webp" alt="Quick Shot preview" loading="lazy"></div>
         <div class="pkg-body">
           <div class="pkg-name">Quick Shot</div>
-          <div class="pkg-desc">One full-resolution photo, your pick — tap to see the vibe</div>
+          <div class="pkg-desc">One full-resolution photo, your pick from tonight</div>
         </div>
-        <div class="pkg-price">$5</div>
+        <div class="pkg-price">$10</div>
       </div>
 
       <div class="pkg pkg-static" onclick="openPreview(1)">
-        <div class="pkg-thumb"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010304_ca7ed54c-53ee-4a4f-9b64-3e8d76036eff_min.webp" alt="Photo Bundle preview" loading="lazy"></div>
+        <div class="pkg-thumb"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010304_ca7ed54c-53ee-4a4f-9b64-3e8d76036eff_min.webp" alt="The Bundle preview" loading="lazy"></div>
         <div class="pkg-body">
-          <div class="pkg-name">Photo Bundle</div>
+          <div class="pkg-name">The Bundle</div>
           <div class="pkg-desc">Up to 8 edited photos — your whole night, curated</div>
         </div>
-        <div class="pkg-price">$20</div>
+        <div class="pkg-price">$30</div>
       </div>
 
-      <div class="pkg pkg-static" onclick="openPreview(2)">
-        <div class="pkg-thumb"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010305_5b02bc43-c1f9-46bf-8d31-ca3451e99b7a_min.webp" alt="Spotlight Package preview" loading="lazy"></div>
+      <div class="pkg pkg-static" style="margin-bottom:0" onclick="openPreview(2)">
+        <div class="pkg-thumb"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010309_5bf0f52c-7833-404d-8344-2c6338e26eac_min.webp" alt="Full Night preview" loading="lazy"></div>
         <div class="pkg-body">
-          <div class="pkg-name">Spotlight Package</div>
-          <div class="pkg-desc">5–10 curated photos + 1 short vertical clip, edited for your story — main character treatment</div>
-        </div>
-        <div class="pkg-price">$40</div>
-      </div>
-
-      <div class="pkg pkg-static" onclick="openPreview(3)">
-        <div class="pkg-thumb"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010307_424e40c8-f791-46be-8a19-eafa1b0253ff_min.webp" alt="Performance Reel Basic preview" loading="lazy"></div>
-        <div class="pkg-body">
-          <div class="pkg-name">Performance Reel — Basic</div>
-          <div class="pkg-desc">A 60–90 sec highlight reel + 5 photos — built for your story</div>
-        </div>
-        <div class="pkg-price">$50</div>
-      </div>
-
-      <div class="pkg pkg-static" onclick="openPreview(4)">
-        <div class="pkg-thumb"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010309_5bf0f52c-7833-404d-8344-2c6338e26eac_min.webp" alt="Table Package preview" loading="lazy"></div>
-        <div class="pkg-body">
-          <div class="pkg-name">Table Package</div>
-          <div class="pkg-desc">Photos + a quick group reel for your whole table — built for bottle service, one pickup covers everyone</div>
+          <div class="pkg-name">Full Night</div>
+          <div class="pkg-desc">Every photo + a reel — the full story, ready to post</div>
         </div>
         <div class="pkg-price">$60</div>
-      </div>
-
-      <div class="pkg pkg-static" style="margin-bottom:0" onclick="openPreview(5)">
-        <div class="pkg-thumb"><img src="https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010310_3a674cd5-8df4-494e-935a-6b8514ca9e7a_min.webp" alt="Performance Reel Premium preview" loading="lazy"></div>
-        <div class="pkg-body">
-          <div class="pkg-name">Performance Reel — Premium</div>
-          <div class="pkg-desc">Full edit, color grade &amp; captions + 10 photos — polished, ready to post</div>
-        </div>
-        <div class="pkg-price">$100</div>
       </div>
     </div>
 
@@ -461,67 +435,40 @@ button:focus-visible,a:focus-visible,.pkg:focus-visible,.gallery-item:focus-visi
       <h2>What do you want to take home?</h2>
       <p class="card-desc">Pick what fits — you can change your mind any time before you pay.</p>
 
-      <div class="pkg active" data-price="5" data-name="Quick Shot" onclick="selectPkg(this)">
+      <div class="pkg active" data-price="10" data-name="Quick Shot" onclick="selectPkg(this)">
         <div class="pkg-radio"></div>
         <div class="pkg-body">
           <div class="pkg-name">Quick Shot</div>
-          <div class="pkg-desc">1 photo, full resolution</div>
+          <div class="pkg-desc">1 full-resolution photo, your pick</div>
         </div>
-        <div class="pkg-price">$5</div>
+        <div class="pkg-price">$10</div>
       </div>
 
-      <div class="pkg" data-price="20" data-name="Photo Bundle" onclick="selectPkg(this)">
+      <div class="pkg" data-price="30" data-name="The Bundle" onclick="selectPkg(this)">
         <div class="pkg-radio"></div>
         <div class="pkg-body">
-          <div class="pkg-name">Photo Bundle</div>
+          <div class="pkg-name">The Bundle</div>
           <div class="pkg-desc">Up to 8 edited photos from tonight</div>
         </div>
-        <div class="pkg-price">$20</div>
+        <div class="pkg-price">$30</div>
       </div>
 
-      <div class="pkg" data-price="40" data-name="Spotlight Package" onclick="selectPkg(this)">
+      <div class="pkg" data-price="60" data-name="Full Night" onclick="selectPkg(this)">
         <div class="pkg-radio"></div>
         <div class="pkg-body">
-          <div class="pkg-name">Spotlight Package</div>
-          <div class="pkg-desc">5–10 curated photos + 1 short vertical clip, edited for your story — main character treatment</div>
-        </div>
-        <div class="pkg-price">$40</div>
-      </div>
-
-      <div class="pkg" data-price="50" data-name="Performance Reel — Basic" onclick="selectPkg(this)">
-        <div class="pkg-radio"></div>
-        <div class="pkg-body">
-          <div class="pkg-name">Performance Reel — Basic</div>
-          <div class="pkg-desc">60–90 sec highlight reel + 5 photos</div>
-        </div>
-        <div class="pkg-price">$50</div>
-      </div>
-
-      <div class="pkg" data-price="60" data-name="Table Package" onclick="selectPkg(this)">
-        <div class="pkg-radio"></div>
-        <div class="pkg-body">
-          <div class="pkg-name">Table Package</div>
-          <div class="pkg-desc">Photos + a quick group reel for your whole table — built for bottle service, one pickup covers everyone</div>
+          <div class="pkg-name">Full Night</div>
+          <div class="pkg-desc">Every photo + a reel — the full story, ready to post</div>
         </div>
         <div class="pkg-price">$60</div>
-      </div>
-
-      <div class="pkg" data-price="100" data-name="Performance Reel — Premium" onclick="selectPkg(this)">
-        <div class="pkg-radio"></div>
-        <div class="pkg-body">
-          <div class="pkg-name">Performance Reel — Premium</div>
-          <div class="pkg-desc">Full edit, color grade &amp; captions + 10 photos — built to post</div>
-        </div>
-        <div class="pkg-price">$100</div>
       </div>
 
       <div class="ai-edit-toggle" id="aiEditToggle" onclick="toggleAiEdit()">
         <div class="ai-edit-toggle-check" id="aiEditCheck"></div>
         <div class="ai-edit-toggle-body">
           <div class="ai-edit-toggle-name">+ AI-Enhanced Edit</div>
-          <div class="ai-edit-toggle-desc">Turn one of your shots into a glossy AI-enhanced fantasy edit — added to your gallery once it's ready (usually within a day).</div>
+          <div class="ai-edit-toggle-desc">Same you, different world — private jet, VIP section, red carpet, your name in lights. Ready in your gallery within 24 hrs. <a href="atche-ai-edit.html" target="_blank" onclick="event.stopPropagation()" style="color:var(--gold);text-decoration:underline;font-weight:600">See examples →</a></div>
         </div>
-        <div class="ai-edit-toggle-price" id="aiEditTogglePrice">+$15</div>
+        <div class="ai-edit-toggle-price" id="aiEditTogglePrice">+$20</div>
       </div>
 
       <div class="ai-edit-options" id="aiEditOptions" style="display:none">
@@ -616,14 +563,17 @@ const CASHTAG = 'XaveirMSnow';
 
 let session = null;
 let galleryItems = []; // {name, url, type, selected}
-let currentPrice = 5;
+let currentPrice = 10;
 let currentName = 'Quick Shot';
 
 // ---- AI-ENHANCED EDIT ADD-ON ----
 const AI_EDIT_THEMES = [
-  { name:'Private Jet Glam', desc:'Tarmac, private jet stairs, designer luggage, champagne in hand.', price:15 },
-  { name:'Penthouse Night', desc:'City skyline view from a glowing penthouse lounge, golden hour energy.', price:15 },
-  { name:'Red Carpet', desc:'Step-and-repeat backdrop, paparazzi flashes, premiere-night vibe.', price:15 }
+  { name:'Your Name in Lights', desc:'Marquee billboard, neon signs, concert stage energy — your name in the sky.', price:20, img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_135834_2c76db40-227b-47c1-966f-c86d9eeda5f3_min.webp' },
+  { name:'Private Jet', desc:'Tarmac, private jet stairs, designer luggage, champagne in hand.', price:20, img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_135838_7debe738-39b7-42eb-a5b9-af8772aaa5db_min.webp' },
+  { name:'Sports Car', desc:'Sleek supercar at golden hour, city or coastal road behind you.', price:20, img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_135843_3048cb89-89f6-4138-a26e-29019e368814_min.webp' },
+  { name:'VIP Section', desc:'Velvet ropes, bottle service, a room that knows you\'re the reason they\'re here.', price:20, img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_135851_ceaa9001-7443-4580-8c65-8c5ffd7f857e_min.webp' },
+  { name:'Penthouse Night', desc:'City skyline from a glowing penthouse lounge — floor-to-ceiling golden hour.', price:20, img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_135857_20a230ea-796d-47c0-a83c-346a5bf954be_min.webp' },
+  { name:'Red Carpet', desc:'Step-and-repeat backdrop, paparazzi flashes, premiere-night vibe.', price:20, img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_135905_2d4edb85-4027-4ca1-8336-baad12ce38eb_min.webp' }
 ];
 let aiEditEnabled = false;
 let aiEditThemeIdx = 0;
@@ -666,12 +616,9 @@ function initBgFx(){
 
 // ---- LANDING: package previews ----
 const PKG_PREVIEWS = [
-  { name:'Quick Shot', desc:'One full-resolution photo, your pick from tonight.', price:'$5', img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_005538_be580b13-e2b5-4009-a425-a12c797e7f89.png' },
-  { name:'Photo Bundle', desc:'Up to 8 edited photos from tonight — your whole night, curated.', price:'$20', img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010304_ca7ed54c-53ee-4a4f-9b64-3e8d76036eff.png' },
-  { name:'Spotlight Package', desc:'5–10 curated photos + 1 short vertical clip, edited for your story — main character treatment.', price:'$40', img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010305_5b02bc43-c1f9-46bf-8d31-ca3451e99b7a.png' },
-  { name:'Performance Reel — Basic', desc:'60–90 sec highlight reel + 5 photos — built for your story.', price:'$50', img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010307_424e40c8-f791-46be-8a19-eafa1b0253ff.png' },
-  { name:'Table Package', desc:"Photos + a quick group reel for your whole table — built for bottle service, one pickup covers everyone.", price:'$60', img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010309_5bf0f52c-7833-404d-8344-2c6338e26eac.png' },
-  { name:'Performance Reel — Premium', desc:'Full edit, color grade & captions + 10 photos — polished, ready to post.', price:'$100', img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010310_3a674cd5-8df4-494e-935a-6b8514ca9e7a.png' }
+  { name:'Quick Shot', desc:'One full-resolution photo, your pick from tonight.', price:'$10', img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_005538_be580b13-e2b5-4009-a425-a12c797e7f89.png' },
+  { name:'The Bundle', desc:'Up to 8 edited photos from tonight — your whole night, curated.', price:'$30', img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010304_ca7ed54c-53ee-4a4f-9b64-3e8d76036eff.png' },
+  { name:'Full Night', desc:'Every photo + a reel — the full story, edited and ready to post.', price:'$60', img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260613_010309_5bf0f52c-7833-404d-8344-2c6338e26eac.png' }
 ];
 
 function openPreview(idx){
@@ -915,11 +862,12 @@ function renderAiEditThemes(){
     div.className = 'ai-edit-theme' + (idx === aiEditThemeIdx ? ' active' : '');
     div.onclick = (e) => { e.stopPropagation(); selectAiEditTheme(idx); };
     div.innerHTML = `
-      <div class="ai-edit-theme-radio"></div>
-      <div>
+      ${theme.img ? `<img class="ai-edit-theme-thumb" src="${theme.img}" alt="${theme.name}" loading="lazy">` : ''}
+      <div style="flex:1;min-width:0">
         <div class="ai-edit-theme-name">${theme.name}</div>
         <div class="ai-edit-theme-desc">${theme.desc}</div>
-      </div>`;
+      </div>
+      <div class="ai-edit-theme-radio" style="flex-shrink:0"></div>`;
     wrap.appendChild(div);
   });
 }

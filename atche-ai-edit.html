@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ATCHÉ AI Edit — Your Night, Elevated</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#080808;--surface:#111111;--surface2:#181818;--surface3:#242424;
+    --border:#222222;--border2:#2e2e2e;
+    --gold:#C9A84C;--gold-light:#E2C47A;--gold-dim:rgba(201,168,76,0.12);--gold-glow:rgba(201,168,76,0.25);
+    --text:#F2EDE6;--text2:#B0A898;--text3:#8A7E72;
+    --rose:#C2697A;--sage:#6B9E7A;
+    --t:0.25s cubic-bezier(0.4,0,0.2,1);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--black);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+  /* ── SPARKLE FIELD ── */
+  #sparkleField{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .spark{position:absolute;border-radius:50%;background:var(--gold);opacity:0;animation:drift linear infinite}
+  .spark-rose{background:var(--rose)}
+  @keyframes drift{0%{opacity:0;transform:translateY(0) scale(1)}10%{opacity:0.35}90%{opacity:0.1}100%{opacity:0;transform:translateY(-60vh) scale(0.4)}}
+
+  /* ── LAYOUT ── */
+  .wrap{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 20px 80px}
+
+  /* ── HEADER ── */
+  .site-header{text-align:center;padding:48px 0 32px}
+  .logo{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;letter-spacing:4px;color:var(--gold);display:block;margin-bottom:4px}
+  .logo-sub{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3)}
+
+  /* ── HERO ── */
+  .hero{text-align:center;margin-bottom:48px}
+  .hero-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block}
+  .hero-title{font-family:'Playfair Display',serif;font-size:clamp(30px,8vw,42px);font-weight:700;line-height:1.2;margin-bottom:16px;color:var(--text)}
+  .hero-title em{font-style:italic;color:var(--gold)}
+  .hero-desc{font-size:15px;color:var(--text2);line-height:1.7;max-width:340px;margin:0 auto}
+
+  /* ── BEFORE/AFTER SLIDER ── */
+  .ba-section{margin-bottom:56px}
+  .ba-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);text-align:center;margin-bottom:16px}
+  .ba-wrap{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;background:var(--surface);user-select:none;touch-action:none;cursor:ew-resize;border:1px solid var(--border2)}
+  .ba-after,.ba-before{position:absolute;inset:0;background-size:cover;background-position:center top}
+  .ba-before{z-index:1}
+  .ba-after{z-index:2;clip-path:inset(0 50% 0 0)}
+  .ba-divider{position:absolute;top:0;bottom:0;left:50%;width:3px;background:var(--gold);z-index:3;transform:translateX(-50%)}
+  .ba-handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:var(--gold);z-index:4;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(201,168,76,0.5)}
+  .ba-handle svg{width:20px;height:20px;fill:var(--black)}
+  .ba-tag{position:absolute;bottom:16px;z-index:5;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:5px 10px;border-radius:6px;font-weight:600}
+  .ba-tag.before{left:16px;background:rgba(8,8,8,0.7);color:var(--text3);border:1px solid var(--border2)}
+  .ba-tag.after{right:16px;background:rgba(201,168,76,0.85);color:var(--black)}
+  .ba-hint{text-align:center;margin-top:12px;font-size:11px;color:var(--text3);letter-spacing:1px}
+
+  /* ── HOW IT WORKS ── */
+  .hiw-section{margin-bottom:56px}
+  .section-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--text);margin-bottom:6px}
+  .section-sub{font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.6}
+  .hiw-steps{display:flex;flex-direction:column;gap:16px}
+  .hiw-step{display:flex;gap:16px;align-items:flex-start;padding:18px;border:1px solid var(--border2);border-radius:14px;background:var(--surface)}
+  .hiw-num{width:36px;height:36px;border-radius:50%;background:var(--gold-dim);border:1px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:15px;color:var(--gold);flex-shrink:0}
+  .hiw-body{}
+  .hiw-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+  .hiw-desc{font-size:12px;color:var(--text2);line-height:1.6}
+
+  /* ── THEMES GRID ── */
+  .themes-section{margin-bottom:56px}
+  .themes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .theme-card{border-radius:16px;overflow:hidden;position:relative;aspect-ratio:3/4;background:var(--surface2);border:1px solid var(--border2);cursor:pointer;transition:transform var(--t),border-color var(--t)}
+  .theme-card:hover{transform:scale(1.02);border-color:rgba(201,168,76,0.4)}
+  .theme-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s ease}
+  .theme-card:hover img{transform:scale(1.06)}
+  .theme-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,0.85) 0%,rgba(8,8,8,0.1) 55%,transparent 100%)}
+  .theme-card-body{position:absolute;bottom:0;left:0;right:0;padding:14px}
+  .theme-card-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+  .theme-card-desc{font-size:10.5px;color:rgba(242,237,230,0.7);line-height:1.5}
+  .theme-card-price{position:absolute;top:12px;right:12px;background:rgba(201,168,76,0.9);color:var(--black);font-size:11px;font-weight:700;padding:4px 9px;border-radius:20px}
+
+  /* ── PACKAGES ── */
+  .pkg-section{margin-bottom:56px}
+  .pkg-list{display:flex;flex-direction:column;gap:10px}
+  .pkg-row{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--border2);border-radius:14px;background:var(--surface)}
+  .pkg-row.featured{border-color:rgba(201,168,76,0.4);background:var(--gold-dim)}
+  .pkg-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);flex-shrink:0}
+  .pkg-row.featured .pkg-dot{background:var(--gold)}
+  .pkg-info{flex:1}
+  .pkg-name{font-size:14px;font-weight:600;color:var(--text)}
+  .pkg-desc{font-size:12px;color:var(--text2);margin-top:2px}
+  .pkg-price{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold);white-space:nowrap}
+  .ai-badge{display:inline-block;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:var(--gold);font-size:10px;letter-spacing:1px;padding:3px 8px;border-radius:20px;margin-top:6px;font-weight:600}
+
+  /* ── CTA ── */
+  .cta-section{text-align:center;padding:40px 24px;background:var(--surface);border:1px solid var(--border2);border-radius:20px;margin-bottom:56px}
+  .cta-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:10px}
+  .cta-title em{font-style:italic;color:var(--gold)}
+  .cta-sub{font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.7}
+  .cta-btn{display:inline-block;background:var(--gold);color:var(--black);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:16px 32px;border-radius:12px;text-decoration:none;transition:background var(--t),transform var(--t)}
+  .cta-btn:hover{background:var(--gold-light);transform:scale(1.02)}
+  .cta-note{margin-top:14px;font-size:11px;color:var(--text3)}
+
+  /* ── FOOTER ── */
+  .footer{text-align:center;padding:32px 0;border-top:1px solid var(--border)}
+  .footer-logo{font-family:'Playfair Display',serif;font-size:18px;letter-spacing:4px;color:var(--gold);margin-bottom:6px}
+  .footer-note{font-size:11px;color:var(--text3);letter-spacing:1px}
+
+  /* ── MODAL (theme detail) ── */
+  .lightbox{position:fixed;inset:0;background:rgba(8,8,8,0.94);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+  .lightbox.show{display:flex;animation:lb-fade .2s ease}
+  @keyframes lb-fade{from{opacity:0}to{opacity:1}}
+  .lb-img{max-width:100%;max-height:80vh;border-radius:16px;border:1px solid var(--border2);display:block;margin:0 auto 20px}
+  .lb-name{font-family:'Playfair Display',serif;font-size:20px;color:var(--text);text-align:center;margin-bottom:6px}
+  .lb-desc{font-size:13px;color:var(--text2);text-align:center;line-height:1.6;max-width:300px;margin:0 auto 16px}
+  .lb-price{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold);text-align:center;margin-bottom:20px}
+  .lb-close{display:block;text-align:center;color:var(--text3);font-size:13px;cursor:pointer;padding:10px}
+
+  /* ── ANIMATIONS ── */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}
+  .reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<div id="sparkleField"></div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <span class="logo">ATCHÉ</span>
+    <span class="logo-sub">Visuals · AI Edit</span>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero reveal">
+    <span class="hero-eyebrow">Introducing AI Edit</span>
+    <h1 class="hero-title">Your photo.<br><em>Anywhere you want.</em></h1>
+    <p class="hero-desc">Same you. Same fit. Same energy. Just a different world behind you — private jet, VIP section, red carpet, your name in lights. Real photos, elevated.</p>
+  </section>
+
+  <!-- BEFORE / AFTER SLIDER -->
+  <section class="ba-section reveal">
+    <p class="ba-label">Drag to compare</p>
+    <div class="ba-wrap" id="baWrap">
+      <div class="ba-before" id="baBefore" style="background-image:url('before-pj-girls.jpg')"></div>
+      <div class="ba-after" id="baAfter" style="background-image:url('after-pj-girls.jpg')"></div>
+      <div class="ba-divider" id="baDivider"></div>
+      <div class="ba-handle" id="baHandle">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5l-7 7 7 7V5zm8 0v14l7-7-7-7z"/></svg>
+      </div>
+      <span class="ba-tag before">Original</span>
+      <span class="ba-tag after">AI Edit</span>
+    </div>
+    <p class="ba-hint">← drag → to reveal</p>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="hiw-section reveal">
+    <h2 class="section-title">How it works</h2>
+    <p class="section-sub">Add it to any package. Ready in your gallery within 24 hours.</p>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-num">1</div>
+        <div class="hiw-body">
+          <div class="hiw-name">Pick your scene</div>
+          <div class="hiw-desc">Choose one of 6 AI Edit themes at checkout — private jet, VIP section, red carpet, your name in lights, and more.</div>
+        </div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num">2</div>
+        <div class="hiw-body">
+          <div class="hiw-name">Pay &amp; download your originals</div>
+          <div class="hiw-desc">Your regular photos unlock instantly. The AI edit is crafted after the night — same quality standard, processed with care.</div>
+        </div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num">3</div>
+        <div class="hiw-body">
+          <div class="hiw-name">It drops into your gallery</div>
+          <div class="hiw-desc">Your AI-enhanced photo appears in your gallery link automatically — same link, no refresh needed. Ready to post.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THEMES -->
+  <section class="themes-section reveal">
+    <h2 class="section-title">Choose your world</h2>
+    <p class="section-sub">Six scenes. One version of you that lives there.</p>
+    <div class="themes-grid" id="themesGrid"></div>
+  </section>
+
+  <!-- PACKAGES -->
+  <section class="pkg-section reveal">
+    <h2 class="section-title">Tonight's packages</h2>
+    <p class="section-sub">All packages include full-resolution originals. AI Edit adds $20 to any order.</p>
+    <div class="pkg-list">
+      <div class="pkg-row">
+        <div class="pkg-dot"></div>
+        <div class="pkg-info">
+          <div class="pkg-name">Quick Shot</div>
+          <div class="pkg-desc">1 full-resolution photo, your pick from tonight</div>
+        </div>
+        <div class="pkg-price">$10</div>
+      </div>
+      <div class="pkg-row featured">
+        <div class="pkg-dot"></div>
+        <div class="pkg-info">
+          <div class="pkg-name">The Bundle</div>
+          <div class="pkg-desc">Up to 8 edited photos from tonight</div>
+          <span class="ai-badge">✦ Most add AI Edit</span>
+        </div>
+        <div class="pkg-price">$30</div>
+      </div>
+      <div class="pkg-row">
+        <div class="pkg-dot"></div>
+        <div class="pkg-info">
+          <div class="pkg-name">Full Night</div>
+          <div class="pkg-desc">Every photo + a reel — the full story, ready to post</div>
+        </div>
+        <div class="pkg-price">$60</div>
+      </div>
+      <div class="pkg-row" style="border-color:rgba(201,168,76,0.3);background:var(--gold-dim)">
+        <div class="pkg-dot" style="background:var(--gold)"></div>
+        <div class="pkg-info">
+          <div class="pkg-name" style="color:var(--gold)">+ AI Edit Add-On</div>
+          <div class="pkg-desc">One of your photos, placed in any of 6 AI-enhanced scenes. Same face, same outfit, different world.</div>
+        </div>
+        <div class="pkg-price">+$20</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section reveal">
+    <h2 class="cta-title">Tell your photographer<br><em>you want the edit.</em></h2>
+    <p class="cta-sub">Add it when you select your package tonight — or ask your photographer to add it while you're still here. It's the easiest upsell you'll ever love.</p>
+    <a href="#" class="cta-btn" onclick="return false">Add AI Edit — $20</a>
+    <p class="cta-note">Drops into your gallery link within 24 hours · No app needed</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo">ATCHÉ</div>
+    <div class="footer-note">Visuals · Powered by AI</div>
+  </footer>
+
+</div>
+
+<!-- THEME LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div onclick="event.stopPropagation()">
+    <img class="lb-img" id="lbImg" src="" alt="">
+    <div class="lb-name" id="lbName"></div>
+    <div class="lb-desc" id="lbDesc"></div>
+    <div class="lb-price" id="lbPrice">+$20</div>
+    <span class="lb-close" onclick="closeLightbox()">Close ✕</span>
+  </div>
+</div>
+
+<script>
+// ── SPARKLES ──
+(function(){
+  const f = document.getElementById('sparkleField');
+  for(let i=0;i<28;i++){
+    const s=document.createElement('div');s.className='spark';
+    if(i%5===0)s.classList.add('spark-rose');
+    const sz=2+Math.random()*4;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${10+Math.random()*90}%;animation-duration:${10+Math.random()*14}s;animation-delay:${-Math.random()*24}s`;
+    f.appendChild(s);
+  }
+})();
+
+// ── REVEAL ON SCROLL ──
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ── BEFORE/AFTER SLIDER ──
+(function(){
+  const wrap=document.getElementById('baWrap');
+  const after=document.getElementById('baAfter');
+  const divider=document.getElementById('baDivider');
+  const handle=document.getElementById('baHandle');
+  let dragging=false;
+
+  function setPos(pct){
+    pct=Math.max(5,Math.min(95,pct));
+    after.style.clipPath=`inset(0 ${100-pct}% 0 0)`;
+    divider.style.left=pct+'%';
+    handle.style.left=pct+'%';
+  }
+  setPos(50);
+
+  function getX(e){return e.touches?e.touches[0].clientX:e.clientX}
+
+  wrap.addEventListener('mousedown',()=>dragging=true);
+  wrap.addEventListener('touchstart',()=>dragging=true,{passive:true});
+  window.addEventListener('mouseup',()=>dragging=false);
+  window.addEventListener('touchend',()=>dragging=false);
+
+  function onMove(e){
+    if(!dragging)return;
+    const rect=wrap.getBoundingClientRect();
+    const pct=((getX(e)-rect.left)/rect.width)*100;
+    setPos(pct);
+  }
+  window.addEventListener('mousemove',onMove);
+  window.addEventListener('touchmove',onMove,{passive:true});
+})();
+
+// ── THEMES ──
+const THEMES=[
+  // Your Name in Lights — pending render (job 9caea170), placeholder until done
+  {name:'Your Name in Lights',desc:'Marquee billboard, neon, concert-night energy — your name in the sky.',price:'+$20',img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_135834_2c76db40-227b-47c1-966f-c86d9eeda5f3_min.webp'},
+  // Private Jet — real duo edit
+  {name:'Private Jet',desc:'Tarmac, designer luggage, champagne in hand.',price:'+$20',img:'after-pj-girls.jpg'},
+  // Sports Car — pending render (job d0197db1), placeholder until done
+  {name:'Sports Car',desc:'Supercar at golden hour — coastal road, cinematic.',price:'+$20',img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_135843_3048cb89-89f6-4138-a26e-29019e368814_min.webp'},
+  // VIP Section — real duo edit (60c68156)
+  {name:'VIP Section',desc:'Velvet ropes, sparklers, bottle service — a room that knows you.',price:'+$20',img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_163420_60c68156-6487-4e8a-9851-531a52f9ba1a_min.webp'},
+  // Penthouse Night — pending render (job 623cfd4d), placeholder until done
+  {name:'Penthouse Night',desc:'Floor-to-ceiling windows, city skyline, golden-hour lounge.',price:'+$20',img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_135857_20a230ea-796d-47c0-a83c-346a5bf954be_min.webp'},
+  // Red Carpet — pending render (job de83fadc), placeholder until done
+  {name:'Red Carpet',desc:'Step-and-repeat backdrop, paparazzi flashes, premiere night.',price:'+$20',img:'https://d8j0ntlcm91z4.cloudfront.net/user_38UuuwPAyCC1aFyPsNUyccdEuZD/hf_20260617_135905_2d4edb85-4027-4ca1-8336-baad12ce38eb_min.webp'},
+];
+
+const grid=document.getElementById('themesGrid');
+THEMES.forEach((t,i)=>{
+  const card=document.createElement('div');
+  card.className='theme-card';
+  card.innerHTML=`
+    <img src="${t.img}" alt="${t.name}" loading="lazy">
+    <div class="theme-card-overlay"></div>
+    <span class="theme-card-price">${t.price}</span>
+    <div class="theme-card-body">
+      <div class="theme-card-name">${t.name}</div>
+      <div class="theme-card-desc">${t.desc}</div>
+    </div>`;
+  card.onclick=()=>openTheme(i);
+  grid.appendChild(card);
+});
+
+function openTheme(i){
+  const t=THEMES[i];
+  document.getElementById('lbImg').src=t.img;
+  document.getElementById('lbImg').alt=t.name;
+  document.getElementById('lbName').textContent=t.name;
+  document.getElementById('lbDesc').textContent=t.desc;
+  document.getElementById('lightbox').classList.add('show');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('show')}
+</script>
+</body>
+</html>

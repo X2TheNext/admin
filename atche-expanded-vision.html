@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATCHÉ — Expanded Vision & Scalability</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --black:  #080808;
+  --s:      #111111;
+  --s2:     #181818;
+  --border: #2a2a2a;
+  --gold:   #C9A84C;
+  --glt:    #E2C47A;
+  --gd:     rgba(201,168,76,0.1);
+  --rose:   #C2697A;
+  --rd:     rgba(194,105,122,0.12);
+  --sage:   #6B9E7A;
+  --sd:     rgba(107,158,122,0.12);
+  --violet: #8B6BB1;
+  --vd:     rgba(139,107,177,0.12);
+  --sky:    #5B8DB8;
+  --skyd:   rgba(91,141,184,0.12);
+  --text:   #F2EDE6;
+  --t2:     #B0A898;
+  --t3:     #6A6258;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);line-height:1.7}
+::-webkit-scrollbar{display:none}
+
+.topbar{position:sticky;top:0;z-index:50;background:var(--black);border-bottom:1px solid var(--border);padding:12px 40px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:6px}
+.nav-link{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--s2);color:var(--t2);text-decoration:none;display:inline-block;transition:0.15s}
+.nav-link:hover{color:var(--text);border-color:var(--t3)}
+
+.page{max-width:860px;margin:0 auto;padding:0 32px 100px}
+
+/* COVER */
+.cover{padding:80px 0 60px;border-bottom:1px solid var(--border);margin-bottom:60px}
+.cover-eyebrow{font-size:10px;font-weight:700;color:var(--t3);letter-spacing:3px;text-transform:uppercase;margin-bottom:16px}
+.cover-title{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;color:var(--glt);line-height:1.15;margin-bottom:12px}
+.cover-sub{font-size:16px;color:var(--t2);max-width:580px;line-height:1.75;margin-bottom:32px}
+.cover-source{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;background:var(--s2);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--t2)}
+.cover-source strong{color:var(--text)}
+
+/* SECTION */
+.section{margin-bottom:64px}
+.section-label{font-size:10px;font-weight:700;color:var(--t3);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.section-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--glt);margin-bottom:12px;padding-bottom:14px;border-bottom:2px solid var(--gold)}
+.section-intro{font-size:14px;color:var(--t2);margin-bottom:32px;line-height:1.75;max-width:680px}
+
+/* IDEA CARDS */
+.idea-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px}
+.idea-card{background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:20px 22px}
+.idea-card.gold{border-color:rgba(201,168,76,0.3)}
+.idea-card.rose{border-color:rgba(194,105,122,0.3)}
+.idea-card.sage{border-color:rgba(107,158,122,0.3)}
+.idea-card.violet{border-color:rgba(139,107,177,0.3)}
+.idea-card.sky{border-color:rgba(91,141,184,0.3)}
+.idea-icon{font-size:24px;margin-bottom:8px}
+.idea-name{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px}
+.idea-name.gold{color:var(--glt)}
+.idea-name.rose{color:#E8A0AE}
+.idea-name.sage{color:#9DC9A8}
+.idea-name.violet{color:#B99FD4}
+.idea-name.sky{color:#9BC2E8}
+.idea-desc{font-size:12px;color:var(--t2);line-height:1.65}
+
+/* STRATEGY ROWS */
+.strategy-row{display:grid;grid-template-columns:200px 1fr;gap:24px;margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.strategy-row:last-child{border-bottom:none}
+.strategy-label{display:flex;flex-direction:column;gap:6px}
+.strategy-tag{display:inline-block;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;align-self:flex-start}
+.tag-gold{background:var(--gd);border:1px solid rgba(201,168,76,0.3);color:var(--glt)}
+.tag-rose{background:var(--rd);border:1px solid rgba(194,105,122,0.3);color:#E8A0AE}
+.tag-sage{background:var(--sd);border:1px solid rgba(107,158,122,0.3);color:#9DC9A8}
+.tag-violet{background:var(--vd);border:1px solid rgba(139,107,177,0.3);color:#B99FD4}
+.tag-sky{background:var(--skyd);border:1px solid rgba(91,141,184,0.3);color:#9BC2E8}
+.strategy-title{font-size:15px;font-weight:700;color:var(--text);margin-top:6px}
+.strategy-body{font-size:13px;color:var(--t2);line-height:1.7}
+.strategy-body strong{color:var(--text)}
+
+/* PHASE TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0}
+.phase{display:grid;grid-template-columns:120px 1fr;gap:20px;position:relative}
+.phase::before{content:'';position:absolute;left:54px;top:32px;bottom:0;width:1px;background:var(--border)}
+.phase:last-child::before{display:none}
+.phase-left{display:flex;flex-direction:column;align-items:center;padding-top:8px}
+.phase-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--gold);background:var(--black);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--gold)}
+.phase-connector{width:1px;flex:1;background:var(--border);margin-top:6px;margin-bottom:0}
+.phase-right{padding:6px 0 40px}
+.phase-tag{font-size:10px;font-weight:700;color:var(--t3);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.phase-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--glt);margin-bottom:10px}
+.phase-items{display:flex;flex-direction:column;gap:7px}
+.phase-item{font-size:13px;color:var(--t2);display:flex;gap:8px;line-height:1.55}
+.phase-item::before{content:'→';color:var(--gold);flex-shrink:0}
+
+/* REVENUE TABLE */
+.rev-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:40px}
+.rev-table th{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:2px solid var(--gold);background:var(--s2)}
+.rev-table td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+.rev-table td:first-child{color:var(--glt);font-weight:600;width:220px}
+.rev-table td:nth-child(2){color:var(--t2);font-size:12px}
+.rev-table td:last-child{color:#9DC9A8;font-weight:600;white-space:nowrap}
+.rev-table tr:last-child td{border-bottom:none}
+.rev-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;margin-left:6px;vertical-align:middle}
+.rev-new{background:var(--sd);border:1px solid var(--sage);color:#9DC9A8}
+.rev-existing{background:var(--gd);border:1px solid rgba(201,168,76,0.3);color:var(--glt)}
+
+/* MOAT CARDS */
+.moat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:40px}
+.moat-card{background:var(--s);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.moat-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--gold);opacity:0.25;line-height:1;margin-bottom:8px}
+.moat-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
+.moat-desc{font-size:11px;color:var(--t2);line-height:1.65}
+
+/* CALLOUT */
+.callout{background:var(--gd);border:1px solid rgba(201,168,76,0.25);border-radius:12px;padding:24px 28px;margin-bottom:32px}
+.callout-label{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.callout-text{font-size:14px;color:var(--t2);line-height:1.75}
+.callout-text strong{color:var(--text)}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .idea-grid{grid-template-columns:1fr}
+  .moat-row{grid-template-columns:1fr}
+  .strategy-row{grid-template-columns:1fr}
+  .strategy-label{flex-direction:row;align-items:center}
+  .page{padding:0 20px 80px}
+  .topbar{padding:12px 20px}
+  .cover-title{font-size:36px}
+  .phase{grid-template-columns:80px 1fr}
+  .phase::before{left:34px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">ATCHÉ</div>
+  <a class="nav-link" href="atche-hub.html">← Hub</a>
+</div>
+
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-eyebrow">Strategic Expansion · June 2026</div>
+    <div class="cover-title">From Community Platform<br>to Industry Infrastructure</div>
+    <div class="cover-sub">
+      Four ideas surfaced from a meeting with an AV industry expert and Haven stakeholder (H St, DC)
+      that fundamentally expand what ATCHÉ can become — and how it earns.
+    </div>
+    <div class="cover-source">
+      <span>Source:</span>
+      <strong>Meeting — AV Expert / Haven (H St NW, DC) · June 2026</strong>
+    </div>
+  </div>
+
+  <!-- FOUR IDEAS -->
+  <div class="section">
+    <div class="section-label">What Came Out of the Room</div>
+    <div class="section-title">The Four Ideas</div>
+    <div class="section-intro">
+      These aren't random features. They're four interconnected layers that — built in the right order —
+      turn ATCHÉ from a community app into something venues and artists can't function without.
+    </div>
+
+    <div class="idea-grid">
+      <div class="idea-card gold">
+        <div class="idea-icon">⭐</div>
+        <div class="idea-name gold">Michelin-Style Venue Certification</div>
+        <div class="idea-desc">Venues are rated against a set of ATCHÉ-defined standards. To carry the ATCHÉ certification badge publicly, they must meet and maintain the score. Xavier's add: sell that standard back to them as a paid product.</div>
+      </div>
+      <div class="idea-card rose">
+        <div class="idea-icon">💰</div>
+        <div class="idea-name rose">Revenue Attribution</div>
+        <div class="idea-desc">When an ATCHÉ artist performs at a venue, ATCHÉ tracks how much revenue is generated that night. Proves the artist's economic value — to the venue, to the artist, and to the booking market.</div>
+      </div>
+      <div class="idea-card sage">
+        <div class="idea-icon">📲</div>
+        <div class="idea-name sage">Native Artist Booking</div>
+        <div class="idea-desc">Venues book ATCHÉ artists directly through the app. ATCHÉ is the transaction layer, not just the discovery layer. Booking fee revenue, automated contracts, and built-in protections.</div>
+      </div>
+      <div class="idea-card violet">
+        <div class="idea-icon">✍🏾</div>
+        <div class="idea-name violet">Open Artist Commentary</div>
+        <div class="idea-desc">Artists leave public reviews and comments about venues — payment practices, environment, professionalism. Community-validated scoring, not just top-down certification. Glassdoor for nightlife.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW THEY CONNECT -->
+  <div class="section">
+    <div class="section-label">The Real Insight</div>
+    <div class="section-title">These Four Are One System</div>
+    <div class="section-intro">
+      Standalone, each idea is useful. Together, they form a closed loop that gets more powerful the more people use it.
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">The Flywheel</div>
+      <div class="callout-text">
+        <strong>Artists comment on venues</strong> → their commentary feeds the rating score →
+        <strong>venues want a better score</strong> → they pay for certification and improve their standards →
+        <strong>ATCHÉ books more artists</strong> into certified venues →
+        <strong>revenue attribution proves</strong> artists drive real dollars →
+        venues pay more to book ATCHÉ talent →
+        <strong>more artists join ATCHÉ</strong> to access those bookings → repeat.
+      </div>
+    </div>
+
+    <div class="strategy-row">
+      <div class="strategy-label">
+        <div class="strategy-tag tag-gold">Layer 1</div>
+        <div class="strategy-title">Commentary is the foundation</div>
+      </div>
+      <div class="strategy-body">
+        Artist reviews are the raw data the entire system runs on. Without honest, community-sourced input on how venues actually treat performers, the rating is just ATCHÉ's opinion. With it, the rating has credibility that's very hard to challenge or fake. This is also a <strong>network effect</strong> — every artist who joins and comments makes the data better for every other artist.
+      </div>
+    </div>
+
+    <div class="strategy-row">
+      <div class="strategy-label">
+        <div class="strategy-tag tag-gold">Layer 2</div>
+        <div class="strategy-title">Certification creates the stakes</div>
+      </div>
+      <div class="strategy-body">
+        The commentary feeds a score. The score feeds a certification tier. Once ATCHÉ's "Certified" badge means something in DC nightlife — once people know that only venues who actually pay artists on time and maintain a certain environment can carry it — <strong>non-certified venues feel the gap</strong>. That's when you can charge for the badge. And when you can set the criteria, you set the standard for the industry.
+      </div>
+    </div>
+
+    <div class="strategy-row">
+      <div class="strategy-label">
+        <div class="strategy-tag tag-rose">Layer 3</div>
+        <div class="strategy-title">Revenue attribution is the proof</div>
+      </div>
+      <div class="strategy-body">
+        This is what makes the booking fee unchallengeable. Right now, venues don't know if a specific artist drove revenue — they feel it, but they can't prove it. <strong>If ATCHÉ can show a venue that revenue went up 40% on the nights [Name] performed</strong>, the artist can charge more, ATCHÉ's cut is justified, and the booking fee becomes an ROI conversation instead of a cost conversation. This data also protects artists — it's evidence for fair pay disputes.
+      </div>
+    </div>
+
+    <div class="strategy-row">
+      <div class="strategy-label">
+        <div class="strategy-tag tag-sage">Layer 4</div>
+        <div class="strategy-title">Booking is where the money moves</div>
+      </div>
+      <div class="strategy-body">
+        Once trust is established through certification and attribution, <strong>venues naturally want to book ATCHÉ talent through ATCHÉ</strong> — because the booking comes with data, contracts, protections, and the ATCHÉ brand behind it. That's where the transaction fee revenue compounds. Each booking is also another data point for the attribution model.
+      </div>
+    </div>
+  </div>
+
+  <!-- BUSINESS PLAN FIT -->
+  <div class="section">
+    <div class="section-label">Business Plan Integration</div>
+    <div class="section-title">How It Fits What You Already Built</div>
+    <div class="section-intro">
+      Your current revenue model is strong. These ideas don't replace it — they add two new tiers
+      above it and make everything underneath more defensible.
+    </div>
+
+    <table class="rev-table">
+      <thead>
+        <tr>
+          <th>Revenue Stream</th>
+          <th>How It Works / What Changes</th>
+          <th>Potential Range</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Events (table packages + tickets) <span class="rev-tag rev-existing">Existing</span></td>
+          <td>Primary cash engine. Unchanged — but certification makes ATCHÉ events more desirable. Certified venues want to host them.</td>
+          <td>$2k–$15k / event</td>
+        </tr>
+        <tr>
+          <td>Brand activations <span class="rev-tag rev-existing">Existing</span></td>
+          <td>$5k–$25k deals. Stronger with attribution data — you can show brands exactly who was in the room and how they spent.</td>
+          <td>$5k–$25k / deal</td>
+        </tr>
+        <tr>
+          <td>Guest memberships (The Room) <span class="rev-tag rev-existing">Existing</span></td>
+          <td>$100–$200/month. Unchanged — certification makes ATCHÉ the most desirable room to be in.</td>
+          <td>$100–$200 / mo</td>
+        </tr>
+        <tr>
+          <td>Artist booking fees <span class="rev-tag rev-existing">Existing → Enhanced</span></td>
+          <td>Currently 15–20%. Attribution data makes this unchallengeable — you prove the artist drove revenue, the fee is justified. Native booking flow removes friction.</td>
+          <td>15–20% per booking</td>
+        </tr>
+        <tr>
+          <td>Venue certification / badge <span class="rev-tag rev-new">New</span></td>
+          <td>Venues pay a recurring subscription to hold their ATCHÉ certification. Includes score maintenance support, badge for marketing, and inclusion in the app's certified venue directory. Think of it as a B2B SaaS product with nightlife positioning.</td>
+          <td>$300–$1,500 / mo</td>
+        </tr>
+        <tr>
+          <td>Data / attribution reports <span class="rev-tag rev-new">New</span></td>
+          <td>Venues can purchase detailed revenue attribution reports — which nights, which artists, which demographics drove the most spend. Sellable as a premium add-on to the certification tier.</td>
+          <td>$200–$800 / report</td>
+        </tr>
+        <tr>
+          <td>Platform booking (marketplace fee) <span class="rev-tag rev-new">New</span></td>
+          <td>When a venue books an artist directly through the ATCHÉ app, ATCHÉ takes a marketplace fee. Differs from the existing booking fee because this is the tech-enabled transaction — automated contract, payment processing, scheduling.</td>
+          <td>10–15% per booking</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SCALABILITY -->
+  <div class="section">
+    <div class="section-label">How It Scales</div>
+    <div class="section-title">Three Phases</div>
+    <div class="section-intro">
+      The critical move is building the rating system quietly before making it public.
+      Once it goes live, it has weight. The AV expert was right about that.
+    </div>
+
+    <div class="timeline">
+      <div class="phase">
+        <div class="phase-left">
+          <div class="phase-dot">1</div>
+        </div>
+        <div class="phase-right">
+          <div class="phase-tag">Phase 1 · DC · Now – 12 months</div>
+          <div class="phase-title">Build the Standard Quietly</div>
+          <div class="phase-items">
+            <div class="phase-item">Pilot with Haven and 2–3 other warm DC venues. Don't publish scores yet.</div>
+            <div class="phase-item">Define the ATCHÉ certification criteria — payment terms, women's safety protocols, % female performers booked, environment standards. Get input from Circle members.</div>
+            <div class="phase-item">Build artist commentary into the app (private beta first — Circle members only).</div>
+            <div class="phase-item">Start tracking check-ins and attendance at pilot venues to build the attribution data foundation.</div>
+            <div class="phase-item">Haven becomes the first "ATCHÉ Certified" venue — a proof point, not a product yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-left">
+          <div class="phase-dot">2</div>
+        </div>
+        <div class="phase-right">
+          <div class="phase-tag">Phase 2 · DMV + Atlanta · 12–24 months</div>
+          <div class="phase-title">Make It Public, Make It a Product</div>
+          <div class="phase-items">
+            <div class="phase-item">Launch the ATCHÉ Venue Rating publicly. First 5–10 venues rated. The certification badge goes live.</div>
+            <div class="phase-item">Non-certified venues see the gap. Some will reach out. That's when you charge.</div>
+            <div class="phase-item">Launch native booking in the app — start in DC, expand to Atlanta.</div>
+            <div class="phase-item">Artist commentary goes public. Venues can respond to reviews (like Glassdoor employer responses).</div>
+            <div class="phase-item">First attribution reports sold to venues as premium add-ons.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-left">
+          <div class="phase-dot">3</div>
+        </div>
+        <div class="phase-right">
+          <div class="phase-tag">Phase 3 · National · 24–48 months</div>
+          <div class="phase-title">The ATCHÉ Standard Is the Industry Standard</div>
+          <div class="phase-items">
+            <div class="phase-item">"ATCHÉ Certified" has national brand recognition in nightlife. Venues in every market want to carry it — because their target audience (creative women, curated guests) use the app to decide where to go.</div>
+            <div class="phase-item">Attribution data spans multiple cities. You can benchmark DC vs Atlanta vs Charlotte — sell that data to brands and venue groups.</div>
+            <div class="phase-item">The booking marketplace becomes a national platform. Artists can get booked in cities they've never been to, with ATCHÉ handling contracts and payments.</div>
+            <div class="phase-item">At this scale, the certification + data business alone could support a Series A fundraise.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPETITIVE MOAT -->
+  <div class="section">
+    <div class="section-label">Why This Is Hard to Copy</div>
+    <div class="section-title">Three Moats</div>
+
+    <div class="moat-row">
+      <div class="moat-card">
+        <div class="moat-num">01</div>
+        <div class="moat-name">Community trust moat</div>
+        <div class="moat-desc">Artist commentary is only credible if artists actually trust the platform enough to be honest. ATCHÉ's Circle-first, women-protective positioning is why they will. A competitor can copy the feature, not the trust.</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-num">02</div>
+        <div class="moat-name">Data moat</div>
+        <div class="moat-desc">Revenue attribution requires historical data. The longer ATCHÉ tracks check-ins, artist performances, and venue revenue, the more accurate and valuable the attribution model gets. Day 1 competitors start with zero data.</div>
+      </div>
+      <div class="moat-card">
+        <div class="moat-num">03</div>
+        <div class="moat-name">Standard-setting moat</div>
+        <div class="moat-desc">Whoever defines the criteria for what makes a "good" nightlife venue for women becomes the authority. Once ATCHÉ sets that standard publicly and venues compete to meet it, the standard is ATCHÉ's. That's very hard to dislodge.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT TO BUILD NEXT -->
+  <div class="section">
+    <div class="section-label">Immediate Next Steps</div>
+    <div class="section-title">What to Do Right Now</div>
+
+    <div class="strategy-row">
+      <div class="strategy-label">
+        <div class="strategy-tag tag-gold">This week</div>
+        <div class="strategy-title">Lock in Haven as Pilot Partner</div>
+      </div>
+      <div class="strategy-body">
+        Follow up with the AV expert while the meeting energy is fresh. The ask isn't money — it's permission to use Haven as the first pilot venue for the ATCHÉ certification. Get a date on the calendar. This gives you a real venue to build around and a well-connected advocate in your corner.
+      </div>
+    </div>
+
+    <div class="strategy-row">
+      <div class="strategy-label">
+        <div class="strategy-tag tag-violet">This month</div>
+        <div class="strategy-title">Draft the Certification Criteria</div>
+      </div>
+      <div class="strategy-body">
+        Write the first version of the ATCHÉ Venue Standard — what does a venue have to do to earn the badge? Start with the obvious categories: payment terms (do they pay on time? in full?), safety protocols, percentage of female performers booked, atmosphere for women. Get input from Circle members and from the AV expert. This doc doesn't have to be public yet — it just has to exist so the pilot is real.
+      </div>
+    </div>
+
+    <div class="strategy-row">
+      <div class="strategy-label">
+        <div class="strategy-tag tag-sage">Next 60 days</div>
+        <div class="strategy-title">Build Artist Commentary (Private)</div>
+      </div>
+      <div class="strategy-body">
+        Add a private "venue review" feature to the app — Circle members only, not public yet. Start collecting honest data about how venues treat performers. Even 20–30 data points from real experiences makes your eventual public rating credible. When you launch publicly, you're not starting from zero.
+      </div>
+    </div>
+
+    <div class="strategy-row">
+      <div class="strategy-label">
+        <div class="strategy-tag tag-rose">Don't build yet</div>
+        <div class="strategy-title">Revenue Attribution & Native Booking</div>
+      </div>
+      <div class="strategy-body">
+        These are real and important, but they require infrastructure (payment processing, check-in data, probably a POS integration or QR check-in system) that you don't need to build right now. File them as Phase 2. Focus Phase 1 on community + certification. The data and booking layers are stronger once there's a community to back them.
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div style="padding:40px 0;border-top:1px solid var(--border);text-align:center">
+    <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--glt);margin-bottom:10px;font-style:italic">
+      "The venue tracker must be made with care."
+    </div>
+    <div style="font-size:13px;color:var(--t3);margin-bottom:4px">— AV Expert, Haven (H St DC), June 2026</div>
+    <div style="font-size:13px;color:var(--t2);margin-top:20px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7">
+      He was right. The care you put in now — building the standard deliberately, collecting real data privately,
+      piloting with trusted partners — is what makes the public launch mean something.
+    </div>
+    <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);letter-spacing:4px;margin-top:32px">ATCHÉ ✦</div>
+  </div>
+
+</div>
+</body>
+</html>

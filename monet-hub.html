@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATCHÉ — Monet's Hub</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@200;300;400;500;600&display=swap');
+
+:root {
+  --black:    #080808;
+  --surface:  #111111;
+  --surface2: #181818;
+  --border:   #222222;
+  --border2:  #2e2e2e;
+  --gold:     #C9A84C;
+  --gold-lt:  #E2C47A;
+  --gold-d:   rgba(201,168,76,0.12);
+  --rose:     #C2697A;
+  --rose-d:   rgba(194,105,122,0.12);
+  --sage:     #6B9E7A;
+  --sage-d:   rgba(107,158,122,0.15);
+  --violet:   #8B6BB1;
+  --violet-d: rgba(139,107,177,0.12);
+  --sky:      #5B8DB8;
+  --sky-d:    rgba(91,141,184,0.12);
+  --text:     #F2EDE6;
+  --text2:    #B0A898;
+  --text3:    #6A6258;
+  --t:        0.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-x:hidden}
+
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;opacity:0.025;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse at center top, rgba(201,168,76,0.06) 0%, transparent 70%);pointer-events:none;z-index:0}
+
+/* ── LOGIN ── */
+#loginScreen{width:100%;max-width:400px;position:relative;z-index:1}
+.hub-logo{text-align:center;margin-bottom:48px}
+.hub-wordmark{font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--gold);letter-spacing:10px;display:block}
+.hub-rule{width:48px;height:1px;background:rgba(201,168,76,0.3);margin:16px auto}
+.hub-tagline{font-size:10px;color:var(--text3);letter-spacing:4px;text-transform:uppercase}
+
+.login-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:36px;position:relative;overflow:hidden}
+.login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.3),transparent)}
+.login-card h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--text);margin-bottom:6px;text-align:center}
+.login-card p{font-size:12px;color:var(--text3);text-align:center;margin-bottom:28px;letter-spacing:0.3px;line-height:1.6}
+
+.form-group{margin-bottom:14px}
+.form-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:6px}
+.form-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:11px 14px;color:var(--text);font-size:14px;outline:none;transition:border-color var(--t);font-family:'Inter',sans-serif}
+.form-input:focus{border-color:var(--gold)}
+.form-input::placeholder{color:var(--text3)}
+
+.btn-primary{width:100%;padding:13px;background:var(--gold);color:var(--black);border:none;border-radius:8px;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:var(--t);margin-top:8px}
+.btn-primary:hover{background:var(--gold-lt)}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed}
+
+.auth-switch{text-align:center;margin-top:16px;font-size:12px;color:var(--text3)}
+.auth-switch a{color:var(--gold);cursor:pointer;font-weight:500}
+.auth-switch a:hover{text-decoration:underline}
+.auth-err{background:rgba(194,105,122,0.1);border:1px solid rgba(194,105,122,0.3);border-radius:8px;padding:10px 12px;font-size:12px;color:#E8A0AE;margin-bottom:14px;display:none;line-height:1.5}
+.auth-loading{text-align:center;font-size:11px;color:var(--text3);margin-top:10px;display:none;letter-spacing:1px}
+
+/* ── HUB ── */
+#hubScreen{width:100%;max-width:860px;display:none;position:relative;z-index:1}
+
+.hub-header{text-align:center;margin-bottom:56px}
+.hub-header-word{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;color:var(--gold);letter-spacing:12px;display:block}
+.hub-header-rule{width:48px;height:1px;background:rgba(201,168,76,0.3);margin:18px auto}
+.hub-header-tag{font-size:11px;color:var(--text3);letter-spacing:4px;text-transform:uppercase}
+.hub-header-user{font-size:12px;color:var(--text2);margin-top:10px}
+.hub-header-user span{color:var(--gold);font-weight:500}
+
+/* greeting banner */
+.monet-banner{background:var(--gold-d);border:1px solid rgba(201,168,76,0.2);border-radius:14px;padding:16px 22px;margin-bottom:32px;display:flex;align-items:center;gap:14px}
+.monet-banner-icon{font-size:24px;flex-shrink:0}
+.monet-banner-text{font-size:13px;color:var(--text2);line-height:1.6}
+.monet-banner-text strong{color:var(--text)}
+
+/* cards */
+.app-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px}
+.app-grid.three{grid-template-columns:1fr 1fr 1fr}
+
+.app-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:36px 30px;cursor:pointer;transition:var(--t);position:relative;overflow:hidden;display:flex;flex-direction:column}
+.app-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.2),transparent);transition:var(--t)}
+.app-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,0.5)}
+.app-card:hover::before{background:linear-gradient(90deg,transparent,rgba(201,168,76,0.55),transparent)}
+
+/* accent left borders */
+.app-card.accent-gold{border-left:3px solid var(--gold)}
+.app-card.accent-rose{border-left:3px solid var(--rose)}
+.app-card.accent-sage{border-left:3px solid var(--sage)}
+.app-card.accent-violet{border-left:3px solid var(--violet)}
+.app-card.accent-sky{border-left:3px solid var(--sky)}
+
+.app-card-icon{font-size:36px;margin-bottom:20px;display:block}
+.app-card-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.badge-primary{background:var(--gold-d);color:var(--gold);border:1px solid rgba(201,168,76,0.3)}
+.badge-active{background:var(--sage-d);color:#9DC9A8;border:1px solid rgba(107,158,122,0.3)}
+.badge-ref{background:var(--violet-d);color:#B99FD4;border:1px solid rgba(139,107,177,0.3)}
+.badge-venue{background:var(--sky-d);color:#9BC2E8;border:1px solid rgba(91,141,184,0.3)}
+.badge-guide{background:var(--rose-d);color:#E8A0AE;border:1px solid rgba(194,105,122,0.3)}
+
+.app-card-name{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.15}
+.app-card-desc{font-size:12px;color:var(--text2);line-height:1.7;flex:1}
+.app-card-footer{margin-top:24px;padding-top:16px;border-top:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between}
+.app-card-meta{font-size:11px;color:var(--text3)}
+.app-card-cta{font-size:12px;font-weight:600;color:var(--gold);letter-spacing:0.5px;display:flex;align-items:center;gap:6px;transition:var(--t)}
+.app-card:hover .app-card-cta{gap:10px}
+
+.hub-footer{display:flex;align-items:center;justify-content:center;gap:20px;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap}
+.hub-footer-link{font-size:11px;color:var(--text3);cursor:pointer;letter-spacing:0.5px;transition:var(--t)}
+.hub-footer-link:hover{color:var(--gold)}
+
+/* connection status */
+.conn-status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text3);margin-bottom:24px;justify-content:center}
+.conn-dot{width:7px;height:7px;border-radius:50%;background:var(--sage);flex-shrink:0;animation:connPulse 2s ease-in-out infinite}
+.conn-dot.disconnected{background:var(--rose);animation:none}
+@keyframes connPulse{0%,100%{opacity:0.5}50%{opacity:1}}
+
+/* loading */
+#loadingScreen{position:fixed;inset:0;background:var(--black);z-index:200;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.load-mark{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:var(--gold);letter-spacing:8px;animation:pulse 1.4s ease-in-out infinite}
+.load-sub{font-size:10px;color:var(--text3);letter-spacing:3px;text-transform:uppercase}
+@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
+
+@media(max-width:768px){
+  body{padding:16px}
+  .hub-wordmark,.hub-header-word{font-size:32px;letter-spacing:6px}
+  .hub-header{margin-bottom:32px}
+  .login-card{padding:24px}
+  .app-grid,.app-grid.three{grid-template-columns:1fr;gap:14px;margin-bottom:24px}
+  .app-card{padding:24px 20px}
+  .hub-footer{gap:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loadingScreen">
+  <div class="load-mark">ATCHÉ</div>
+  <div class="load-sub">Loading…</div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen" style="display:none">
+  <div class="hub-logo">
+    <span class="hub-wordmark">ATCHÉ</span>
+    <div class="hub-rule"></div>
+    <div class="hub-tagline">Operations Hub · Monet Howell</div>
+  </div>
+  <div class="login-card">
+    <h2 id="loginTitle">Welcome Back, Monet</h2>
+    <p id="loginSub">Sign in to access your tools</p>
+    <div class="auth-err" id="authErr"></div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" type="email" id="loginEmail" placeholder="you@email.com" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="loginPass" placeholder="••••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-primary" id="loginBtn" onclick="doLogin()">ENTER</button>
+    <div class="auth-loading" id="authLoading">Authenticating…</div>
+    <div class="auth-switch" id="authSwitch">
+      First time? <a onclick="toggleMode()">Create your account</a>
+    </div>
+  </div>
+</div>
+
+<!-- HUB -->
+<div id="hubScreen">
+  <div class="hub-header">
+    <span class="hub-header-word">ATCHÉ</span>
+    <div class="hub-header-rule"></div>
+    <div class="hub-header-tag">Operations Hub · Co-Founder</div>
+    <div class="hub-header-user">Signed in as <span id="userEmail">–</span></div>
+  </div>
+
+  <!-- DATA CONNECTION STATUS -->
+  <div class="conn-status" id="connStatus">
+    <div class="conn-dot" id="connDot"></div>
+    <span id="connLabel">Connecting to shared roster…</span>
+  </div>
+
+  <!-- GREETING BANNER -->
+  <div class="monet-banner">
+    <div class="monet-banner-icon">✦</div>
+    <div class="monet-banner-text">
+      <strong>Everything here is live and shared with Xavier.</strong>
+      Changes you make in the Talent Tracker, Venue CRM, or your Dashboard update instantly for both of you.
+      Your Daily &amp; Weekly tasks are in your Dashboard — start there each morning.
+    </div>
+  </div>
+
+  <!-- TOP ROW: Primary tools -->
+  <div class="app-grid" style="margin-bottom:20px">
+
+    <!-- FOLLOW-UP DASHBOARD (primary) -->
+    <div class="app-card accent-gold" onclick="launch('atche-followup.html')">
+      <span class="app-card-icon">📋</span>
+      <span class="app-card-badge badge-primary">Your Home Base</span>
+      <div class="app-card-name">Dashboard</div>
+      <div class="app-card-desc">
+        Your daily follow-up queue, photography calendar, new lead form, and admin task checklist.
+        Start here every morning — everything due today is already sorted for you.
+      </div>
+      <div class="app-card-footer">
+        <div class="app-card-meta" id="queue-count">Loading queue…</div>
+        <div class="app-card-cta">Open Dashboard →</div>
+      </div>
+    </div>
+
+    <!-- TALENT TRACKER -->
+    <div class="app-card accent-sage" onclick="launch('model-tracker.html')">
+      <span class="app-card-icon">✦</span>
+      <span class="app-card-badge badge-active">Shared</span>
+      <div class="app-card-name">Talent Tracker</div>
+      <div class="app-card-desc">
+        The full Circle roster — models, DJs, photographers, MUAs, owners. Kanban pipeline, ratings, calendar, email templates, and booking stages. You and Xavier see the same data.
+      </div>
+      <div class="app-card-footer">
+        <div class="app-card-meta" id="talent-count">Loading…</div>
+        <div class="app-card-cta">Open Tracker →</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM ROW: Supporting tools -->
+  <div class="app-grid three">
+
+    <!-- VENUE CRM -->
+    <div class="app-card accent-sky" onclick="launch('venue-crm.html')">
+      <span class="app-card-icon">🏛️</span>
+      <span class="app-card-badge badge-venue">Venues</span>
+      <div class="app-card-name">Venue CRM</div>
+      <div class="app-card-desc">
+        DC venue pipeline — ATCHÉ Score, partnership stages, contacts, event history, revenue terms. Track every venue from cold lead to active partner.
+      </div>
+      <div class="app-card-footer">
+        <div class="app-card-meta" id="venue-count">Loading…</div>
+        <div class="app-card-cta">Open CRM →</div>
+      </div>
+    </div>
+
+    <!-- PLAYBOOK -->
+    <div class="app-card accent-violet" onclick="launch('atche-playbook.html')">
+      <span class="app-card-icon">◈</span>
+      <span class="app-card-badge badge-ref">Reference</span>
+      <div class="app-card-name">The Playbook</div>
+      <div class="app-card-desc">
+        The full operating manual — business model, 90-day sprint, talent system, venue framework, SOPs. Read this once so you understand what you're building and why.
+      </div>
+      <div class="app-card-footer">
+        <div class="app-card-meta">Full strategy</div>
+        <div class="app-card-cta">Open Playbook →</div>
+      </div>
+    </div>
+
+    <!-- ADMIN GUIDE -->
+    <div class="app-card accent-rose" onclick="launch('monet-admin-guide.html')">
+      <span class="app-card-icon">📖</span>
+      <span class="app-card-badge badge-guide">Your Guide</span>
+      <div class="app-card-name">Admin Guide</div>
+      <div class="app-card-desc">
+        Your daily &amp; weekly task reference, pipeline stage definitions, and email template guide. Bookmark it. Print it to PDF if you want a hard copy.
+      </div>
+      <div class="app-card-footer">
+        <div class="app-card-meta">Daily + weekly</div>
+        <div class="app-card-cta">Open Guide →</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="hub-footer">
+    <span class="hub-footer-link" onclick="window.open('atche-hub.html','_blank')">↗ Xavier's Hub</span>
+    <span style="color:var(--border2)">·</span>
+    <span class="hub-footer-link" onclick="window.open('index.html','_blank')">↗ Landing Page</span>
+    <span style="color:var(--border2)">·</span>
+    <span class="hub-footer-link" onclick="doSignOut()">Sign Out</span>
+  </div>
+</div>
+
+<script>
+const SB_URL = 'https://aayigsbmmdolvnicxacs.supabase.co';
+const SB_KEY = 'sb_publishable_ofAZ_64cKZXJefM5nbbt3g_wNOoF5DC';
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+let isSignUp = false;
+
+function toggleMode(){
+  isSignUp = !isSignUp;
+  document.getElementById('loginTitle').textContent = isSignUp ? 'Create Your Account' : 'Welcome Back, Monet';
+  document.getElementById('loginSub').textContent = isSignUp
+    ? 'Set up your ATCHÉ access — takes 10 seconds'
+    : 'Sign in to access your tools';
+  document.getElementById('loginBtn').textContent = isSignUp ? 'CREATE ACCOUNT' : 'ENTER';
+  document.getElementById('authSwitch').innerHTML = isSignUp
+    ? 'Already have an account? <a onclick="toggleMode()">Sign in</a>'
+    : 'First time? <a onclick="toggleMode()">Create your account</a>';
+  document.getElementById('authErr').style.display = 'none';
+}
+
+async function doLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  const err   = document.getElementById('authErr');
+  const btn   = document.getElementById('loginBtn');
+  const load  = document.getElementById('authLoading');
+
+  if(!email || !pass){ err.textContent='Please fill in both fields.'; err.style.display='block'; return; }
+  err.style.display='none';
+  btn.disabled=true; load.style.display='block';
+
+  const fn = isSignUp
+    ? sb.auth.signUp({ email, password: pass })
+    : sb.auth.signInWithPassword({ email, password: pass });
+
+  const { error } = await fn;
+  btn.disabled=false; load.style.display='none';
+
+  if(error){
+    err.textContent = error.message || 'Authentication failed.';
+    err.style.display='block';
+    return;
+  }
+  if(isSignUp){
+    err.style.background='rgba(107,158,122,0.1)';
+    err.style.borderColor='rgba(107,158,122,0.3)';
+    err.style.color='#9DC9A8';
+    err.textContent='Account created! Check your email to confirm, then sign in.';
+    err.style.display='block';
+    isSignUp=false;
+    toggleMode();
+  }
+}
+
+async function doSignOut(){
+  await sb.auth.signOut();
+  location.reload();
+}
+
+function launch(page){ window.location.href = page; }
+
+function setConn(connected, label){
+  const dot   = document.getElementById('connDot');
+  const lbl   = document.getElementById('connLabel');
+  dot.className = 'conn-dot' + (connected ? '' : ' disconnected');
+  lbl.textContent = label;
+}
+
+async function loadStats(){
+  try {
+    // Roster data (talent count)
+    const { data: roster } = await sb.from('roster_data')
+      .select('models,updated_at').order('updated_at',{ascending:false}).limit(1).maybeSingle();
+
+    if(roster && roster.models){
+      const models = Array.isArray(roster.models) ? roster.models : JSON.parse(roster.models);
+      document.getElementById('talent-count').textContent = `${models.length} talent in roster`;
+
+      // Follow-up queue count (due today or overdue)
+      const today = new Date().toISOString().split('T')[0];
+      const due = models.filter(m => m.nextFollowUp && m.nextFollowUp <= today);
+      document.getElementById('queue-count').textContent =
+        due.length > 0 ? `${due.length} due today or overdue` : 'Queue is clear ✦';
+
+      setConn(true, 'Connected to shared roster');
+    } else {
+      document.getElementById('talent-count').textContent = 'No data yet';
+      document.getElementById('queue-count').textContent  = 'No queue data';
+      setConn(false, 'No shared data found — ask Xavier to open the Talent Tracker first');
+    }
+
+    // Venue count
+    const { data: venueRow } = await sb.from('atche_venues')
+      .select('venues,updated_at').order('updated_at',{ascending:false}).limit(1).maybeSingle();
+
+    if(venueRow && venueRow.venues){
+      const venues = Array.isArray(venueRow.venues) ? venueRow.venues : JSON.parse(venueRow.venues);
+      document.getElementById('venue-count').textContent = `${venues.length} venue${venues.length!==1?'s':''} tracked`;
+    } else {
+      document.getElementById('venue-count').textContent = 'No venues yet';
+    }
+
+  } catch(e){
+    setConn(false, 'Could not reach Supabase — check connection');
+  }
+}
+
+// ── AUTH STATE ──
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  document.getElementById('loadingScreen').style.display = 'none';
+
+  if(session){
+    document.getElementById('hubScreen').style.display = 'block';
+    document.getElementById('userEmail').textContent = session.user.email;
+    loadStats();
+  } else {
+    document.getElementById('loginScreen').style.display = 'block';
+  }
+
+  sb.auth.onAuthStateChange((event, session) => {
+    if(event === 'SIGNED_IN' && session){
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('hubScreen').style.display = 'block';
+      document.getElementById('userEmail').textContent = session.user.email;
+      loadStats();
+    }
+    if(event === 'SIGNED_OUT'){
+      document.getElementById('hubScreen').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'block';
+    }
+  });
+})();
+</script>
+</body>
+</html>

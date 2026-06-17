@@ -605,7 +605,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 <aside class="sidebar">
   <div class="sidebar-logo">
     <h1>ATCHÉ</h1>
-    <p>Xavier Snow · Private Roster</p>
+    <p>ATCHÉ · Talent Tracker</p>
   </div>
   <nav class="sidebar-nav">
     <div class="nav-item active" onclick="showView('dashboard',this)">
@@ -1466,18 +1466,29 @@ const sb = supabase.createClient(SB_URL, SB_KEY);
 let currentUser = null;
 let saveTimer = null;
 
+// The shared-row owner — whichever account first created data owns the row,
+// but any authenticated teammate can read and update it.
+let sharedRowOwnerId = null;
+
 async function loadFromSupabase(){
-  const { data, error } = await sb.from('roster_data').select('*').eq('user_id', currentUser.id).maybeSingle();
+  // Load the most-recently-updated row in the table (shared team row)
+  // RLS SELECT policy is "auth.uid() is not null" so any teammate can read it
+  const { data, error } = await sb.from('roster_data')
+    .select('*')
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
   if(data){
+    sharedRowOwnerId = data.user_id;
     models = data.models || [];
     notes = data.notes || [];
     events = data.events || [];
-    // cache locally
     localStorage.setItem('atcheModels', JSON.stringify(models));
     localStorage.setItem('atcheNotes', JSON.stringify(notes));
     localStorage.setItem('atcheEvents', JSON.stringify(events));
   } else {
-    // first time — seed demo then push to supabase
+    // Truly no rows yet (first-ever login) — seed demo and create own row
+    sharedRowOwnerId = currentUser.id;
     seedDemo();
     models = JSON.parse(localStorage.getItem('atcheModels')||'[]');
     notes  = JSON.parse(localStorage.getItem('atcheNotes')||'[]');
@@ -1489,11 +1500,21 @@ async function loadFromSupabase(){
 async function pushToSupabase(){
   if(!currentUser) return;
   setSyncStatus('saving');
-  const { error } = await sb.from('roster_data').upsert({
-    user_id: currentUser.id,
-    models, notes, events,
-    updated_at: new Date().toISOString()
-  },{onConflict:'user_id'});
+  const ownerId = sharedRowOwnerId || currentUser.id;
+  let error;
+  if(sharedRowOwnerId && sharedRowOwnerId !== currentUser.id){
+    // Teammate: update the shared row (RLS UPDATE policy allows any authed user)
+    ({ error } = await sb.from('roster_data')
+      .update({ models, notes, events, updated_at: new Date().toISOString() })
+      .eq('user_id', ownerId));
+  } else {
+    // Owner: upsert own row
+    ({ error } = await sb.from('roster_data').upsert({
+      user_id: currentUser.id,
+      models, notes, events,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id' }));
+  }
   setSyncStatus(error ? 'error' : 'synced');
 }
 
@@ -2774,51 +2795,84 @@ function deleteCurrentModel(){
 // ── PHOTO UPLOAD ──
 let pendingPhoto = null;
 
-function resizeImage(file, callback){
+function resizeImageToBlob(file, callback){
   const reader = new FileReader();
   reader.onload = function(e){
     const img = new Image();
     img.onload = function(){
-      const max = 400;
+      const max = 600;
       let w = img.width, h = img.height;
       if(w > h){ if(w>max){h=Math.round(h*(max/w));w=max;} }
       else{ if(h>max){w=Math.round(w*(max/h));h=max;} }
       const canvas = document.createElement('canvas');
       canvas.width=w; canvas.height=h;
       canvas.getContext('2d').drawImage(img,0,0,w,h);
-      callback(canvas.toDataURL('image/jpeg',0.82));
+      // Return both dataUrl (for immediate preview) and blob (for storage upload)
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      canvas.toBlob(blob => callback(dataUrl, blob), 'image/jpeg', 0.82);
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
 
+async function uploadPhotoToStorage(blob, modelId){
+  if(!sb || !currentUser) return null;
+  const path = `photos/${modelId || Date.now()}_${Date.now()}.jpg`;
+  const { data, error } = await sb.storage.from('atche-media').upload(path, blob, {
+    contentType: 'image/jpeg',
+    upsert: true
+  });
+  if(error){ console.warn('Storage upload failed:', error.message); return null; }
+  const { data: urlData } = sb.storage.from('atche-media').getPublicUrl(path);
+  return urlData.publicUrl || null;
+}
+
 function handlePhotoUpload(input){
   const file = input.files[0];
   if(!file) return;
-  resizeImage(file, function(dataUrl){
-    pendingPhoto = dataUrl;
-    const preview = document.getElementById('formPhotoPreview');
+  const preview = document.getElementById('formPhotoPreview');
+  preview.innerHTML = `<span style="font-size:11px;color:var(--text3)">Uploading…</span>`;
+  resizeImageToBlob(file, async function(dataUrl, blob){
+    // Show preview immediately
     preview.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover">`;
     preview.style.border = '2px solid var(--gold)';
-    document.getElementById('f-photo').value = dataUrl;
+    pendingPhoto = dataUrl;
+    document.getElementById('f-photo').value = dataUrl; // fallback
+    // Upload to Supabase Storage
+    const pendingId = document.getElementById('f-id') ? document.getElementById('f-id').value : null;
+    const url = await uploadPhotoToStorage(blob, pendingId || 'new');
+    if(url){
+      pendingPhoto = url;
+      document.getElementById('f-photo').value = url;
+    }
   });
 }
 
 function changeProfilePhoto(input){
   const file = input.files[0];
   if(!file || !currentModelId) return;
-  resizeImage(file, function(dataUrl){
+  const av = document.getElementById('profileAvatar');
+  if(av) av.style.opacity = '0.5';
+  resizeImageToBlob(file, async function(dataUrl, blob){
     const m = models.find(x=>x.id===currentModelId);
     if(!m) return;
-    m.photo = dataUrl;
+    // Set preview immediately
+    if(av){
+      av.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;border-radius:50%;object-fit:cover"><div id="avatarOverlay" style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;opacity:0;transition:0.2s;pointer-events:none">✎ Edit</div>`;
+      av.style.opacity = '1';
+    }
+    m.photo = dataUrl; // optimistic
     m.updatedAt = Date.now();
+    // Upload to Supabase Storage
+    const url = await uploadPhotoToStorage(blob, currentModelId);
+    if(url){
+      m.photo = url;
+    }
     save();
-    // update avatar in modal
-    const av = document.getElementById('profileAvatar');
-    const overlay = document.getElementById('avatarOverlay');
-    av.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;border-radius:50%;object-fit:cover"><div id="avatarOverlay" style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;opacity:0;transition:0.2s;pointer-events:none">✎ Edit</div>`;
-    // update cards in background
+    if(av && m.photo !== dataUrl){
+      av.innerHTML = `<img src="${m.photo}" style="width:100%;height:100%;border-radius:50%;object-fit:cover"><div id="avatarOverlay" style="position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;opacity:0;transition:0.2s;pointer-events:none">✎ Edit</div>`;
+    }
     if(document.getElementById('view-roster').classList.contains('active')) renderRoster();
     if(document.getElementById('view-kanban').classList.contains('active')) renderKanban();
     renderDashboard();
