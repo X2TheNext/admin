@@ -33,7 +33,7 @@
   --sky-dim: rgba(91,141,184,0.15);
   --text: #F2EDE6;
   --text2: #B0A898;
-  --text3: #6A6258;
+  --text3: #8A8278;
   --radius: 10px;
   --radius-sm: 6px;
   --radius-lg: 18px;
@@ -120,6 +120,9 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 /* ── KANBAN ── */
 .kanban{display:flex;gap:14px;overflow-x:auto;padding:4px 0 16px;min-height:calc(100vh - 140px)}
 .kanban-col{min-width:240px;max-width:240px;display:flex;flex-direction:column;gap:10px}
+@media(min-width:1200px){
+  .kanban-col{min-width:280px;max-width:320px}
+}
 .kanban-col-header{padding:10px 14px;border-radius:var(--radius);font-size:12px;font-weight:700;letter-spacing:0.5px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .kanban-col-count{font-size:11px;opacity:0.7;font-weight:500}
 .kanban-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px;cursor:pointer;transition:var(--t)}
@@ -358,9 +361,9 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .evt-personal{background:rgba(194,105,122,0.15);border:1px solid var(--rose);color:var(--rose-light)}
 
 /* event type picker buttons */
-.evt-type-btn{padding:7px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;transition:var(--t);letter-spacing:0.3px;opacity:0.55}
-.evt-type-btn.active{opacity:1;transform:scale(1.04)}
-.evt-type-btn:hover{opacity:0.85}
+.evt-type-btn{padding:7px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;transition:var(--t);letter-spacing:0.3px;opacity:0.75;border:1px solid transparent}
+.evt-type-btn.active{opacity:1;transform:scale(1.04);border-color:currentColor}
+.evt-type-btn:hover{opacity:0.9}
 
 /* calendar event pills */
 .cal-event{font-size:10px;padding:2px 5px;border-radius:4px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;font-weight:500;border:1px solid transparent}
@@ -417,6 +420,38 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 
 /* ── MOBILE NAV ── */
 .mobile-nav{display:none}
+.mob-fab{display:none}
+
+/* card email quick-action */
+.card-email-btn{position:absolute;top:10px;right:76px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,0.6);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text3);cursor:pointer;transition:var(--t);opacity:0;z-index:2}
+.model-card:hover .card-email-btn{opacity:1}
+.card-email-btn:hover{border-color:var(--sky);color:var(--sky-light);background:rgba(91,141,184,0.15)}
+
+/* email overdue indicator on tab */
+.email-overdue-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--rose);margin-left:4px;vertical-align:middle;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* photo upload spinner */
+.photo-spinner{width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* collapsible form sections */
+.form-collapse-toggle{display:flex;align-items:center;gap:6px;padding:12px 0;cursor:pointer;font-size:12px;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--gold-dim);margin:16px 0 10px;transition:var(--t);user-select:none}
+.form-collapse-toggle:hover{color:var(--gold-light)}
+.form-collapse-toggle .arrow{transition:var(--t);font-size:10px}
+.form-collapse-toggle.open .arrow{transform:rotate(90deg)}
+.form-collapse-body{display:none}
+.form-collapse-body.open{display:block}
+
+  /* search toggle mobile */
+.search-toggle-btn{display:none}
+@media(max-width:768px){
+  .search-toggle-btn{display:flex;align-items:center;justify-content:center}
+  .search-box.visible{display:flex;position:absolute;top:100%;left:0;right:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 14px;min-width:auto}
+  .mob-fab{display:flex;position:fixed;bottom:calc(76px + env(safe-area-inset-bottom,8px));right:16px;z-index:51;width:48px;height:48px;border-radius:50%;background:var(--gold);color:var(--black);border:none;font-size:24px;font-weight:300;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.5);transition:var(--t)}
+  .mob-fab:hover{background:var(--gold-light);transform:scale(1.08)}
+  .cal-event-extra{display:none}
+}
 
 /* ── MOBILE ── */
 @media(max-width:768px){
@@ -638,7 +673,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
     </div>
     <div class="sidebar-section">Inbox</div>
     <div class="nav-item" onclick="showView('applicants',this)" id="nav-applicants">
-      <span class="icon">✉</span> Applicants
+      <span class="icon">✉</span> Inbox
       <span class="nav-badge" id="applicant-badge" style="display:none">0</span>
     </div>
   </nav>
@@ -667,8 +702,10 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
       <div class="topbar-title" id="viewTitle">Dashboard</div>
       <div class="topbar-sub" id="viewSub">Your private talent intelligence hub</div>
     </div>
+    <div id="syncStatusTopbar" style="display:none;font-size:10px;color:var(--sage-light);letter-spacing:0.5px;flex-shrink:0;margin-left:8px">⬤ Synced</div>
     <div class="topbar-right">
-      <div class="search-box">
+      <button class="icon-btn search-toggle-btn" onclick="toggleMobileSearch()" title="Search" style="display:none">⌕</button>
+      <div class="search-box" id="searchBox">
         <span class="search-icon">⌕</span>
         <input type="text" placeholder="Search talent..." id="globalSearch" oninput="handleSearch(this.value)">
       </div>
@@ -765,17 +802,15 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 
     <!-- KANBAN -->
     <div class="view" id="view-kanban">
-      <div class="filter-bar">
+      <div class="filter-bar" id="kanbanCategoryFilterBar">
         <span class="filter-label">Category:</span>
-        <select class="form-select" style="width:auto;font-size:12px" id="kanbanCategoryFilter" onchange="setKanbanCategoryFilter(this.value)">
-          <option value="all">All</option>
-          <option value="model">Model</option>
-          <option value="dj">DJ</option>
-          <option value="photographer">Photographer/Videographer</option>
-          <option value="mua">MUA/Hair/Stylist</option>
-          <option value="creative">Creative/Other</option>
-          <option value="owner">Venue Owner/Manager</option>
-        </select>
+        <span class="filter-chip active" onclick="setKanbanCategoryFilter('all',this)">All</span>
+        <span class="filter-chip" onclick="setKanbanCategoryFilter('model',this)">Model</span>
+        <span class="filter-chip" onclick="setKanbanCategoryFilter('dj',this)">DJ</span>
+        <span class="filter-chip" onclick="setKanbanCategoryFilter('photographer',this)">Photographer</span>
+        <span class="filter-chip" onclick="setKanbanCategoryFilter('mua',this)">MUA</span>
+        <span class="filter-chip" onclick="setKanbanCategoryFilter('creative',this)">Creative</span>
+        <span class="filter-chip" onclick="setKanbanCategoryFilter('owner',this)">Venue</span>
       </div>
       <div class="kanban" id="kanbanBoard"></div>
     </div>
@@ -784,25 +819,26 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
     <div class="view" id="view-rankings">
       <div class="rankings-header">
         <div class="section-title">Talent Rankings</div>
-        <div style="display:flex;gap:8px">
-          <select class="form-select" style="width:auto;font-size:12px" onchange="renderRankings()" id="rankTypeCat">
-            <option value="all">All Types</option>
-            <option value="model">Models</option>
-            <option value="dj">DJs</option>
-            <option value="photographer">Photographers</option>
-            <option value="mua">MUA / Hair</option>
-            <option value="creative">Creatives</option>
-            <option value="owner">Venue Owners</option>
-          </select>
-          <select class="form-select" style="width:auto;font-size:12px" onchange="renderRankings()" id="rankCat">
-            <option value="overall">Overall Score</option>
-            <option value="look">Look</option>
-            <option value="energy">Energy</option>
-            <option value="skill">Skill Level</option>
-            <option value="vibe">Vibe</option>
-            <option value="reliability">Reliability</option>
-          </select>
-        </div>
+        <div></div>
+      </div>
+      <div class="filter-bar" id="rankTypeFilterBar">
+        <span class="filter-label">Category:</span>
+        <span class="filter-chip active" onclick="setRankTypeFilter('all',this)">All</span>
+        <span class="filter-chip" onclick="setRankTypeFilter('model',this)">Model</span>
+        <span class="filter-chip" onclick="setRankTypeFilter('dj',this)">DJ</span>
+        <span class="filter-chip" onclick="setRankTypeFilter('photographer',this)">Photographer</span>
+        <span class="filter-chip" onclick="setRankTypeFilter('mua',this)">MUA</span>
+        <span class="filter-chip" onclick="setRankTypeFilter('creative',this)">Creative</span>
+        <span class="filter-chip" onclick="setRankTypeFilter('owner',this)">Venue</span>
+      </div>
+      <div class="filter-bar" id="rankScoreFilterBar">
+        <span class="filter-label">Score:</span>
+        <span class="filter-chip active" onclick="setRankScoreFilter('overall',this)">Overall</span>
+        <span class="filter-chip" onclick="setRankScoreFilter('look',this)">Look</span>
+        <span class="filter-chip" onclick="setRankScoreFilter('energy',this)">Energy</span>
+        <span class="filter-chip" onclick="setRankScoreFilter('skill',this)">Skill</span>
+        <span class="filter-chip" onclick="setRankScoreFilter('vibe',this)">Vibe</span>
+        <span class="filter-chip" onclick="setRankScoreFilter('reliability',this)">Reliability</span>
       </div>
       <div class="rank-list" id="rankList"></div>
     </div>
@@ -876,7 +912,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 
     <div class="view" id="view-applicants">
       <div class="section-row" style="margin-bottom:8px">
-        <div class="section-title">Circle Applicants</div>
+        <div class="section-title">Inbox</div>
         <button onclick="loadApplications()" style="font-size:11px;color:var(--text3);background:none;border:none;cursor:pointer;letter-spacing:0.5px">↻ Refresh</button>
       </div>
       <div class="filter-bar" style="margin-bottom:20px">
@@ -924,16 +960,14 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   <div class="mob-item" onclick="mobNav('kanban',this)" data-view="kanban">
     <span class="mi">⬡</span><span>Pipeline</span>
   </div>
-  <div class="mob-item" onclick="mobNav('rankings',this)" data-view="rankings">
-    <span class="mi">◉</span><span>Rank</span>
+  <div class="mob-item" onclick="mobNav('calendar',this)" data-view="calendar">
+    <span class="mi">◫</span><span>Calendar</span>
   </div>
-  <div class="mob-item" onclick="mobNav('notes',this)" data-view="notes">
-    <span class="mi">✎</span><span>Notes</span>
-  </div>
-  <div class="mob-item mob-add" onclick="openAddModal()">
-    <span class="mi">+</span><span>Add</span>
+  <div class="mob-item" onclick="mobNav('applicants',this)" data-view="applicants">
+    <span class="mi">✉</span><span>Inbox</span>
   </div>
 </nav>
+<button class="mob-fab" onclick="openAddModal()" title="Add Talent">+</button>
 
 <!-- ADD MODEL MODAL -->
 <div class="modal-overlay" id="addModal">
@@ -1026,8 +1060,9 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
         </div>
       </div>
 
+      <div class="form-collapse-toggle" onclick="toggleFormSection(this)"><span class="arrow">▶</span> Look & Style</div>
+      <div class="form-collapse-body">
       <div id="section-look">
-      <div class="form-section">Look & Style</div>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Height</label>
@@ -1056,10 +1091,11 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
         <label class="form-label">Look Tags (comma separated)</label>
         <input class="form-input" id="f-tags" placeholder="e.g. runway, editorial, dark glam, streetwear">
       </div>
-      </div>
+      </div></div>
 
+      <div class="form-collapse-toggle" onclick="toggleFormSection(this)"><span class="arrow">▶</span> <span id="catDetailsTitle">Category Details</span></div>
+      <div class="form-collapse-body">
       <div id="section-catdetails">
-      <div class="form-section" id="catDetailsTitle">Category Details</div>
       <div class="form-row">
         <div class="form-group" id="specialtyInputGroup">
           <label class="form-label" id="specialtyLabel">Specialty</label>
@@ -1104,7 +1140,10 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
         </div>
         <div class="form-group"></div>
       </div>
-      </div>
+</div></div>
+
+      <div class="form-collapse-toggle" onclick="toggleFormSection(this)"><span class="arrow">▶</span> Personality, Skills & Notes</div>
+      <div class="form-collapse-body">
 
       <div class="form-section">Personality & Energy</div>
       <div class="form-row">
@@ -1142,37 +1181,37 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
         <div>
           <div class="form-label" style="margin-bottom:8px" id="ratingLookLabel">Look</div>
           <div class="star-input" data-field="look">
-            <span onclick="setStars(this,'look',1)">★</span><span onclick="setStars(this,'look',2)">★</span><span onclick="setStars(this,'look',3)">★</span><span onclick="setStars(this,'look',4)">★</span><span onclick="setStars(this,'look',5)">★</span>
+            <span tabindex="0" role="radio" aria-label="Look 1 star" onclick="setStars(this,'look',1)" onkeydown="starKeydown(event,'look',1)">★</span><span tabindex="0" role="radio" aria-label="Look 2 stars" onclick="setStars(this,'look',2)" onkeydown="starKeydown(event,'look',2)">★</span><span tabindex="0" role="radio" aria-label="Look 3 stars" onclick="setStars(this,'look',3)" onkeydown="starKeydown(event,'look',3)">★</span><span tabindex="0" role="radio" aria-label="Look 4 stars" onclick="setStars(this,'look',4)" onkeydown="starKeydown(event,'look',4)">★</span><span tabindex="0" role="radio" aria-label="Look 5 stars" onclick="setStars(this,'look',5)" onkeydown="starKeydown(event,'look',5)">★</span>
           </div>
         </div>
         <div>
           <div class="form-label" style="margin-bottom:8px">Energy</div>
           <div class="star-input" data-field="energy">
-            <span onclick="setStars(this,'energy',1)">★</span><span onclick="setStars(this,'energy',2)">★</span><span onclick="setStars(this,'energy',3)">★</span><span onclick="setStars(this,'energy',4)">★</span><span onclick="setStars(this,'energy',5)">★</span>
+            <span tabindex="0" role="radio" aria-label="Energy 1 star" onclick="setStars(this,'energy',1)" onkeydown="starKeydown(event,'energy',1)">★</span><span tabindex="0" role="radio" aria-label="Energy 2 stars" onclick="setStars(this,'energy',2)" onkeydown="starKeydown(event,'energy',2)">★</span><span tabindex="0" role="radio" aria-label="Energy 3 stars" onclick="setStars(this,'energy',3)" onkeydown="starKeydown(event,'energy',3)">★</span><span tabindex="0" role="radio" aria-label="Energy 4 stars" onclick="setStars(this,'energy',4)" onkeydown="starKeydown(event,'energy',4)">★</span><span tabindex="0" role="radio" aria-label="Energy 5 stars" onclick="setStars(this,'energy',5)" onkeydown="starKeydown(event,'energy',5)">★</span>
           </div>
         </div>
         <div>
           <div class="form-label" style="margin-bottom:8px">Skill Level</div>
           <div class="star-input" data-field="skill">
-            <span onclick="setStars(this,'skill',1)">★</span><span onclick="setStars(this,'skill',2)">★</span><span onclick="setStars(this,'skill',3)">★</span><span onclick="setStars(this,'skill',4)">★</span><span onclick="setStars(this,'skill',5)">★</span>
+            <span tabindex="0" role="radio" aria-label="Skill 1 star" onclick="setStars(this,'skill',1)" onkeydown="starKeydown(event,'skill',1)">★</span><span tabindex="0" role="radio" aria-label="Skill 2 stars" onclick="setStars(this,'skill',2)" onkeydown="starKeydown(event,'skill',2)">★</span><span tabindex="0" role="radio" aria-label="Skill 3 stars" onclick="setStars(this,'skill',3)" onkeydown="starKeydown(event,'skill',3)">★</span><span tabindex="0" role="radio" aria-label="Skill 4 stars" onclick="setStars(this,'skill',4)" onkeydown="starKeydown(event,'skill',4)">★</span><span tabindex="0" role="radio" aria-label="Skill 5 stars" onclick="setStars(this,'skill',5)" onkeydown="starKeydown(event,'skill',5)">★</span>
           </div>
         </div>
         <div>
           <div class="form-label" style="margin-bottom:8px">Vibe</div>
           <div class="star-input" data-field="vibe">
-            <span onclick="setStars(this,'vibe',1)">★</span><span onclick="setStars(this,'vibe',2)">★</span><span onclick="setStars(this,'vibe',3)">★</span><span onclick="setStars(this,'vibe',4)">★</span><span onclick="setStars(this,'vibe',5)">★</span>
+            <span tabindex="0" role="radio" aria-label="Vibe 1 star" onclick="setStars(this,'vibe',1)" onkeydown="starKeydown(event,'vibe',1)">★</span><span tabindex="0" role="radio" aria-label="Vibe 2 stars" onclick="setStars(this,'vibe',2)" onkeydown="starKeydown(event,'vibe',2)">★</span><span tabindex="0" role="radio" aria-label="Vibe 3 stars" onclick="setStars(this,'vibe',3)" onkeydown="starKeydown(event,'vibe',3)">★</span><span tabindex="0" role="radio" aria-label="Vibe 4 stars" onclick="setStars(this,'vibe',4)" onkeydown="starKeydown(event,'vibe',4)">★</span><span tabindex="0" role="radio" aria-label="Vibe 5 stars" onclick="setStars(this,'vibe',5)" onkeydown="starKeydown(event,'vibe',5)">★</span>
           </div>
         </div>
         <div>
           <div class="form-label" style="margin-bottom:8px">Reliability</div>
           <div class="star-input" data-field="reliability">
-            <span onclick="setStars(this,'reliability',1)">★</span><span onclick="setStars(this,'reliability',2)">★</span><span onclick="setStars(this,'reliability',3)">★</span><span onclick="setStars(this,'reliability',4)">★</span><span onclick="setStars(this,'reliability',5)">★</span>
+            <span tabindex="0" role="radio" aria-label="Reliability 1 star" onclick="setStars(this,'reliability',1)" onkeydown="starKeydown(event,'reliability',1)">★</span><span tabindex="0" role="radio" aria-label="Reliability 2 stars" onclick="setStars(this,'reliability',2)" onkeydown="starKeydown(event,'reliability',2)">★</span><span tabindex="0" role="radio" aria-label="Reliability 3 stars" onclick="setStars(this,'reliability',3)" onkeydown="starKeydown(event,'reliability',3)">★</span><span tabindex="0" role="radio" aria-label="Reliability 4 stars" onclick="setStars(this,'reliability',4)" onkeydown="starKeydown(event,'reliability',4)">★</span><span tabindex="0" role="radio" aria-label="Reliability 5 stars" onclick="setStars(this,'reliability',5)" onkeydown="starKeydown(event,'reliability',5)">★</span>
           </div>
         </div>
         <div>
           <div class="form-label" style="margin-bottom:8px">Overall</div>
           <div class="star-input" data-field="overall">
-            <span onclick="setStars(this,'overall',1)">★</span><span onclick="setStars(this,'overall',2)">★</span><span onclick="setStars(this,'overall',3)">★</span><span onclick="setStars(this,'overall',4)">★</span><span onclick="setStars(this,'overall',5)">★</span>
+            <span tabindex="0" role="radio" aria-label="Overall 1 star" onclick="setStars(this,'overall',1)" onkeydown="starKeydown(event,'overall',1)">★</span><span tabindex="0" role="radio" aria-label="Overall 2 stars" onclick="setStars(this,'overall',2)" onkeydown="starKeydown(event,'overall',2)">★</span><span tabindex="0" role="radio" aria-label="Overall 3 stars" onclick="setStars(this,'overall',3)" onkeydown="starKeydown(event,'overall',3)">★</span><span tabindex="0" role="radio" aria-label="Overall 4 stars" onclick="setStars(this,'overall',4)" onkeydown="starKeydown(event,'overall',4)">★</span><span tabindex="0" role="radio" aria-label="Overall 5 stars" onclick="setStars(this,'overall',5)" onkeydown="starKeydown(event,'overall',5)">★</span>
           </div>
         </div>
       </div>
@@ -1197,7 +1236,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
         </div>
         <input type="file" id="f-photo-file" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
         <input type="hidden" id="f-photo">
-      </div>
+      </div></div>
 
       <div class="form-btns">
         <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
@@ -1520,10 +1559,20 @@ async function pushToSupabase(){
 
 function setSyncStatus(s){
   const el = document.getElementById('syncStatus');
-  if(!el) return;
-  if(s==='saving') { el.textContent='● Saving…'; el.style.color='var(--gold)'; }
-  else if(s==='synced') { el.textContent='⬤ Synced'; el.style.color='var(--sage-light)'; }
-  else { el.textContent='⚠ Sync error'; el.style.color='var(--rose-light)'; }
+  const tb = document.getElementById('syncStatusTopbar');
+  const updateEl = (e)=>{
+    if(!e) return;
+    if(s==='saving') { e.textContent='● Saving…'; e.style.color='var(--gold)'; }
+    else if(s==='synced') { e.textContent='⬤ Synced'; e.style.color='var(--sage-light)'; }
+    else { e.textContent='⚠ Sync error'; e.style.color='var(--rose-light)'; }
+  };
+  updateEl(el);
+  updateEl(tb);
+  if(tb) tb.style.display = window.innerWidth <= 768 ? 'none' : '';
+}
+function toggleMobileSearch(){
+  const sb = document.getElementById('searchBox');
+  if(sb) sb.classList.toggle('visible');
 }
 
 let isSignup = false;
@@ -1719,6 +1768,10 @@ function save(){
   saveTimer = setTimeout(pushToSupabase, 1200);
 }
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function toggleFormSection(el){
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
 function initials(name){ return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
 function igUrl(handle){ if(!handle) return ''; const h=handle.trim().replace(/^@/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/\/$/,''); return h?`https://instagram.com/${h}`:''; }
 function fmt(ts){ if(!ts) return ''; const d=new Date(ts); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
@@ -1914,6 +1967,7 @@ function modelCardHTML(m){
   return `<div class="model-card" onclick="openProfile('${m.id}')">
     <div class="card-header">
       ${rank>0?`<div class="card-rank">#${rank}</div>`:''}
+      <div class="card-email-btn" onclick="event.stopPropagation();openProfile('${m.id}');setTimeout(()=>openEmailTab(),100)" title="✉ Email templates">✉</div>
       <div class="card-avatar">${m.photo?`<img src="${m.photo}">`:`${initials(m.name)}`}</div>
       <div class="card-tier badge ${tierClass(m.tier)}">${(m.tier||'new').toUpperCase()}</div>
       <div class="card-status-dot ${dotClass(m.status)}"></div>
@@ -1947,11 +2001,10 @@ function filterByCategory(cat, el){
   renderRoster();
   if(document.getElementById('view-kanban').classList.contains('active')) renderKanban();
 }
-function setKanbanCategoryFilter(cat){
+function setKanbanCategoryFilter(cat, el){
   categoryFilterMode = cat;
-  document.querySelectorAll('#categoryFilterBar .filter-chip').forEach(c=>{
-    c.classList.toggle('active', c.getAttribute('onclick')===`filterByCategory('${cat}',this)`);
-  });
+  document.querySelectorAll('#kanbanCategoryFilterBar .filter-chip').forEach(c=>c.classList.remove('active'));
+  if(el) el.classList.add('active');
   renderKanban();
 }
 function handleSearch(v){ searchQuery=v.toLowerCase(); if(document.getElementById('view-roster').classList.contains('active')) renderRoster(); }
@@ -2056,9 +2109,23 @@ function touchDragEnd(e){
 }
 
 // ── RANKINGS ──
+let rankTypeFilter = 'all';
+let rankScoreFilter = 'overall';
+function setRankTypeFilter(val, el){
+  rankTypeFilter = val;
+  document.querySelectorAll('#rankTypeFilterBar .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderRankings();
+}
+function setRankScoreFilter(val, el){
+  rankScoreFilter = val;
+  document.querySelectorAll('#rankScoreFilterBar .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderRankings();
+}
 function renderRankings(){
-  const cat = (document.getElementById('rankCat')||{}).value || 'overall';
-  const typeCat = (document.getElementById('rankTypeCat')||{}).value || 'all';
+  const cat = rankScoreFilter || 'overall';
+  const typeCat = rankTypeFilter || 'all';
   let pool = [...models];
   if(typeCat !== 'all') pool = pool.filter(m=>(m.category||'model')===typeCat);
   const ranked = pool.sort((a,b)=>{
@@ -2436,8 +2503,11 @@ function openAddModal(){
 function closeAddModal(){ document.getElementById('addModal').classList.remove('open'); editingId=null; }
 function setStars(el, field, val){
   ratings[field]=val;
-  const row = el.parentElement;
+  const row = el.closest('.star-input');
   row.querySelectorAll('span').forEach((s,i)=>s.classList.toggle('on',i<val));
+}
+function starKeydown(e, field, val){
+  if(e.key==='Enter'||e.key===' '){ e.preventDefault(); setStars(e.target, field, val); }
 }
 function editCurrentModel(){
   if(!currentModelId) return;
@@ -2832,7 +2902,8 @@ function handlePhotoUpload(input){
   const file = input.files[0];
   if(!file) return;
   const preview = document.getElementById('formPhotoPreview');
-  preview.innerHTML = `<span style="font-size:11px;color:var(--text3)">Uploading…</span>`;
+  preview.innerHTML = '<div class="photo-spinner"></div>';
+  preview.style.border = '2px solid var(--gold)';
   resizeImageToBlob(file, async function(dataUrl, blob){
     // Show preview immediately
     preview.innerHTML = `<img src="${dataUrl}" style="width:100%;height:100%;object-fit:cover">`;
@@ -2845,6 +2916,10 @@ function handlePhotoUpload(input){
     if(url){
       pendingPhoto = url;
       document.getElementById('f-photo').value = url;
+      preview.style.border = '2px solid var(--sage)';
+      const orig = preview.innerHTML;
+      preview.innerHTML = '<span style="font-size:11px;color:var(--sage-light)">✓ Saved</span>';
+      setTimeout(()=>{ preview.innerHTML = orig; preview.style.border = '2px solid var(--gold)'; }, 1200);
     }
   });
 }
@@ -2966,15 +3041,26 @@ function renderApplications() {
 
   container.innerHTML = list.map(a => {
     const roles = Array.isArray(a.roles) ? a.roles.join(', ') : (a.roles || '–');
-    const date = new Date(a.submitted_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const date = a.submitted_at ? new Date(a.submitted_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '–';
     const statusColor = { pending:'var(--gold)', approved:'var(--sage)', passed:'var(--text3)' }[a.status] || 'var(--text3)';
     const initials = (a.name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    // Source badge
+    const sourceLabels = {
+      'circle':              { label:'The Circle',          color:'rgba(139,107,177,0.15)', border:'rgba(139,107,177,0.35)', text:'#B99FD4' },
+      'spicy-water-shoot':   { label:'Spicy Water Shoot',   color:'rgba(201,168,76,0.12)',  border:'rgba(201,168,76,0.35)',  text:'var(--gold-light)' },
+      'studio':              { label:'ATCHÉ Studio',        color:'rgba(194,105,122,0.12)', border:'rgba(194,105,122,0.35)', text:'#E8A0AE' },
+    };
+    const src = sourceLabels[a.source] || sourceLabels['circle'];
+    const sourceBadge = `<span style="padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;background:${src.color};border:1px solid ${src.border};color:${src.text}">${src.label}</span>`;
 
     return `<div style="background:var(--surface);border:1px solid var(--border${a.status==='pending'?'2':''});border-radius:var(--radius-lg);overflow:hidden;transition:var(--t)" id="app-card-${a.id}">
       <div style="background:linear-gradient(135deg,var(--surface2),var(--surface3));padding:16px 20px;display:flex;align-items:center;gap:16px">
         <div style="width:52px;height:52px;border-radius:50%;background:var(--gold-dim);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold);flex-shrink:0">${initials}</div>
         <div style="flex:1">
-          <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--text);margin-bottom:2px">${a.name}</div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px">
+            <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--text)">${a.name}</div>
+            ${sourceBadge}
+          </div>
           <div style="font-size:12px;color:var(--text3);display:flex;gap:12px;flex-wrap:wrap">
             <span style="color:var(--gold)">${a.instagram||'No IG'}</span>
             <span>${a.location||'–'}</span>
