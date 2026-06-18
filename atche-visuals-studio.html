@@ -111,6 +111,18 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .row .btn-primary{width:auto;padding:11px 20px;white-space:nowrap}
 @media(max-width:480px){.row{flex-direction:column}.row .btn-primary{width:100%}}
 
+/* ---- SMALL-SCREEN SESSION LIST ---- */
+@media(max-width:540px){
+  .sess-item{flex-wrap:wrap;gap:8px;padding:10px 12px}
+  .sess-code{width:auto;font-size:14px}
+  .sess-meta{flex:1 1 100%;order:2}
+  .sess-badge{order:1}
+  .sess-open{order:3;min-height:auto;font-size:10px}
+  .sess-confirm{order:3;font-size:10px;padding:3px 10px;min-height:auto}
+  .sess-overflow{order:4}
+  .sess-overflow-menu{bottom:auto;top:calc(100% + 6px)}
+}
+
 /* ACTIVE SESSION */
 .session-active{display:none}
 .session-code{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold);letter-spacing:4px;text-align:center;margin-bottom:4px}
@@ -235,7 +247,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offse
 .sess-overflow{position:relative;flex-shrink:0}
 .sess-overflow-btn{background:transparent;border:1px solid var(--border2);border-radius:6px;color:var(--text3);font-size:14px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--t);line-height:1;padding-bottom:4px}
 .sess-overflow-btn:hover{background:var(--surface3);color:var(--text);border-color:rgba(201,168,76,0.3)}
-.sess-overflow-menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:6px;z-index:50;min-width:156px;box-shadow:0 12px 32px rgba(0,0,0,0.5);display:none}
+.sess-overflow-menu{position:absolute;right:0;bottom:calc(100% + 6px);background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:6px;z-index:100;min-width:156px;box-shadow:0 -4px 24px rgba(0,0,0,0.6);display:none}
 .sess-overflow-menu.open{display:block;animation:cm-in .18s cubic-bezier(.16,1,.3,1)}
 .sess-overflow-item{display:block;width:100%;text-align:left;background:transparent;border:none;color:var(--text2);font-size:12px;font-weight:500;padding:9px 12px;border-radius:7px;cursor:pointer;transition:background var(--t),color var(--t);font-family:inherit}
 .sess-overflow-item:hover{background:var(--surface2);color:var(--text)}
@@ -338,6 +350,9 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offse
     <div class="auth-switch" id="authSwitch">
       Don't have an account? <a onclick="toggleMode()">Create one</a>
     </div>
+    <div class="auth-switch" id="forgotPwLink" style="margin-top:6px">
+      <a onclick="forgotPassword()">Forgot your password?</a>
+    </div>
   </div>
 </div>
 
@@ -407,7 +422,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offse
         <div class="share-qr"><img id="shareQr" alt="Session QR code"></div>
         <div class="share-info">
           <div class="share-link" id="shareLink">—</div>
-          <button class="btn-secondary" onclick="copyLink()">Copy Link</button>
+          <button class="btn-secondary" onclick="copyLink(event)">Copy Link</button>
           <button class="btn-secondary" id="notifyBtn" onclick="notifyClient()" style="margin-left:6px" aria-label="Notify Client">📩 Notify Client</button>
         </div>
       </div>
@@ -988,9 +1003,11 @@ async function copyAiEditPrompt(){
 async function closeSessionConfirm(){
   if(!activeSession) return;
   const label = activeSession.label ? ` for ${activeSession.label}` : '';
+  const needsConfirm = activeSession.payment_requested && !activeSession.paid;
+  const pendingWarn = needsConfirm ? ` ⚠️ This client has sent a payment request that hasn't been confirmed yet. Closing now will prevent them from unlocking their download.` : '';
   const confirmed = await showModal({
     title: 'Close Session',
-    body: `Mark session ${activeSession.code}${label} as closed? Clients can no longer tap "I've sent payment" — you can reopen it from the session list if needed.`,
+    body: `Mark session ${activeSession.code}${label} as closed? Clients can no longer tap "I've sent payment" — you can reopen it from the session list if needed.${pendingWarn}`,
     confirm: 'Close Session',
     cancel: 'Not Yet'
   });
@@ -1117,6 +1134,7 @@ async function markPaid(s){
     payment_requested: false
   }).eq('id', s.id);
   if(error){ showToast('Error: ' + error.message, 'error'); return; }
+  showToast(`${esc(s.code)}${s.package_price ? ' — $' + s.package_price : ''} confirmed ✓`, 'success');
   loadSessions();
 }
 
@@ -1471,13 +1489,31 @@ async function deletePhoto(fileName){
   loadThumbs();
 }
 
-function copyLink(){
+function copyLink(e){
   if(!activeSession) return;
-  navigator.clipboard.writeText(clientLink(activeSession.code));
-  const btn = event.target;
+  const btn = e ? e.target : document.querySelector('.btn-secondary');
   const orig = btn.textContent;
-  btn.textContent = 'Copied ✓';
-  setTimeout(()=>btn.textContent=orig, 1500);
+  navigator.clipboard.writeText(clientLink(activeSession.code))
+    .then(() => {
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => btn.textContent = orig, 1500);
+    })
+    .catch(() => showToast('Copy failed — tap and hold the link to copy it manually', 'error'));
+}
+
+async function forgotPassword(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const errEl = document.getElementById('authErr');
+  if(!email){
+    if(errEl){ errEl.textContent = 'Enter your email above first, then tap Forgot Password.'; errEl.style.display = 'block'; }
+    return;
+  }
+  const { error } = await sb.auth.resetPasswordForEmail(email);
+  if(error){
+    if(errEl){ errEl.textContent = error.message; errEl.style.display = 'block'; }
+  } else {
+    if(errEl){ errEl.textContent = 'Check your email — a password reset link has been sent.'; errEl.style.display = 'block'; }
+  }
 }
 
 boot();
