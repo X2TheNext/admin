@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATCHÉ — How to Use Your Tools · Monet</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --black:   #080808;
+  --surface: #111111;
+  --s2:      #181818;
+  --border:  #2a2a2a;
+  --gold:    #C9A84C;
+  --gold-lt: #E2C47A;
+  --gold-d:  rgba(201,168,76,0.12);
+  --rose:    #C2697A;
+  --sage:    #6B9E7A;
+  --text:    #F2EDE6;
+  --text2:   #B0A898;
+  --text3:   #6A6258;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+::-webkit-scrollbar { display: none; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--black);
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* PRINT */
+@media print {
+  body { background: #fff; color: #111; }
+  .no-print { display: none; }
+  .section { page-break-inside: avoid; }
+  .cover { min-height: 40vh; }
+}
+
+/* ── HEADER ── */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--black); border-bottom: 1px solid var(--border);
+  padding: 12px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--gold); letter-spacing: 6px; }
+.topbar-right { display: flex; gap: 10px; }
+.nav-btn {
+  padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); background: var(--s2); color: var(--text2);
+  text-decoration: none; display: inline-block; transition: 0.15s;
+}
+.nav-btn:hover { color: var(--text); border-color: var(--text3); }
+.nav-btn.print { border-color: var(--gold); color: var(--gold); }
+.nav-btn.print:hover { background: var(--gold); color: var(--black); }
+
+/* ── PAGE WRAPPER ── */
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 32px 80px;
+}
+
+/* ── COVER ── */
+.cover {
+  min-height: 50vh;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center;
+  padding: 80px 24px 60px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 60px;
+}
+.cover-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 72px; font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 16px;
+  margin-bottom: 16px;
+}
+.cover-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px; font-style: italic; color: var(--gold-lt);
+  margin-bottom: 8px;
+}
+.cover-sub {
+  font-size: 14px; color: var(--text3); letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 40px;
+}
+.cover-divider {
+  width: 80px; height: 2px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: 0 auto 40px;
+}
+.cover-lead {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; color: var(--gold-lt); font-style: italic;
+  margin-bottom: 12px;
+}
+.cover-desc {
+  font-size: 15px; color: var(--text2); max-width: 520px; line-height: 1.8;
+}
+
+/* ── SECTION HEADING ── */
+.section-head {
+  margin-top: 60px; margin-bottom: 8px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--gold);
+  display: flex; align-items: baseline; gap: 12px;
+}
+.section-head h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px; font-weight: 700; color: var(--gold-lt);
+}
+.section-head .badge {
+  font-size: 11px; color: var(--text3);
+  background: var(--s2); border: 1px solid var(--border);
+  padding: 3px 10px; border-radius: 20px;
+}
+.section-desc {
+  font-size: 13px; color: var(--text2); margin-bottom: 32px; font-style: italic;
+}
+
+/* ── STEP / HOW-TO ── */
+.step {
+  margin-bottom: 36px;
+  padding: 20px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  border-left: 3px solid var(--gold);
+}
+.step-num {
+  display: inline-block;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--gold-d);
+  border: 1px solid rgba(201,168,76,0.3);
+  font-size: 12px; font-weight: 700; color: var(--gold);
+  text-align: center; line-height: 26px;
+  margin-bottom: 10px;
+}
+.step-title {
+  font-size: 16px; font-weight: 700; color: var(--text);
+  margin-bottom: 8px;
+}
+.step-body {
+  font-size: 13px; color: var(--text2);
+  line-height: 1.75;
+  margin-bottom: 10px;
+}
+.step-body strong { color: var(--text); }
+.step-tip {
+  margin: 10px 0 0 0;
+  padding: 10px 14px;
+  background: rgba(201,168,76,0.06);
+  border-left: 2px solid rgba(201,168,76,0.3);
+  border-radius: 0 8px 8px 0;
+  font-size: 12px; color: var(--text2); font-style: italic; line-height: 1.6;
+}
+.step-tip strong { color: var(--gold); font-style: normal; }
+
+/* ── KEYBOARD CHIP ── */
+.key { display: inline-block; padding: 2px 7px; background: var(--s2); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; color: var(--text2); font-family: 'Inter', monospace; }
+
+/* ── CODE / EXAMPLE ── */
+.code-block {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 10px 0;
+  font-size: 12px; color: var(--text2);
+  line-height: 1.7; font-style: italic;
+  white-space: pre-wrap;
+}
+
+/* ── CARD ── */
+.info-card {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+}
+.info-card-title {
+  font-size: 14px; font-weight: 700; color: var(--gold-lt);
+  margin-bottom: 6px;
+}
+.info-card-body {
+  font-size: 12px; color: var(--text2); line-height: 1.7;
+}
+
+/* ── TIMELINE ── */
+.timeline {
+  display: flex; flex-direction: column; gap: 14px;
+  margin: 16px 0 32px;
+}
+.tl-row {
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.tl-time {
+  width: 90px; flex-shrink: 0;
+  text-align: right;
+  font-size: 11px; font-weight: 600; color: var(--gold);
+  padding-top: 3px;
+}
+.tl-content {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+.tl-content strong { display: block; font-size: 13px; color: var(--text); margin-bottom: 3px; }
+.tl-content span { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+/* ── FOOTER ── */
+.doc-footer {
+  margin-top: 80px; padding-top: 24px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.doc-footer p { font-size: 12px; color: var(--text3); margin-bottom: 4px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .cover-brand { font-size: 48px; }
+  .page { padding: 0 20px 60px; }
+  .topbar { padding: 12px 20px; }
+  .step { padding: 16px 18px; }
+  .timeline { gap: 10px; }
+  .tl-time { width: 65px; font-size: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar no-print">
+  <div class="topbar-logo">ATCHÉ</div>
+  <div class="topbar-right">
+    <button class="nav-btn print" onclick="window.print()">📄 Print / Save PDF</button>
+    <a class="nav-btn" href="https://atche-dashboard.vercel.app/monet-hub.html">← My Hub</a>
+    <a class="nav-btn" href="atche-followup.html">← Dashboard</a>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-brand">ATCHÉ</div>
+    <div class="cover-title">How to Use Your Tools</div>
+    <div class="cover-sub">A Real Guide for Monet · Updated June 2026</div>
+    <div class="cover-divider"></div>
+    <div class="cover-lead">You don't need to memorize everything.</div>
+    <div class="cover-desc">
+      This guide walks you through exactly how to use every tool —
+      from logging in to closing deals. Read it once, then come back
+      when you hit something new.
+    </div>
+  </div>
+
+  <!-- ── PART 0: YOUR SYSTEM ──────────────────────────────────── -->
+  <div class="section-head">
+    <h2>Your System at a Glance</h2>
+    <span class="badge">The Big Picture</span>
+  </div>
+  <div class="section-desc">Here's every tool you have and what each one is for.</div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ Dashboard</div>
+    <div class="info-card-body">
+      This is your home base. It's the first thing you open every morning.
+      It has your follow-up queue (everyone who needs a message), your task
+      checklist, a photography calendar, and a button to add new leads.
+      <strong style="color:#9DC9A8">Everything here is shared live with Xavier.</strong>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ Talent Tracker</div>
+    <div class="info-card-body">
+      The full database of every model, DJ, photographer, MUA, and creative
+      ATCHÉ is working with. Xavier uses this for the deep work — ratings,
+      scheduling, profile photos — but you can open it anytime to see the
+      pipeline in Kanban view or look up details on anyone.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ Venue CRM</div>
+    <div class="info-card-body">
+      Every venue we're talking to or partnering with — from Focus Social Club
+      to cold leads. Shows ATCHÉ Scores, revenue terms, pipeline stages,
+      and contact info. Opens from your Hub or the Dashboard.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ Admin Guide (this doc's companion)</div>
+    <div class="info-card-body">
+      The task-by-task reference that tells you what to do. The guide you're
+      reading now tells you <em>how</em> to do it. Bookmark both.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ The Playbook</div>
+    <div class="info-card-body">
+      The full strategy document. Read it once so you understand the business
+      model, talent system, and venue framework. You don't need it daily —
+      it's your context document.
+    </div>
+  </div>
+
+  <!-- ── PART 1: DAILY ROUTINE ────────────────────────────────── -->
+  <div class="section-head">
+    <h2>Your Daily Routine</h2>
+    <span class="badge">15–25 min · every morning</span>
+  </div>
+  <div class="section-desc">Open your Dashboard. Follow this sequence. The whole thing should take under 30 minutes once you're in rhythm.</div>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-title">Open your Dashboard</div>
+    <div class="step-body">
+      Go to <strong>atche-dashboard.vercel.app/monet-hub.html</strong> on your phone or laptop. Sign in with your email. Tap <strong>Dashboard</strong>.
+    </div>
+    <div class="step-tip"><strong>Pro tip:</strong> Bookmark the Dashboard URL on your phone's home screen. One tap opens it like an app.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-title">Scan the stats at the top</div>
+    <div class="step-body">
+      Look at the four numbers: <strong>Overdue</strong>, <strong>Due Today</strong>, <strong>Due This Week</strong>, and <strong>Events This Week</strong>. This tells you how heavy your day is in 2 seconds.
+    </div>
+    <div class="step-tip">Red number ≠ panic. It just means someone slipped a day. Send the message today and they'll catch up.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-title">Work through Overdue + Today cards first</div>
+    <div class="step-body">
+      Tap the <strong>🔴 Overdue</strong> tab. Work through every card one by one, then switch to <strong>⭐ Today</strong> and do the same. For each card:
+    </div>
+    <div class="step-tip">
+      <strong>①</strong> Read the person's name and stage so you know who you're reaching out to<br>
+      <strong>②</strong> Tap <strong>Copy</strong> next to IG DM (or Text) — the message is now in your clipboard<br>
+      <strong>③</strong> Open Instagram or your text app, paste, send<br>
+      <strong>④</strong> Come back to the Dashboard and tap <strong>✓ Sent</strong><br>
+      <strong>⑤</strong> Pick when to follow up next (tap 3 days, 5 days, 1 week, or a custom date)<br>
+      <strong>⑥</strong> Card disappears — you're done with that person ✦
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-title">Snooze what you can't do right now</div>
+    <div class="step-body">
+      If you're not in the right headspace or the timing isn't right, just hit <strong>+3d</strong> on any card. It slides the follow-up 3 days forward and the card disappears. It'll come back on that date.
+    </div>
+    <div class="step-tip">Don't overthink the templates. They're written to sound like you. The core message is good to go — you can add a sentence at the end if it feels right, but don't rewrite the whole thing.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-title">Check the photography calendar</div>
+    <div class="step-body">
+      Tap the <strong>📸 Calendar</strong> tab. Scan today's and tomorrow's shoots. For any confirmed event not already in your Google Calendar, tap the <strong>📅</strong> button to add it. It'll open Google Calendar pre-filled with all the event details.
+    </div>
+    <div class="step-tip">If a shoot moved or got cancelled, text Xavier and update the notes in the Talent Tracker so it's recorded.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-title">Log any new leads</div>
+    <div class="step-body">
+      Tap the <strong>+</strong> button (bottom right of your Dashboard). Anyone who expressed interest recently — a new model who applied, a venue owner Xavier mentioned, someone who slid into the DMs — add them now.
+    </div>
+    <div class="step-tip">
+      <strong>How to add a talent:</strong> Tap "Talent" → fill in name, category, Instagram handle, city, status, <strong>upload a photo if you have one</strong>, and add one line of notes about how you met. Hit Save. They now show up in Xavier's tracker too.<br><br>
+      <strong>How to add a venue:</strong> Tap "Venue" → fill in name, contact person, Instagram, pipeline stage. Hit Save.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">7</div>
+    <div class="step-title">Cross-reference your Instagram DMs</div>
+    <div class="step-body">
+      Open Instagram. Scan your DMs for replies to messages you've sent from the Dashboard. Anyone who responded — go to their card in the Dashboard and update their stage.<br><br>
+      If someone replied positively, change their stage to <strong>Interested</strong> or <strong>Meeting Set</strong>. If they said no, move them to <strong>Inactive</strong>.
+    </div>
+    <div class="step-tip">Every card has an <strong>Open IG ↗</strong> button that jumps straight to their profile. Use it instead of searching manually.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">8</div>
+    <div class="step-title">Check off your tasks</div>
+    <div class="step-body">
+      Tap the <strong>✓ Tasks</strong> tab at the top of your Dashboard. You'll see a checklist of everything you're supposed to do today and this week. Tap each item to check it off. The progress bar fills up — aim for 100% by the end of the day.
+    </div>
+    <div class="step-tip">The tasks reset every day (daily) and every week (weekly). Don't skip the weekly tasks — that's the work that moves ATCHÉ forward strategically, not just day-to-day.</div>
+  </div>
+
+  <!-- ── PART 2: WEEKLY ROUTINE ───────────────────────────────── -->
+  <div class="section-head">
+    <h2>Your Weekly Routine</h2>
+    <span class="badge">30–45 min · pick one day</span>
+  </div>
+  <div class="section-desc">Pick a standing day — Monday or Friday works best. Protect it like a meeting. Do these in order.</div>
+
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-title">Pipeline Review — open the Talent Tracker</div>
+    <div class="step-body">
+      From your Hub, open <strong>Talent Tracker</strong>. Tap <strong>Pipeline</strong> in the sidebar (or the bottom nav on mobile). This is the Kanban view — it shows every talent organized by stage.
+    </div>
+    <div class="step-tip">
+      <strong>What to do:</strong> Drag any card that changed status this week to the right column. Flag anyone who's been stuck in the same column for 2+ weeks — either schedule a follow-up or move them to Inactive. Don't let cards pile up in limbo.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-title">Promote promising leads to full profiles</div>
+    <div class="step-body">
+      In the Talent Tracker, find anyone in "New Lead" or "Prospect" who's shown real interest. Open their profile by tapping their name. Add their <strong>photo</strong>, <strong>rating notes</strong>, and <strong>email</strong> if you have it — the email field unlocks the email template tab, which Xavier uses for the deeper outreach.
+    </div>
+    <div class="step-tip">Even a one-sentence impression in the notes field ("Great energy, reliable, showed up on time") is gold for Xavier later when he's booking shoots.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-title">Do an outreach batch</div>
+    <div class="step-body">
+      Back in your Dashboard, filter by <strong>Models</strong> and look at people in "New Lead" or "Contacted" stage. Pick 5–10 and send their messages. The templates are ready — just copy, paste, send, mark sent.
+    </div>
+    <div class="step-tip">Use <strong>First Outreach</strong> for cold contacts. <strong>Follow-Up Check-in</strong> for people who haven't responded. <strong>Relationship Check-in</strong> for warm contacts who've gone quiet. The Dashboard picks the right template based on their pipeline stage automatically.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-title">Sync the photography calendar</div>
+    <div class="step-body">
+      In your Dashboard, tap <strong>📸 Calendar</strong>. Review every confirmed shoot for the next 2 weeks. For each one not already in your Google Calendar, tap <strong>📅</strong> to add it. Flag any scheduling conflicts to Xavier by text — don't try to resolve venue conflicts alone.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-title">Open and scan the Venue CRM</div>
+    <div class="step-body">
+      From your Hub, open <strong>Venue CRM</strong>. Look at the Dashboard tab. Check the Pipeline Overview — are venues moving through the stages? Check Follow-Ups Due — are any venue contacts overdue for a message? Tap into any venue that needs attention.
+    </div>
+    <div class="step-tip">Every venue card in your Dashboard now shows the contact name and neighborhood (e.g. "✦ Neb · H Street NE"). Use this to know who you're messaging at a glance.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-title">Send Xavier your weekly recap</div>
+    <div class="step-body">
+      Drop him a quick text. Here's what he needs:
+    </div>
+    <div class="code-block">New leads this week: [number]
+Follow-ups sent: [number]
+Shoots confirmed: [list]
+Venue owners worth prioritizing: [names]
+Anything broken or missing in the tools: [notes]</div>
+    <div class="step-tip">Even two sentences is enough. This is how Xavier knows what's working and where to focus. Keep it consistent.</div>
+  </div>
+
+  <!-- ── PART 3: HOW TO USE EACH FEATURE ──────────────────────── -->
+  <div class="section-head">
+    <h2>Feature-by-Feature Deep Dives</h2>
+    <span class="badge">Reference</span>
+  </div>
+  <div class="section-desc">Read these when you encounter a feature for the first time, or when something doesn't make sense.</div>
+
+  <div class="step">
+    <div class="step-title">📱 How Templates Work</div>
+    <div class="step-body">
+      Every follow-up card has <strong>two templates</strong>: an IG DM version and a Text version. The Dashboard picks the right message automatically based on whether the person is a talent or venue — <em>and</em> what stage they're in. A "Prospecting" venue gets a different message than an "Active" partner. A "prospect" model gets a different message than a "booked" model.
+    </div>
+    <div class="step-tip">
+      <strong>Always use the template.</strong> They're written to sound natural and personal. Templates include the person's first name automatically. You never have to type it — just copy and paste.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">🖼 How to Add Talent Photos</div>
+    <div class="step-body">
+      When you add a new talent lead (tap <strong>+</strong> → <strong>Talent</strong>), you'll see a <strong>Photo (optional)</strong> field below Status. Tap it and pick a photo from your phone. It gets saved to the shared database — so Xavier sees the face immediately.
+    </div>
+    <div class="step-tip">Even a screenshot from their Instagram works. It's so much easier to remember who someone is when you can see their face. Once Xavier uploads a real profile photo from the Talent Tracker, it replaces whatever you uploaded.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">⚡ How the Sync Indicator Works</div>
+    <div class="step-body">
+      At the top of your Dashboard, next to the queue count, there's a small <strong>green dot</strong> with the time your Dashboard last refreshed. If it turns <strong>red</strong> after a minute, that just means the data hasn't refreshed — your changes are still saved. When you reload or switch tabs, it'll turn green again.
+    </div>
+    <div class="step-tip">If you ever wonder "is Xavier seeing my changes?", the answer is yes — everything saves to Supabase instantly when you mark someone as sent or add a new lead.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">🏛 How Venue Cards Are Enriched</div>
+    <div class="step-body">
+      When you open a <strong>venue</strong> follow-up card, you'll now see the <strong>contact name</strong> and <strong>neighborhood</strong> right below the pipeline stage (e.g. "✦ Neb · H Street NE"). This tells you who you're messaging and where they are without having to open the full Venue CRM.
+    </div>
+    <div class="step-tip">The contact name in the card header <em>is</em> the person the IG DM and Text templates address. So "Hey Neb" in the template matches what you see on the card.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">🗓 How the Calendar Works</div>
+    <div class="step-body">
+      The <strong>📸 Calendar</strong> tab shows every photography event Xavier has scheduled — paid shoots, donation gigs, meetings, venue pitches, and personal events — for the next 30 days. Each event card shows:
+    </div>
+    <div class="step-tip">
+      • <strong>Event type</strong> (Paid Shoot, Donation/Door Gig, Meeting, Venue Pitch, Personal)<br>
+      • <strong>Time and venue</strong> (if filled in)<br>
+      • <strong>Status badge</strong> (Scheduled, Confirmed, Done, Cancelled)<br>
+      • <strong>📅 button</strong> to add to your Google Calendar in one tap<br><br>
+      This calendar is <strong>read-only</strong> — Xavier manages events from the Talent Tracker. Your job is to stay aware and keep your personal calendar in sync.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">📋 How the Task Checklist Works</div>
+    <div class="step-body">
+      The <strong>✓ Tasks</strong> tab has 7 daily tasks and 6 weekly tasks. Tap each one to check it off — they save to your phone's local storage. The progress bar at the top shows how much you've done. Tasks reset every day (daily) and every week (weekly).
+    </div>
+    <div class="step-tip">
+      <strong>Don't skip the weekly tasks</strong> just because they're not due today. The pipeline review, outreach batch, and Xavier recap are what turn day-to-day follow-ups into real business momentum. Block 30 minutes on your calendar for them.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">🔍 How to Open the Talent Tracker or Venue CRM</div>
+    <div class="step-body">
+      From your Dashboard, tap <strong>← Hub</strong> in the top bar. This takes you back to your Hub (monet-hub.html). From there, tap <strong>Talent Tracker</strong> or <strong>Venue CRM</strong> to open either tool. They open in the same tab, so to get back to your Dashboard, tap <strong>← Hub</strong> in those tools and then <strong>Dashboard</strong>.
+    </div>
+    <div class="step-tip">You can also bookmark the Talent Tracker and Venue CRM directly if you find yourself opening them often.</div>
+  </div>
+
+  <!-- ── PART 4: BEST PRACTICES ───────────────────────────────── -->
+  <div class="section-head">
+    <h2>How to Get the Most Out of This System</h2>
+    <span class="badge">Mindset</span>
+  </div>
+  <div class="section-desc">These are the things that separate "doing the tasks" from "moving the business forward."</div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ Protect your morning routine.</div>
+    <div class="info-card-body">
+      Open the Dashboard every single morning. Even if it's just 10 minutes. Consistency is everything. A week of missed follow-ups is hard to recover from — people move on fast.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ Don't over-personalize the templates.</div>
+    <div class="info-card-body">
+      The messages are written to sound like a real person — not a bot, not a corporation. They're casual but intentional. Adding a sentence at the end ("Btw I saw your post from last weekend — fire 🔥") is great. Rewriting the whole message is not.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ Speed matters more than perfection.</div>
+    <div class="info-card-body">
+      If someone responded, move them to the next stage <em>immediately</em>. A warm lead goes cold in 48 hours. The Dashboard makes this fast — one tap to mark sent, one tap to pick the follow-up date, done.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ Photos make everything easier.</div>
+    <div class="info-card-body">
+      When you add a new lead, upload a photo — even a screenshot of their Instagram profile. When you're scanning 20 cards in your queue, faces are 10x faster to process than names. Xavier can replace it with a proper photo later.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ Your notes are gold.</div>
+    <div class="info-card-body">
+      Every time you add a note — "she's friends with Zara," "he owns the spot on H Street," "great energy, needs coaching on posing" — you're building institutional knowledge that Xavier uses to book the right people for the right events. Even one sentence matters.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">✦ When in doubt, text Xavier.</div>
+    <div class="info-card-body">
+      Something broken? Confused about a pipeline stage? Not sure if someone should be Active or On Hold? Text him. This system is built for both of you — he'd rather you ask than guess.
+    </div>
+  </div>
+
+  <!-- ── PART 5: QUICK REFERENCE ──────────────────────────────── -->
+  <div class="section-head">
+    <h2>Quick Reference</h2>
+    <span class="badge">Keep Handy</span>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">URLs</div>
+    <div class="info-card-body">
+      <span style="color:var(--gold)">Your Hub:</span> atche-dashboard.vercel.app/monet-hub.html<br>
+      <span style="color:var(--gold)">Dashboard:</span> atche-dashboard.vercel.app/atche-followup.html<br>
+      <span style="color:var(--gold)">Talent Tracker:</span> atche-dashboard.vercel.app/model-tracker.html<br>
+      <span style="color:var(--gold)">Venue CRM:</span> atche-dashboard.vercel.app/venue-crm.html<br>
+      <span style="color:var(--gold)">Playbook:</span> atche-dashboard.vercel.app/atche-playbook.html
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">Pipeline Stages (Talent)</div>
+    <div class="info-card-body">
+      <strong>New Lead</strong> → Just found. Schedule first follow-up in 3–5 days.<br>
+      <strong>Contacted</strong> → First message sent. Follow up in 5–7 days.<br>
+      <strong>Interested</strong> → They replied. Move quickly — schedule a meeting.<br>
+      <strong>Meeting Set</strong> → Call or in-person booked. Confirm day before.<br>
+      <strong>Proposal Sent</strong> → ATCHÉ deck/rates sent. Follow up in 3–5 days.<br>
+      <strong>Negotiating</strong> → Active discussion. Keep momentum.<br>
+      <strong>Active / Signed</strong> → They're in. Switch to logistics.<br>
+      <strong>On Hold</strong> → Interested but bad timing. Check back in 4–6 weeks.<br>
+      <strong>Inactive</strong> → No response after 3+ attempts. Deprioritize.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-title">Pipeline Stages (Venues)</div>
+    <div class="info-card-body">
+      <strong>Prospecting</strong> → Researching. Not yet contacted.<br>
+      <strong>First Contact</strong> → Outreach sent. Waiting on reply.<br>
+      <strong>Meeting Set</strong> → Meeting booked. Confirm.<br>
+      <strong>Proposal Sent</strong> → Partnership proposal delivered.<br>
+      <strong>Negotiating</strong> → Terms in discussion.<br>
+      <strong>Signed</strong> → Deal locked. Transition to active.<br>
+      <strong>Active</strong> → Ongoing partner.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <p>This guide lives alongside your Admin Guide (monet-admin-guide.html).</p>
+    <p style="margin-top:12px;font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);letter-spacing:4px;">ATCHÉ ✦</p>
+    <p style="margin-top:6px;font-size:11px;color:var(--text3)">Built for creative women in nightlife. DC / HBCU launch.</p>
+  </div>
+
+</div>
+</body>
+</html>

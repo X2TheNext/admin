@@ -763,14 +763,14 @@ function save() { scheduleSave(); }
 // ── AUTH ──────────────────────────────────────────────────────────
 async function doLogout() {
   await sb.auth.signOut();
-  window.location.href = 'atche-hub.html';
+  window.location.href = 'https://atche-dashboard.vercel.app/atche-hub.html';
 }
 
-function goHub() { window.location.href = 'atche-hub.html'; }
+function goHub() { window.location.href = 'https://atche-dashboard.vercel.app/atche-hub.html'; }
 
 async function bootApp() {
   const { data: { session } } = await sb.auth.getSession();
-  if(!session) { window.location.href = 'atche-hub.html'; return; }
+  if(!session) { window.location.href = 'https://atche-dashboard.vercel.app/atche-hub.html'; return; }
   currentUser = session.user;
   try {
     await loadFromSupabase();
@@ -784,7 +784,7 @@ async function bootApp() {
     console.error('renderAll failed', e);
   }
   sb.auth.onAuthStateChange(async (event, session) => {
-    if(event === 'SIGNED_OUT') window.location.href = 'atche-hub.html';
+    if(event === 'SIGNED_OUT') window.location.href = 'https://atche-dashboard.vercel.app/atche-hub.html';
   });
 }
 
