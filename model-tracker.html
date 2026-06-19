@@ -238,9 +238,14 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .info-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
 .info-block.full{grid-column:1/-1}
 .info-label{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
-.info-value{font-size:13px;color:var(--text);line-height:1.5}
+.info-value{font-size:13px;color:var(--text);line-height:1.5;cursor:default}
 .info-value.editable{background:transparent;border:none;color:var(--text);font-size:13px;outline:none;width:100%;resize:none;font-family:'Inter',sans-serif;line-height:1.5}
 .info-value.editable:focus{color:var(--gold)}
+.info-value[contenteditable="true"]{cursor:text;transition:var(--t);padding:2px 4px;margin:-2px -4px;border-radius:var(--radius-sm);min-height:20px}
+.info-value[contenteditable="true"]:hover{background:var(--gold-dim);outline:1px dashed var(--border2)}
+.info-value[contenteditable="true"]:focus{background:var(--surface2);outline:1px solid var(--gold);color:var(--gold);box-shadow:0 0 0 2px var(--gold-dim)}
+.inline-edit-hint{font-size:9px;color:var(--text3);opacity:0;transition:opacity 0.2s;margin-top:2px}
+.info-block:hover .inline-edit-hint{opacity:0.7}
 
 .skill-chips{display:flex;flex-wrap:wrap;gap:6px}
 .skill-chip{padding:4px 10px;background:var(--gold-dim);border:1px solid var(--gold);border-radius:20px;font-size:11px;color:var(--gold);font-weight:500;cursor:pointer;transition:var(--t)}
@@ -2631,6 +2636,33 @@ function saveModel(){
   }
 }
 
+// ── INLINE EDIT HELPERS ──────────────────────────────────────────
+function makeEditable(el, prop, modelId){
+  if(!el) return;
+  el.setAttribute('contenteditable','true');
+  el.setAttribute('data-edit-prop', prop);
+  el.setAttribute('data-edit-model', modelId);
+  // Add hint below
+  const hint = document.createElement('span');
+  hint.className = 'inline-edit-hint';
+  hint.textContent = 'click to edit · blur to save';
+  el.parentNode.appendChild(hint);
+  // Save on blur
+  el.addEventListener('blur', function(){
+    const m = models.find(x=>x.id===modelId);
+    if(!m) return;
+    const newVal = el.textContent.trim();
+    const oldVal = m[prop];
+    if(newVal === oldVal || (newVal==='—' && !oldVal)) return;
+    m[prop] = newVal==='—'||newVal==='' ? '' : newVal;
+    m.updatedAt = Date.now();
+    save();
+    // Brief feedback
+    el.style.color = 'var(--sage-light)';
+    setTimeout(()=>{ el.style.color = ''; }, 800);
+  });
+}
+
 // ── PROFILE MODAL ──
 function openProfile(id){
   currentModelId=id;
@@ -2719,6 +2751,21 @@ function openProfile(id){
       <div class="note-item-date">${fmt(n.updatedAt)}</div>
       <div class="note-item-preview">${n.body||'...'}</div>
     </div>`).join(''):'<div style="color:var(--text3);font-size:13px;padding:20px 0">No notes linked to this talent yet.</div>';
+  // Make fields inline-editable
+  makeEditable(document.getElementById('p-city'), 'city', id);
+  makeEditable(document.getElementById('p-metAt'), 'metAt', id);
+  makeEditable(document.getElementById('p-height'), 'height', id);
+  makeEditable(document.getElementById('p-measurements'), 'measurements', id);
+  makeEditable(document.getElementById('p-complexion'), 'complexion', id);
+  makeEditable(document.getElementById('p-hair'), 'hair', id);
+  makeEditable(document.getElementById('p-style'), 'style', id);
+  makeEditable(document.getElementById('p-vibe'), 'vibe', id);
+  makeEditable(document.getElementById('p-personality'), 'personality', id);
+  makeEditable(document.getElementById('p-personal'), 'personal', id);
+  makeEditable(document.getElementById('p-specialty'), 'specialty', id);
+  makeEditable(document.getElementById('p-equipment'), 'equipment', id);
+  makeEditable(document.getElementById('p-rate'), 'rate', id);
+  makeEditable(document.getElementById('p-setLength'), 'setLength', id);
   // Switch to overview tab
   switchProfileTab('overview', document.querySelector('.modal-tab'));
   document.getElementById('profileModal').classList.add('open');
