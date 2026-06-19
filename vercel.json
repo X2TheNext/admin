@@ -9,6 +9,9 @@
     { "source": "/apply", "destination": "/circle-application.html" },
     { "source": "/visuals", "destination": "/atche-visuals.html" },
     { "source": "/visuals-studio", "destination": "/atche-visuals-studio.html" },
-    { "source": "/venues", "destination": "/atche-venues.html" }
+    { "source": "/venues", "destination": "/atche-venues.html" },
+    { "source": "/monet-guide", "destination": "/monet-daily-guide.html" },
+    { "source": "/monet-admin", "destination": "/monet-admin-guide.html" },
+    { "source": "/monet-hub", "destination": "/monet-hub.html" }
   ]
 }
