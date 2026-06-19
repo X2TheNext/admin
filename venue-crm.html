@@ -603,6 +603,14 @@ tr:hover td{background:var(--gold-glow);color:var(--text)}
         <div class="form-group"><label class="form-label">Title / Role</label><input class="form-input" id="f-role" placeholder="Owner"></div>
       </div>
       <div class="form-row">
+        <div class="form-group full"><label class="form-label">Link to Owner (from Talent Tracker)</label>
+          <select class="form-select" id="f-ownerSelect" onchange="document.getElementById('f-ownerId').value=this.value">
+            <option value="">— None —</option>
+          </select>
+          <input type="hidden" id="f-ownerId" value="">
+        </div>
+      </div>
+      <div class="form-row">
         <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="f-phone" placeholder="+1 (202) 000-0000"></div>
         <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="f-email" type="email" placeholder="name@venue.com"></div>
       </div>
@@ -1000,7 +1008,21 @@ function openVenue(id) {
     <div class="info-block"><div class="info-label">Pipeline Stage</div><div class="info-value">${v.pipeline}</div></div>
     <div class="info-block"><div class="info-label">Status</div><div class="info-value"><span class="badge ${getStatusClass(v.status)}">${v.status}</span></div></div>
     <div class="info-block"><div class="info-label">Last Contact</div><div class="info-value">${v.lastContact?formatDate(v.lastContact):'–'}</div></div>
-    <div class="info-block"><div class="info-label">Next Follow-Up</div><div class="info-value" style="color:var(--gold)">${v.followUp?formatDate(v.followUp):'Not scheduled'}</div></div>`;
+    <div class="info-block"><div class="info-label">Next Follow-Up</div><div class="info-value" style="color:var(--gold)">${v.followUp?formatDate(v.followUp):'Not scheduled'}</div></div>
+    <div class="info-block full"><div class="info-label">Linked Owner</div><div class="info-value" id="modal-linked-owner">${v.ownerId ? '<span style="color:var(--text3);font-size:11px">Loading…</span>' : '<span style="color:var(--text3)">No owner linked — add owners in Talent Tracker first</span>'}</div></div>`;
+  // Load linked owner name async
+  if(v.ownerId){
+    sb.from('roster_data').select('models').order('updated_at',{ascending:false}).limit(1).maybeSingle().then(({data})=>{
+      if(data && data.models){
+        const models = Array.isArray(data.models) ? data.models : JSON.parse(data.models);
+        const owner = models.find(m=>m.id===v.ownerId);
+        const el = document.getElementById('modal-linked-owner');
+        if(el && owner){
+          el.innerHTML = `<a href="model-tracker.html" onclick="window.open('model-tracker.html','_blank');event.preventDefault()" style="color:var(--gold);cursor:pointer;text-decoration:underline">✦ ${owner.name}</a> · ${owner.specialty||'Venue'} · ${owner.city||''}`;
+        }
+      }
+    }).catch(()=>{});
+  }
   document.getElementById('modal-events').innerHTML = v.events&&v.events.length ? v.events.map(e=>`
     <div class="event-entry">
       <div class="event-entry-header"><div class="event-entry-name">${e.name}</div><div class="event-entry-date">${formatDate(e.date)}</div></div>
@@ -1042,7 +1064,27 @@ function deleteNote(vid,idx) {
 }
 
 // ── ADD VENUE ─────────────────────────────────────────────────────
-function openAddModal() { document.getElementById('addModal').classList.add('open'); }
+function populateOwnerDropdown() {
+  const sel = document.getElementById('f-ownerSelect');
+  if(!sel) return;
+  // Load owners from Supabase roster_data
+  sb.from('roster_data')
+    .select('models').order('updated_at',{ascending:false}).limit(1).maybeSingle()
+    .then(({data}) => {
+      if(data && data.models){
+        const allModels = Array.isArray(data.models) ? data.models : JSON.parse(data.models);
+        const owners = allModels.filter(m => (m.category||'model')==='owner');
+        sel.innerHTML = '<option value="">— None —</option>' + owners.map(o => 
+          `<option value="${o.id}">${o.name} · ${o.specialty||'Venue'} · ${o.city||''}</option>`
+        ).join('');
+      }
+    }).catch(()=>{});
+}
+
+function openAddModal() { 
+  populateOwnerDropdown();
+  document.getElementById('addModal').classList.add('open'); 
+}
 
 function saveNewVenue() {
   const name = document.getElementById('f-name').value.trim();
@@ -1066,6 +1108,7 @@ function saveNewVenue() {
     scores:{ culturalFit:parseInt(document.getElementById('f-s1').value)||5, vibe:parseInt(document.getElementById('f-s2').value)||5, revenueTerms:parseInt(document.getElementById('f-s3').value)||5, location:parseInt(document.getElementById('f-s4').value)||5, capacityFit:parseInt(document.getElementById('f-s5').value)||5, amenities:parseInt(document.getElementById('f-s6').value)||5 },
     tags: document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
     vibe: document.getElementById('f-notes').value,
+    ownerId: document.getElementById('f-ownerId').value || '',
     notes:[], events:[]
   };
   venues.push(v); save(); renderAll(); closeModal('addModal');
