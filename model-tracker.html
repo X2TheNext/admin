@@ -49,8 +49,8 @@ body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);mi
 
 /* ── LAYOUT ── */
 .app{display:flex;height:100vh;overflow:hidden}
-.sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;z-index:10}
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;z-index:10}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 
 /* ── SIDEBAR ── */
 .sidebar-logo{padding:22px 18px 18px;border-bottom:1px solid var(--border)}

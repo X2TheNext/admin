@@ -32,7 +32,7 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:24px;overflow-x:hidden;overflow-y:auto}
 
 body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;opacity:0.025;pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse at center top, rgba(201,168,76,0.06) 0%, transparent 70%);pointer-events:none;z-index:0}
@@ -380,18 +380,28 @@ async function loadStats(){
       setConn(false, 'No shared data found — ask Xavier to open the Talent Tracker first');
     }
 
-    // Venue count
-    const { data: venueRow } = await sb.from('atche_venues')
-      .select('venues,updated_at').order('updated_at',{ascending:false}).limit(1).maybeSingle();
+    // Venue count — query all rows (shared across team)
+    const { data: allVenueRows, error: venueErr } = await sb.from('atche_venues')
+      .select('venues,user_id').order('updated_at',{ascending:false});
 
-    if(venueRow && venueRow.venues){
-      const venues = Array.isArray(venueRow.venues) ? venueRow.venues : JSON.parse(venueRow.venues);
-      document.getElementById('venue-count').textContent = `${venues.length} venue${venues.length!==1?'s':''} tracked`;
+    if(venueErr) console.warn('Venue query:', venueErr);
+
+    if(allVenueRows && allVenueRows.length > 0){
+      // Merge all venue arrays from all rows
+      const allVenues = [];
+      allVenueRows.forEach(row => {
+        if(row.venues){
+          const v = Array.isArray(row.venues) ? row.venues : JSON.parse(row.venues);
+          allVenues.push(...v);
+        }
+      });
+      document.getElementById('venue-count').textContent = `${allVenues.length} venue${allVenues.length!==1?'s':''} tracked`;
     } else {
       document.getElementById('venue-count').textContent = 'No venues yet';
     }
 
   } catch(e){
+    console.warn('loadStats error:', e);
     setConn(false, 'Could not reach Supabase — check connection');
   }
 }
